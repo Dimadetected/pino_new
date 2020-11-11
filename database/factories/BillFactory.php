@@ -27,6 +27,8 @@ class BillFactory extends Factory
             'text' => $this->faker->realText(),
             'bill_type_id' => 1,
             'bill_status_id' => 1,
+            'user_role_id' => 6,
+            'steps' => 1
          ];
     }
 }

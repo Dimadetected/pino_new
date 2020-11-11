@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Profile') }}
+            Профиль / {{auth()->user()->name}} / {{auth()->user()->user_role->name}}
         </h2>
     </x-slot>
 
@@ -21,23 +21,23 @@
                 <x-jet-section-border />
             @endif
 
-            @if (Laravel\Fortify\Features::canManageTwoFactorAuthentication())
-                <div class="mt-10 sm:mt-0">
-                    @livewire('profile.two-factor-authentication-form')
-                </div>
+{{--            @if (Laravel\Fortify\Features::canManageTwoFactorAuthentication())--}}
+{{--                <div class="mt-10 sm:mt-0">--}}
+{{--                    @livewire('profile.two-factor-authentication-form')--}}
+{{--                </div>--}}
 
-                <x-jet-section-border />
-            @endif
+{{--                <x-jet-section-border />--}}
+{{--            @endif--}}
 
-            <div class="mt-10 sm:mt-0">
-                @livewire('profile.logout-other-browser-sessions-form')
-            </div>
+{{--            <div class="mt-10 sm:mt-0">--}}
+{{--                @livewire('profile.logout-other-browser-sessions-form')--}}
+{{--            </div>--}}
 
-            <x-jet-section-border />
-
-            <div class="mt-10 sm:mt-0">
-                @livewire('profile.delete-user-form')
-            </div>
+{{--            <x-jet-section-border />--}}
+{{----}}
+{{--            <div class="mt-10 sm:mt-0">--}}
+{{--                @livewire('profile.delete-user-form')--}}
+{{--            </div>--}}
         </div>
     </div>
 </x-app-layout>

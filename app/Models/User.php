@@ -50,4 +50,8 @@ class User extends Authenticatable
         }
         return NULL;
     }
+    
+    public function user_role(){
+        return $this->belongsTo(UserRole::class);
+    }
 }

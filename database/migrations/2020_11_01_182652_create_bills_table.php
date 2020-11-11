@@ -21,7 +21,9 @@ class CreateBillsTable extends Migration
             $table->foreignId('file_id')->nullable();
             $table->foreignId('bill_status_id')->nullable();
             $table->foreignId('bill_answer_id')->nullable();
-            $table->foreignId('status')->nullable();
+            $table->foreignId('status')->default(1);
+            $table->integer('steps')->nullable();
+            $table->foreignId('user_role_id')->nullable();
             $table->timestamps();
         });
     }

@@ -17,6 +17,7 @@ class CreateBillActionsTable extends Migration
             $table->id();
             $table->foreignId('bill_id')->nullable();
             $table->foreignId('user_id')->nullable();
+            $table->integer('status')->nullable();
             $table->text('text')->nullable();
             $table->timestamps();
         });

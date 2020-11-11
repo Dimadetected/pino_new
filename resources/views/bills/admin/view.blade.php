@@ -10,7 +10,7 @@
                 <div class="card card-body shadow mb-1" style="min-height: 90vh">
                     <div class=" card-title" style="font-size: 16pt"><a href="#">Счет #{{$bill->id}}</a></div>
                     <div class=" card-title" style="font-size: 16pt">{{\Carbon\Carbon::parse($bill->created_at)->format('d.m.Y')}}</div>
-                    <div class="my-2  h4">{{$bill->bill_type->name}}</div>
+                    <div class="my-2  h4">{{$bill->bill_type->name??'Оплачено'}}</div>
                     <hr>
                     <p class="my-3">{{$bill->text}}</p>
                     @if(isset($bill->file))

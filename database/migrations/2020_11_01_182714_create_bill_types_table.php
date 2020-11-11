@@ -17,6 +17,7 @@ class CreateBillTypesTable extends Migration
             $table->id();
             $table->text('short_name');
             $table->text('name');
+            $table->foreignId('user_role_id');
             $table->timestamps();
         });
     }

@@ -34,8 +34,8 @@ class BillController extends Controller
     
     public function index()
     {
-        $date_start = Carbon::parse(\request('date_start',now()->startOfYear()))->startOfDay();
-        $date_end = Carbon::parse(\request('date_end',now()->endOfYear()))->endOfDay();
+        $date_start = Carbon::parse(\request('date_start', now()->startOfYear()))->startOfDay();
+        $date_end = Carbon::parse(\request('date_end', now()->endOfYear()))->endOfDay();
         $user = auth()->user();
         
         $bills = Bill::query()
@@ -44,10 +44,10 @@ class BillController extends Controller
             ->with(['user', 'bill_type', 'bill_status'])
             ->orderBy('created_at', 'desc');
         
-        $bills = $bills->whereBetween('created_at',[$date_start,$date_end])->get();
+        $bills = $bills->whereBetween('created_at', [$date_start, $date_end])->get();
         $header = 'Счета';
         $action = '<a class="btn btn-success" href=' . route($this->routes['form']) . ' style="float: right">Создать</a>';
-        return view($this->views['index'], compact('date_start','date_end','bills', 'user', 'header', 'action'))->with('routes', $this->routes);
+        return view($this->views['index'], compact('date_start', 'date_end', 'bills', 'user', 'header', 'action'))->with('routes', $this->routes);
     }
     
     public function view(Bill $bill)
@@ -78,8 +78,8 @@ class BillController extends Controller
         $file = \App\Models\File::query()->create([
             'src' => $files,
         ]);
-        
-        if($user->user_role_id == 7)
+        $bill->steps = 1;
+        if ($user->user_role_id == 7)
             $bill->steps = 2;
         
         $bill->user_role_id = 6;
@@ -136,50 +136,50 @@ class BillController extends Controller
     public function accept()
     {
         $user = auth()->user();
-        $date_start = Carbon::parse(\request('date_start',now()->startOfYear()))->startOfDay();
-        $date_end = Carbon::parse(\request('date_end',now()->endOfYear()))->endOfDay();
+        $date_start = Carbon::parse(\request('date_start', now()->startOfYear()))->startOfDay();
+        $date_end = Carbon::parse(\request('date_end', now()->endOfYear()))->endOfDay();
         $bills = Bill::query()
             ->where('user_role_id', $user->user_role_id)
-            ->whereBetween('created_at',[$date_start,$date_end])
+            ->whereBetween('created_at', [$date_start, $date_end])
             ->where('status', 1)
             ->with(['user', 'bill_type', 'bill_status'])
             ->get();
         
         $header = 'Счета для подтверждения';
         $action = '<a class="btn btn-success" href=' . route($this->routes['form']) . ' style="float: right">Создать</a>';
-        return view($this->views['index'], compact('date_end','date_start','bills', 'user', 'header', 'action'))->with('routes', $this->routes);
+        return view($this->views['index'], compact('date_end', 'date_start', 'bills', 'user', 'header', 'action'))->with('routes', $this->routes);
     }
     
     public function accepted()
     {
         $user = auth()->user();
         $actions = BillAction::query()->where('user_id', $user->id)->pluck('bill_id')->toArray();
-        $date_start = Carbon::parse(\request('date_start',now()->startOfYear()))->startOfDay();
-        $date_end = Carbon::parse(\request('date_end',now()->endOfYear()))->endOfDay();
+        $date_start = Carbon::parse(\request('date_start', now()->startOfYear()))->startOfDay();
+        $date_end = Carbon::parse(\request('date_end', now()->endOfYear()))->endOfDay();
         $bills = Bill::query()
             ->whereIn('id', $actions)
-            ->whereBetween('created_at',[$date_start,$date_end])
+            ->whereBetween('created_at', [$date_start, $date_end])
             ->with(['user', 'bill_type', 'bill_status'])
             ->get();
         
         $header = 'Подтвержденные счета';
         $action = '<a class="btn btn-success" href=' . route($this->routes['form']) . ' style="float: right">Создать</a>';
-        return view($this->views['index'], compact('date_start','date_end','bills', 'user', 'header', 'action'))->with('routes', $this->routes);
+        return view($this->views['index'], compact('date_start', 'date_end', 'bills', 'user', 'header', 'action'))->with('routes', $this->routes);
     }
     
     public function my()
     {
         $user = auth()->user();
-        $date_start = Carbon::parse(\request('date_start',now()->startOfYear()))->startOfDay();
-        $date_end = Carbon::parse(\request('date_end',now()->endOfYear()))->endOfDay();
+        $date_start = Carbon::parse(\request('date_start', now()->startOfYear()))->startOfDay();
+        $date_end = Carbon::parse(\request('date_end', now()->endOfYear()))->endOfDay();
         $bills = Bill::query()
             ->where('user_id', $user->id)
-            ->whereBetween('created_at',[$date_start,$date_end])
+            ->whereBetween('created_at', [$date_start, $date_end])
             ->with(['user', 'bill_type', 'bill_status'])
             ->get();
         
         $header = 'Мои счета';
         $action = '<a class="btn btn-success" href=' . route($this->routes['form']) . ' style="float: right">Создать</a>';
-        return view($this->views['index'], compact('date_start','date_end','bills', 'user', 'header', 'action'))->with('routes', $this->routes);
+        return view($this->views['index'], compact('date_start', 'date_end', 'bills', 'user', 'header', 'action'))->with('routes', $this->routes);
     }
 }

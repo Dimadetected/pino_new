@@ -26,44 +26,44 @@ class BillController extends Controller
         'form' => 'bill.form',
         'store' => 'bill.store',
     ];
-    
+
     public function check()
     {
         return 1;
     }
-    
+
     public function index()
     {
         $date_start = Carbon::parse(\request('date_start', now()->startOfYear()))->startOfDay();
         $date_end = Carbon::parse(\request('date_end', now()->endOfYear()))->endOfDay();
         $user = auth()->user();
-        
+
         $bills = Bill::query()
             ->where('user_role_id', $user->user_role_id)
             ->orWhere('user_id', $user->id)
             ->with(['user', 'bill_type', 'bill_status'])
             ->orderBy('created_at', 'desc');
-        
+
         $bills = $bills->whereBetween('created_at', [$date_start, $date_end])->get();
         $header = 'Счета';
         $action = '<a class="btn btn-success" href=' . route($this->routes['form']) . ' style="float: right">Создать</a>';
         return view($this->views['index'], compact('date_start', 'date_end', 'bills', 'user', 'header', 'action'))->with('routes', $this->routes);
     }
-    
+
     public function view(Bill $bill)
     {
         $user = auth()->user();
         $header = 'Инфомарция о счете';
         return view($this->views['view'], compact('bill', 'user', 'header'));
     }
-    
+
     public function form(Bill $bill)
     {
 //        $user = auth()->user();
         $header = 'Форма счета';
         return view($this->views['form'], compact('bill', 'header'))->with('routes', $this->routes);
     }
-    
+
     public function store(BillFormRequest $request, Bill $bill)
     {
         $user = auth()->user();
@@ -71,7 +71,7 @@ class BillController extends Controller
         foreach ($request->file()['files'] as $file) {
             if (!is_dir(public_path('files')))
                 mkdir(public_path('files'), 0777, TRUE);
-            
+
             File::put(public_path('files/' . $file->getClientOriginalName()), file_get_contents($file));
             $files[] = 'files/' . $file->getClientOriginalName();
         }
@@ -79,27 +79,27 @@ class BillController extends Controller
             'src' => $files,
         ]);
         $bill->steps = 1;
-        if ($user->user_role_id == 7)
+        if (in_array($user->user_role_id, [2, 7]))
             $bill->steps = 2;
-        
+
         $bill->user_role_id = 6;
-        
+
         $bill->text = $request->text;
         $bill->file_id = $file->id;
         if (is_null($bill->bill_type_id))
             $bill->bill_type_id = 1;
-        
+
         if (is_null($bill->bill_status_id))
             $bill->bill_status_id = 1;
-        
+
         if (is_null($bill->user_id))
             $bill->user_id = $user->id;
-        
+
         $bill->save();
-        
+
         return redirect()->route($this->routes['view'], $bill);
     }
-    
+
     public function consult(Bill $bill)
     {
         $billArr = [];
@@ -118,10 +118,10 @@ class BillController extends Controller
         }
         $billArr['status'] = $status;
         $billArr['bill_status_id'] = $bill_status_id;
-        
+
         if ($return == 'good')
             $billArr['bill_type_id'] = $bill->bill_type_id + 1;
-        
+
         $bill->update($billArr);
         BillAction::query()->create([
             'bill_id' => $bill->id,
@@ -129,10 +129,10 @@ class BillController extends Controller
             'status' => $status,
             'text' => $text,
         ]);
-        
+
         return redirect()->back();
     }
-    
+
     public function accept()
     {
         $user = auth()->user();
@@ -144,12 +144,12 @@ class BillController extends Controller
             ->where('status', 1)
             ->with(['user', 'bill_type', 'bill_status'])
             ->get();
-        
+
         $header = 'Счета для подтверждения';
         $action = '<a class="btn btn-success" href=' . route($this->routes['form']) . ' style="float: right">Создать</a>';
         return view($this->views['index'], compact('date_end', 'date_start', 'bills', 'user', 'header', 'action'))->with('routes', $this->routes);
     }
-    
+
     public function accepted()
     {
         $user = auth()->user();
@@ -161,12 +161,12 @@ class BillController extends Controller
             ->whereBetween('created_at', [$date_start, $date_end])
             ->with(['user', 'bill_type', 'bill_status'])
             ->get();
-        
+
         $header = 'Подтвержденные счета';
         $action = '<a class="btn btn-success" href=' . route($this->routes['form']) . ' style="float: right">Создать</a>';
         return view($this->views['index'], compact('date_start', 'date_end', 'bills', 'user', 'header', 'action'))->with('routes', $this->routes);
     }
-    
+
     public function my()
     {
         $user = auth()->user();
@@ -177,7 +177,7 @@ class BillController extends Controller
             ->whereBetween('created_at', [$date_start, $date_end])
             ->with(['user', 'bill_type', 'bill_status'])
             ->get();
-        
+
         $header = 'Мои счета';
         $action = '<a class="btn btn-success" href=' . route($this->routes['form']) . ' style="float: right">Создать</a>';
         return view($this->views['index'], compact('date_start', 'date_end', 'bills', 'user', 'header', 'action'))->with('routes', $this->routes);

@@ -9,19 +9,19 @@ class Bill extends Model
 {
     use HasFactory;
     protected $guarded = ['id'];
-    
+
     protected $casts = [
         'steps' => 'array',
     ];
-    
+
     public function goodNextStatus()
     {
         if ($this->steps == 1)
             return $this->chainOneGood();
-        
+
         return $this->chainTwoGood();
     }
-    
+
     /**
      * @return int|null
      * Цепочка без механика
@@ -44,7 +44,7 @@ class Bill extends Model
         }
         return NULL;
     }
-    
+
     /**
      * @return int|null
      * Цепочка с механиком
@@ -54,11 +54,8 @@ class Bill extends Model
         switch ($this->bill_status_id) {
             case 1:
                 return ['status' => 3,
-                    'user_role_id' => 3];
-            case 3:
-                return ['status' => 8,
                     'user_role_id' => 2];
-            case  8:
+            case 3:
                 return ['status' => 6,
                     'user_role_id' => 1];
             case  6:
@@ -70,15 +67,15 @@ class Bill extends Model
         }
         return NULL;
     }
-    
+
     public function badNextStatus()
     {
         if ($this->steps == 1)
             return $this->chainOneBad();
-        
+
         return $this->chainTwoBad();
     }
-    
+
     private function chainOneBad()
     {
         switch ($this->bill_status_id) {
@@ -93,7 +90,7 @@ class Bill extends Model
         }
         return NULL;
     }
-    
+
     private function chainTwoBad()
     {
         switch ($this->bill_status_id) {
@@ -110,27 +107,27 @@ class Bill extends Model
         }
         return NULL;
     }
-    
+
     public function file()
     {
         return $this->belongsTo(File::class);
     }
-    
+
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-    
+
     public function bill_type()
     {
         return $this->hasOne(BillType::class,'user_role_id','user_role_id');
     }
-    
+
     public function bill_status()
     {
         return $this->belongsTo(BillStatus::class);
     }
-    
+
     public function bill_actions()
     {
         return $this->hasMany(BillAction::class)->orderBy('created_at', 'desc');

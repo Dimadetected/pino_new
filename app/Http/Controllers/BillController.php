@@ -79,8 +79,8 @@ class BillController extends Controller
             'src' => $files,
         ]);
         $bill->steps = 1;
+//        dd($user);
         if (in_array($user->user_role_id, [2, 7])){
-            dd(2);
             $bill->steps = 2;
         }
 

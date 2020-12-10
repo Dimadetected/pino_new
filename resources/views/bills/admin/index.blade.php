@@ -3,7 +3,7 @@
 
 @section('content')
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    
+
     <div class="container">
         <div class="row ">
             <div class="col-12">
@@ -12,7 +12,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <label for="">Начало периода:</label>
-                                <input type="text" name="date_start"  class="date form-control" value="{{\Carbon\Carbon::parse($date_start)->format('d.m.Y')}}">
+                                <input type="text" name="date_start" class="date form-control" value="{{\Carbon\Carbon::parse($date_start)->format('d.m.Y')}}">
                             </div>
                             <div class="col-md-6">
                                 <label for="">Конец периода:</label>
@@ -42,11 +42,15 @@
                                 <p class="my-3">{{$bill->text}}</p>
                                 @if(isset($bill->file))
                                     @foreach($bill->file->src as $file)
-                                        <embed src="/{{$file}}" class="mt-1 d-none  files{{$bill->id}}" type="application/pdf" height="400px" width="100%">
+                                        @if(explode('.',$file)[1] == 'pdf')
+                                            <embed src="/{{$file}}" class="mt-1 d-none  files{{$bill->id}}" type="application/pdf" height="400px" width="100%">
+                                        @else
+                                            <img src="/{{$file}}" alt="" class="img-fluid">
+                                        @endif
                                     @endforeach
                                     <button class="btn btn-primary mt-2 shadow btnShowFile" onclick="showOrHideFile(this.id)" id="{{$bill->id}}" data-file="{{$bill->id}}">Файл</button>
                                 @endif
-                                
+
                                 @if($bill->status == 2)
                                     <div class="row ">
                                         <div class="col-12 mt-2 text-center ">
@@ -89,44 +93,44 @@
 
 @endsection
 @section('script')
-    
+
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
-		$(function () {
-			$.datepicker.regional['ru'] = {
-				closeText: 'Закрыть',
-				prevText: 'Предыдущий',
-				nextText: 'Следующий',
-				currentText: 'Сегодня',
-				monthNames: ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'],
-				monthNamesShort: ['Янв','Фев','Мар','Апр','Май','Июн','Июл','Авг','Сен','Окт','Ноя','Дек'],
-				dayNames: ['воскресенье','понедельник','вторник','среда','четверг','пятница','суббота'],
-				dayNamesShort: ['вск','пнд','втр','срд','чтв','птн','сбт'],
-				dayNamesMin: ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'],
-				weekHeader: 'Не',
-				dateFormat: 'dd.mm.yy',
-				firstDay: 1,
-				isRTL: false,
-				showMonthAfterYear: false,
-				yearSuffix: ''
-			};
-			$.datepicker.setDefaults($.datepicker.regional['ru']);
-			$(".date").datepicker();
-			
-		});
-		
-		
-		function showOrHideFile(id) {
-			elem = document.getElementById(id);
-			file_class = elem.dataset.file;
-			files = document.getElementsByClassName('files' + file_class);
-			
-			for (let i = 0; i < files.length; i++)
-				if (files[i].classList.contains('d-none'))
-					files[i].classList.remove('d-none');
-				else
-					files[i].classList.add('d-none');
-		}
+        $(function () {
+            $.datepicker.regional['ru'] = {
+                closeText: 'Закрыть',
+                prevText: 'Предыдущий',
+                nextText: 'Следующий',
+                currentText: 'Сегодня',
+                monthNames: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+                monthNamesShort: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'],
+                dayNames: ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'],
+                dayNamesShort: ['вск', 'пнд', 'втр', 'срд', 'чтв', 'птн', 'сбт'],
+                dayNamesMin: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+                weekHeader: 'Не',
+                dateFormat: 'dd.mm.yy',
+                firstDay: 1,
+                isRTL: false,
+                showMonthAfterYear: false,
+                yearSuffix: ''
+            };
+            $.datepicker.setDefaults($.datepicker.regional['ru']);
+            $(".date").datepicker();
+
+        });
+
+
+        function showOrHideFile(id) {
+            elem = document.getElementById(id);
+            file_class = elem.dataset.file;
+            files = document.getElementsByClassName('files' + file_class);
+
+            for (let i = 0; i < files.length; i++)
+                if (files[i].classList.contains('d-none'))
+                    files[i].classList.remove('d-none');
+                else
+                    files[i].classList.add('d-none');
+        }
     </script>
 @endsection

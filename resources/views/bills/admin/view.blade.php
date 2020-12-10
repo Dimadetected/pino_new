@@ -3,7 +3,7 @@
 
 
 @section('content')
-    
+
     <div class="container">
         <div class="row ">
             <div class="col-md-8">
@@ -15,13 +15,17 @@
                     <p class="my-3">{{$bill->text}}</p>
                     @if(isset($bill->file))
                         @foreach($bill->file->src as $file)
-                            <embed src="/{{$file}}" class="mt-1" type="application/pdf" height="500" width="100%">
+                            @if(explode('.',$file)[1] == 'pdf')
+                                <embed src="/{{$file}}" class="mt-1 d-none  files{{$bill->id}}" type="application/pdf" height="400px" width="100%">
+                            @else
+                                <img src="/{{$file}}" alt="" class="img-fluid">
+                            @endif
                         @endforeach
                     @endif
                 </div>
             </div>
             <div class="col-md-4">
-                
+
                 <div class="card card-body shadow mb-5">
                     <div class=" card-title" style="font-size: 16pt">История взаимодействия:</div>
                     <hr>

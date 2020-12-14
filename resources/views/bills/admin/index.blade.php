@@ -3,7 +3,7 @@
 
 @section('content')
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-
+    
     <div class="container">
         <div class="row ">
             <div class="col-12">
@@ -50,7 +50,7 @@
                                     @endforeach
                                     <button class="btn btn-primary mt-2 shadow btnShowFile" onclick="showOrHideFile(this.id)" id="{{$bill->id}}" data-file="{{$bill->id}}">Файл</button>
                                 @endif
-
+                                
                                 @if($bill->status == 2)
                                     <div class="row ">
                                         <div class="col-12 mt-2 text-center ">
@@ -69,19 +69,11 @@
                                             </div>
                                         </div>
                                     </div>
-                                @elseif(($bill->user_role_id == $user->user_role_id and !in_array($bill->user_role_id,[4])) or ($bill->user_role_id == 6 and $bill->user_id == auth()->user()->id))
-                                    <div class="row">
-                                        <div class="btn-group col-12" role="group" aria-label="Basic example">
-                                            <a href="{{route('bill.consult',['bill' => $bill,'type' => 'accept'])}}" class="btn btn-block btn-success my-1 text-light">Утвердить</a>
-                                            <a href="{{route('bill.consult',['bill' => $bill,'type' => 'decline'])}}" class="btn btn-block btn-danger my-1 text-light">Отказать</a>
-                                        </div>
-                                    </div>
-                                @elseif($bill->user_role_id == $user->user_role_id and $bill->user_role_id == 4)
-                                    <div class="row">
-                                        <div class="btn-group col-12" role="group" aria-label="Basic example">
-                                            <a href="{{route('bill.consult',['bill' => $bill,'type' => 'accept'])}}" class="btn btn-block btn-warning text-light my-1">Оплатить</a>
-                                        </div>
-                                    </div>
+                                @elseif(
+                    ($bill->user_role_id == $user->user_role_id and !in_array($bill->user_role_id,[4])) or ($bill->user_role_id == 6 and $bill->user_id == auth()->user()->id) or
+                    ($bill->user_role_id == $user->user_role_id and $bill->user_role_id == 4)
+                    )
+                                    <bill-status-change-component :bill="{{$bill}}"></bill-status-change-component>
                                 @endif
                             </div>
                         </div>
@@ -93,44 +85,44 @@
 
 @endsection
 @section('script')
-
+    
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
-        $(function () {
-            $.datepicker.regional['ru'] = {
-                closeText: 'Закрыть',
-                prevText: 'Предыдущий',
-                nextText: 'Следующий',
-                currentText: 'Сегодня',
-                monthNames: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
-                monthNamesShort: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'],
-                dayNames: ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'],
-                dayNamesShort: ['вск', 'пнд', 'втр', 'срд', 'чтв', 'птн', 'сбт'],
-                dayNamesMin: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
-                weekHeader: 'Не',
-                dateFormat: 'dd.mm.yy',
-                firstDay: 1,
-                isRTL: false,
-                showMonthAfterYear: false,
-                yearSuffix: ''
-            };
-            $.datepicker.setDefaults($.datepicker.regional['ru']);
-            $(".date").datepicker();
-
-        });
-
-
-        function showOrHideFile(id) {
-            elem = document.getElementById(id);
-            file_class = elem.dataset.file;
-            files = document.getElementsByClassName('files' + file_class);
-
-            for (let i = 0; i < files.length; i++)
-                if (files[i].classList.contains('d-none'))
-                    files[i].classList.remove('d-none');
-                else
-                    files[i].classList.add('d-none');
-        }
+		$(function () {
+			$.datepicker.regional['ru'] = {
+				closeText: 'Закрыть',
+				prevText: 'Предыдущий',
+				nextText: 'Следующий',
+				currentText: 'Сегодня',
+				monthNames: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+				monthNamesShort: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'],
+				dayNames: ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'],
+				dayNamesShort: ['вск', 'пнд', 'втр', 'срд', 'чтв', 'птн', 'сбт'],
+				dayNamesMin: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+				weekHeader: 'Не',
+				dateFormat: 'dd.mm.yy',
+				firstDay: 1,
+				isRTL: false,
+				showMonthAfterYear: false,
+				yearSuffix: ''
+			};
+			$.datepicker.setDefaults($.datepicker.regional['ru']);
+			$(".date").datepicker();
+			
+		});
+		
+		
+		function showOrHideFile(id) {
+			elem = document.getElementById(id);
+			file_class = elem.dataset.file;
+			files = document.getElementsByClassName('files' + file_class);
+			
+			for (let i = 0; i < files.length; i++)
+				if (files[i].classList.contains('d-none'))
+					files[i].classList.remove('d-none');
+				else
+					files[i].classList.add('d-none');
+		}
     </script>
 @endsection

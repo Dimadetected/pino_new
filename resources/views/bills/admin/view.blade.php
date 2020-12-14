@@ -3,8 +3,8 @@
 
 
 @section('content')
-
-    <div class="container" >
+    
+    <div class="container">
         <div class="row ">
             <div class="col-md-8">
                 <div class="card card-body shadow mb-1" style="min-height: 90vh">
@@ -16,7 +16,7 @@
                     @if(isset($bill->file))
                         @foreach($bill->file->src as $file)
                             @if(explode('.',$file)[1] == 'pdf')
-                                <embed  src="/{{$file}}" class="mt-1   files{{$bill->id}}" type="application/pdf" height="500px" width="100%">
+                                <embed src="/{{$file}}" class="mt-1   files{{$bill->id}}" type="application/pdf" height="500px" width="100%">
                             @else
                                 <img src="/{{$file}}" alt="" class="mt-1   files{{$bill->id}}" style="width: 100%;">
                             @endif
@@ -25,8 +25,11 @@
                 </div>
             </div>
             <div class="col-md-4">
-
+                
                 <div class="card card-body shadow mb-5">
+                    @if($bill->bill_type_id == 1 and $bill->user_id == auth()->user()->id)
+                        <a href="{{route('bill.delete',$bill->id)}}" class="btn btn-danger my-1" >Удалить</a>
+                    @endif
                     <button class="btn btn-primary" onclick="print()">Распечатать</button>
                     @if($bill->status == 2)
                         <div class="row ">
@@ -46,38 +49,27 @@
                                 </div>
                             </div>
                         </div>
-                    @elseif(($bill->user_role_id == $user->user_role_id and !in_array($bill->user_role_id,[4])) or ($bill->user_role_id == 6 and $bill->user_id == auth()->user()->id))
-                        <div class="row">
-                            <div class="btn-group col-12" role="group" aria-label="Basic example">
-                                <a href="{{route('bill.consult',['bill' => $bill,'type' => 'accept'])}}" class="btn btn-block btn-success my-1 text-light">Утвердить</a>
-                                <a href="{{route('bill.consult',['bill' => $bill,'type' => 'decline'])}}" class="btn btn-block btn-danger my-1 text-light">Отказать</a>
-                            </div>
-                        </div>
-                    @elseif($bill->user_role_id == $user->user_role_id and $bill->user_role_id == 4)
-                        <div class="row">
-                            <div class="btn-group col-12" role="group" aria-label="Basic example">
-                                <a href="{{route('bill.consult',['bill' => $bill,'type' => 'accept'])}}" class="btn btn-block btn-warning text-light my-1">Оплатить</a>
-                            </div>
-                        </div>
+                    @elseif(
+                    ($bill->user_role_id == $user->user_role_id and !in_array($bill->user_role_id,[4])) or ($bill->user_role_id == 6 and $bill->user_id == auth()->user()->id) or
+                    ($bill->user_role_id == $user->user_role_id and $bill->user_role_id == 4)
+                    )
+                        <bill-status-change-component :bill="{{$bill}}"></bill-status-change-component>
                     @endif
-                    <div class=" card-title mt-4" style="font-size: 16pt">История взаимодействия:</div>
-                    <hr>
-                    @foreach($bill->bill_actions as $key => $bill_action)
-                        <p class="my-3">{{$bill_action->user->name}}:<br>
-                            <span class="pl-4">{{$bill_action->text}}</span>
-                        <div class="text-right">{{\Carbon\Carbon::parse($bill_action->created_at)->format('d.m.Y H:i')}}</div>
-                        </p>
-                        @if($key != count($bill->bill_actions) -1 )
-                            <hr>
-                        @endif
-                    @endforeach
+                    @if(isset($bill->bill_action->user_id) and $bill->bill_action->user_id == $user->id)
+                        <a href="{{route('bill.back',$bill->id)}}" class="btn btn-dark mt-3">Изменить</a>
+                    @endif
+                    <bill-actions :messages="{{$bill->messages}}" :actions="{{$bill->bill_actions}}"></bill-actions>
+                    <hr class="mt-4">
+                    <div class="mt-3">
+                        <message-create :user_id="'{{auth()->user()->id}}'" :type="'bill'" external_id="{{(int)$bill->id}}"></message-create>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     <script>
-        function print(){
-            window.open('/{{$file}}').print();
-        }
+		function print() {
+			window.open('/{{$file}}').print();
+		}
     </script>
 @endsection

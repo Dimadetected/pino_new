@@ -36,14 +36,18 @@
     </header>
     
     <!-- Page Content -->
-    <main class="py-3">
+    <main class="py-3" >
+        <div id="app">
+        
         @yield('content')
+        </div>
         {{ isset($slot) ?$slot :'' }}
     </main>
 </div>
 
 @stack('modals')
 @yield('script')
+<script src="{{ asset('js/app.js') }}"></script>
 
 @livewireScripts
 </body>

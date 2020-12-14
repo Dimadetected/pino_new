@@ -7,32 +7,26 @@ use App\Http\Resources\BillResource;
 use App\Models\Bill;
 use App\Models\BillAction;
 use App\Models\BillStatus;
+use App\Models\Message;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 
-class BillController extends Controller
+class MessageController extends Controller
 {
     
     public function index()
     {
-        $user = User::query()->find(\request('user_id'));
-        if ($user->user_role_id == 4)
-            $user->user_role_id = 5;
-        
-        $bills = BillResource::collection(
-            Bill::query()
-                ->where('bill_type_id', $user->user_role_id)
-                ->orWhere('user_id', $user->id)
-                ->whereNotIn('status', [2])
-                ->with(['user', 'bill_type', 'bill_status'])
-                ->get());
-        return $bills;
     }
     
     public function store(Request $request)
     {
-        //п
+        return response()->json(Message::query()->create([
+            'type' => $request->type,
+            'external_id' => $request->external_id,
+            'user_id' => $request->user_id,
+            'text' => $request->text,
+        ]));
     }
     
     /**

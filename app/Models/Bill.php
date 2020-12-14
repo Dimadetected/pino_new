@@ -9,19 +9,24 @@ class Bill extends Model
 {
     use HasFactory;
     protected $guarded = ['id'];
-
+    
     protected $casts = [
         'steps' => 'array',
     ];
-
+    
+    public function bill_log()
+    {
+        return $this->hasOne(BillLog::class)->orderBy('id', 'desc');
+    }
+    
     public function goodNextStatus()
     {
         if ($this->steps == 1)
             return $this->chainOneGood();
-
+        
         return $this->chainTwoGood();
     }
-
+    
     /**
      * @return int|null
      * Цепочка без механика
@@ -37,14 +42,14 @@ class Bill extends Model
                     'user_role_id' => 1];
             case  8:
                 return ['status' => 4,
-                'user_role_id' => 4];
+                    'user_role_id' => 4];
             case 4:
                 return ['status' => 10,
-                    'user_role_id' => null];
+                    'user_role_id' => NULL];
         }
         return NULL;
     }
-
+    
     /**
      * @return int|null
      * Цепочка с механиком
@@ -63,19 +68,19 @@ class Bill extends Model
                     'user_role_id' => 4];
             case 4:
                 return ['status' => 10,
-                    'user_role_id' => null];
+                    'user_role_id' => NULL];
         }
         return NULL;
     }
-
+    
     public function badNextStatus()
     {
         if ($this->steps == 1)
             return $this->chainOneBad();
-
+        
         return $this->chainTwoBad();
     }
-
+    
     private function chainOneBad()
     {
         switch ($this->bill_status_id) {
@@ -90,7 +95,7 @@ class Bill extends Model
         }
         return NULL;
     }
-
+    
     private function chainTwoBad()
     {
         switch ($this->bill_status_id) {
@@ -107,29 +112,38 @@ class Bill extends Model
         }
         return NULL;
     }
-
+    
     public function file()
     {
         return $this->belongsTo(File::class);
     }
-
+    
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-
+    
     public function bill_type()
     {
-        return $this->hasOne(BillType::class,'user_role_id','user_role_id');
+        return $this->hasOne(BillType::class, 'user_role_id', 'user_role_id');
     }
-
+    
     public function bill_status()
     {
         return $this->belongsTo(BillStatus::class);
     }
-
+    
     public function bill_actions()
     {
         return $this->hasMany(BillAction::class)->orderBy('created_at', 'desc');
+    }
+    
+    public function bill_action()
+    {
+        return $this->hasOne(BillAction::class)->orderBy('id', 'desc');
+    }
+    
+    public function messages(){
+        return $this->hasMany(Message::class,'external_id','id')->where('type','bill');
     }
 }

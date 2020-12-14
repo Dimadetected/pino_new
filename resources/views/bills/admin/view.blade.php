@@ -4,7 +4,7 @@
 
 @section('content')
 
-    <div class="container">
+    <div class="container" >
         <div class="row ">
             <div class="col-md-8">
                 <div class="card card-body shadow mb-1" style="min-height: 90vh">
@@ -16,9 +16,9 @@
                     @if(isset($bill->file))
                         @foreach($bill->file->src as $file)
                             @if(explode('.',$file)[1] == 'pdf')
-                                <embed src="/{{$file}}" class="mt-1 d-none  files{{$bill->id}}" type="application/pdf" height="400px" width="100%">
+                                <embed  src="/{{$file}}" class="mt-1 d-none  files{{$bill->id}}" type="application/pdf" height="400px" width="100%">
                             @else
-                                <img src="/{{$file}}" alt="" class="img-fluid">
+                                <img src="/{{$file}}" alt="" class="img-fluid" style="width: 100%;">
                             @endif
                         @endforeach
                     @endif
@@ -27,7 +27,8 @@
             <div class="col-md-4">
 
                 <div class="card card-body shadow mb-5">
-                    <div class=" card-title" style="font-size: 16pt">История взаимодействия:</div>
+                    <button class="btn btn-primary" onclick="print()">Распечатать</button>
+                    <div class=" card-title mt-4" style="font-size: 16pt">История взаимодействия:</div>
                     <hr>
                     @foreach($bill->bill_actions as $key => $bill_action)
                         <p class="my-3">{{$bill_action->user->name}}:<br>
@@ -42,5 +43,9 @@
             </div>
         </div>
     </div>
-
+    <script>
+        function print(){
+            window.open('/{{$file}}').print();
+        }
+    </script>
 @endsection

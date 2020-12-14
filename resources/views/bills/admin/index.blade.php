@@ -45,7 +45,7 @@
                                         @if(explode('.',$file)[1] == 'pdf')
                                             <embed src="/{{$file}}" class="mt-1 d-none  files{{$bill->id}}" type="application/pdf" height="400px" width="100%">
                                         @else
-                                            <img src="/{{$file}}" alt="" class="img-fluid">
+                                            <img src="/{{$file}}" alt="" class="img-fluid mt-1 d-none  files{{$bill->id}}">
                                         @endif
                                     @endforeach
                                     <button class="btn btn-primary mt-2 shadow btnShowFile" onclick="showOrHideFile(this.id)" id="{{$bill->id}}" data-file="{{$bill->id}}">Файл</button>

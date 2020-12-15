@@ -52,7 +52,6 @@
                     bill: this.bill.id,
                     type: this.type,
                     text: this.textArea,
-
                 })).then(res => {
                     location.reload()
                     console.log(res);

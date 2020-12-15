@@ -2029,13 +2029,12 @@ __webpack_require__.r(__webpack_exports__);
       this.showOrHideFlag = true;
     },
     send: function send() {
-      console.log(this.textArea);
       fetch('/bill/consult?' + new URLSearchParams({
         bill: this.bill.id,
         type: this.type,
         text: this.textArea
       })).then(function (res) {
-        // location.reload()
+        location.reload();
         console.log(res);
       });
     }

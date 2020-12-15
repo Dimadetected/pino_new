@@ -2015,7 +2015,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       type: 'decline',
-      text: '',
+      textArea: '',
       showOrHideFlag: false
     };
   },
@@ -2029,14 +2029,13 @@ __webpack_require__.r(__webpack_exports__);
       this.showOrHideFlag = true;
     },
     send: function send() {
-      console.log(this.text);
-      console.log(this.bill);
+      console.log(this.textArea);
       fetch('/bill/consult?' + new URLSearchParams({
         bill: this.bill.id,
         type: this.type,
-        text: this.text
+        text: this.textArea
       })).then(function (res) {
-        location.reload();
+        // location.reload()
         console.log(res);
       });
     }
@@ -19945,19 +19944,19 @@ var render = function() {
                 {
                   name: "model",
                   rawName: "v-model",
-                  value: _vm.text,
-                  expression: "text"
+                  value: _vm.textArea,
+                  expression: "textArea"
                 }
               ],
               staticClass: "form-control",
               attrs: { id: "" },
-              domProps: { value: _vm.text },
+              domProps: { value: _vm.textArea },
               on: {
                 input: function($event) {
                   if ($event.target.composing) {
                     return
                   }
-                  _vm.text = $event.target.value
+                  _vm.textArea = $event.target.value
                 }
               }
             })

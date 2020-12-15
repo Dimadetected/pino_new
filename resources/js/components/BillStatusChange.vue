@@ -8,7 +8,7 @@
         </div>
         <div class="col-12">
             <div class="col-12 my-2" v-if="showOrHideFlag">
-                <textarea v-model="text" id="" class="form-control"></textarea>
+                <textarea v-model="textArea" id="" class="form-control"></textarea>
             </div>
             <div class="col-12">
                 <button v-if="showOrHideFlag" class="btn btn-primary btn-block" @click="send">Применить</button>
@@ -34,7 +34,7 @@
         data() {
             return {
                 type: 'decline',
-                text: '',
+                textArea: '',
                 showOrHideFlag: false
             }
         },
@@ -48,15 +48,14 @@
                 this.showOrHideFlag = true;
             },
             send() {
-                console.log(this.text);
-                console.log(this.bill);
+                console.log(this.textArea);
                 fetch('/bill/consult?' + new URLSearchParams({
                     bill: this.bill.id,
                     type: this.type,
-                    text: this.text,
+                    text: this.textArea,
 
                 })).then(res => {
-                    location.reload()
+                    // location.reload()
                     console.log(res);
                 })
             }

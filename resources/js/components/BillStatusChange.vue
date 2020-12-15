@@ -7,8 +7,8 @@
             </div>
         </div>
         <div class="col-12">
-            <div class="col-12 my-2">
-                <textarea v-if="showOrHideFlag" :v-model="text" id="" class="form-control"></textarea>
+            <div class="col-12 my-2" v-if="showOrHideFlag">
+                <textarea v-model="text" id="" class="form-control"></textarea>
             </div>
             <div class="col-12">
                 <button v-if="showOrHideFlag" class="btn btn-primary btn-block" @click="send">Применить</button>
@@ -18,49 +18,50 @@
 </template>
 
 <script>
-	export default {
-		name: 'BillStatusChange',
-		mounted() {
-			console.log(123)
-		},
-		props: {
-			bill: {
-				type: Object,
-				default() {
-					return {}
-				}
-			}
-		},
-		data() {
-			return {
-				type: 'decline',
-				text: '',
-				showOrHideFlag: false
-			}
-		},
-		methods: {
-			accept() {
-				this.type = 'accept';
-				this.showOrHideFlag = true;
-			},
-			decline() {
-				this.type = 'decline';
-				this.showOrHideFlag = true;
-			},
-			send() {
-				console.log(this.bill);
-				fetch('/bill/consult?' + new URLSearchParams({
-					bill: this.bill.id,
-					type: this.type,
-					text: this.text,
+    export default {
+        name: 'BillStatusChange',
+        mounted() {
+            console.log(123)
+        },
+        props: {
+            bill: {
+                type: Object,
+                default() {
+                    return {}
+                }
+            }
+        },
+        data() {
+            return {
+                type: 'decline',
+                text: '',
+                showOrHideFlag: false
+            }
+        },
+        methods: {
+            accept() {
+                this.type = 'accept';
+                this.showOrHideFlag = true;
+            },
+            decline() {
+                this.type = 'decline';
+                this.showOrHideFlag = true;
+            },
+            send() {
+                console.log(this.text);
+                console.log(this.bill);
+                fetch('/bill/consult?' + new URLSearchParams({
+                    bill: this.bill.id,
+                    type: this.type,
+                    text: this.text,
 
-				})).then(res => {
-					location.reload()
-					console.log(res);
-				})
-			}
-		}
-	}
+                })).then(res => {
+                    location.reload()
+                    console.log(res);
+                })
+            }
+        }
+    }
 </script>
 
 <style scoped>

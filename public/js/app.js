@@ -2029,6 +2029,7 @@ __webpack_require__.r(__webpack_exports__);
       this.showOrHideFlag = true;
     },
     send: function send() {
+      console.log(this.text);
       console.log(this.bill);
       fetch('/bill/consult?' + new URLSearchParams({
         bill: this.bill.id,
@@ -19937,14 +19938,31 @@ var render = function() {
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "col-12" }, [
-      _c("div", { staticClass: "col-12 my-2" }, [
-        _vm.showOrHideFlag
-          ? _c("textarea", {
+      _vm.showOrHideFlag
+        ? _c("div", { staticClass: "col-12 my-2" }, [
+            _c("textarea", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.text,
+                  expression: "text"
+                }
+              ],
               staticClass: "form-control",
-              attrs: { "v-model": _vm.text, id: "" }
+              attrs: { id: "" },
+              domProps: { value: _vm.text },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.text = $event.target.value
+                }
+              }
             })
-          : _vm._e()
-      ]),
+          ])
+        : _vm._e(),
       _vm._v(" "),
       _c("div", { staticClass: "col-12" }, [
         _vm.showOrHideFlag
@@ -32568,8 +32586,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\Димас\OpenServer\domains\pino\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\Users\Димас\OpenServer\domains\pino\resources\css\app.css */"./resources/css/app.css");
+__webpack_require__(/*! C:\OS\OpenServer\domains\pino_new\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\OS\OpenServer\domains\pino_new\resources\css\app.css */"./resources/css/app.css");
 
 
 /***/ })

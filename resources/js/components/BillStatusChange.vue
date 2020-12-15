@@ -48,14 +48,13 @@
                 this.showOrHideFlag = true;
             },
             send() {
-                console.log(this.textArea);
                 fetch('/bill/consult?' + new URLSearchParams({
                     bill: this.bill.id,
                     type: this.type,
                     text: this.textArea,
 
                 })).then(res => {
-                    // location.reload()
+                    location.reload()
                     console.log(res);
                 })
             }

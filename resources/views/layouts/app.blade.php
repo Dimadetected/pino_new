@@ -36,10 +36,9 @@
     </header>
     
     <!-- Page Content -->
-    <main class="py-3" >
+    <main class="py-3">
         <div id="app">
-        
-        @yield('content')
+            @yield('content')
         </div>
         {{ isset($slot) ?$slot :'' }}
     </main>

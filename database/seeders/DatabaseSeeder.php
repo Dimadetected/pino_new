@@ -61,21 +61,62 @@ class DatabaseSeeder extends Seeder
             ]);
         
         $billStatuses = [
-            'На подтверждении',
-            'Не подтверждено',
-            'На утверждении',
-            'Утверждено генеральным директором',
-            'Не утверждено генеральным директором',
-            'Утверждено главным механиком',
-            'Не утверждено главным механиком',
-            'Утверждено руководителем подразделения',
-            'Не утверждено руководителем подразделения',
-            'Оплачено бухгалтером',
-            'Не оплачено бухгалтером',
+            [
+                'text' => 'Подтверждено',
+                'user_role_id' => 6,
+                'status' => 'good'
+            ],
+            [
+                'text' => 'Не подтверждено',
+                'user_role_id' => 6,
+                'status' => 'bad'
+            ],
+            [
+                'text' => 'Утверждено генеральным директором',
+                'user_role_id' => 1,
+                'status' => 'good'
+            ],
+            [
+                'text' => 'Не утверждено генеральным директором',
+                'user_role_id' => 1,
+                'status' => 'bad'
+            ],
+            [
+                'text' => 'Утверждено главным механиком',
+                'user_role_id' => 2,
+                'status' => 'good'
+            ],
+            [
+                'text' => 'Не утверждено главным механиком',
+                'user_role_id' => 2,
+                'status' => 'bad'
+            ],
+            [
+                'text' => 'Утверждено руководителем подразделения',
+                'user_role_id' => 3,
+                'status' => 'good'
+            ],
+            [
+                'text' => 'Не утверждено руководителем подразделения',
+                'user_role_id' => 3,
+                'status' => 'bad'
+            ],
+            [
+                'text' => 'Оплачено бухгалтером',
+                'user_role_id' => 4,
+                'status' => 'good'
+            ],
+            [
+                'text' => 'Не оплачено бухгалтером',
+                'user_role_id' => 4,
+                'status' => 'bad'
+            ],
         ];
         foreach ($billStatuses as $billStatus)
             BillStatus::query()->create([
-                'name' => $billStatus,
+                'name' => $billStatus['text'],
+                'status' => $billStatus['status'],
+                'user_role_id' => $billStatus['user_role_id'],
             ]);
         Bill::factory(100)->create();
     }

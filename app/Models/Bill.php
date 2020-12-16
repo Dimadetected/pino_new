@@ -14,6 +14,12 @@ class Bill extends Model
         'steps' => 'array',
     ];
     
+
+    public function bill_statuses()
+    {
+        return $this->hasMany(BillStatus::class,'user_role_id','user_role_id');
+    }
+    
     public function bill_log()
     {
         return $this->hasOne(BillLog::class)->orderBy('id', 'desc');
@@ -143,7 +149,14 @@ class Bill extends Model
         return $this->hasOne(BillAction::class)->orderBy('id', 'desc');
     }
     
-    public function messages(){
-        return $this->hasMany(Message::class,'external_id','id')->where('type','bill');
+    public function messages()
+    {
+        return $this->hasMany(Message::class, 'external_id', 'id')->where('type', 'bill');
     }
+    
+    public function chain()
+    {
+        return $this->belongsTo(Chain::class);
+    }
+    
 }

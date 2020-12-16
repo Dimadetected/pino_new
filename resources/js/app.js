@@ -14,6 +14,8 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 Vue.component('bill-status-change-component', require('./components/BillStatusChange.vue').default);
 Vue.component('message-create', require('./components/MessageCreate.vue').default);
 Vue.component('bill-actions', require('./components/BillActions.vue').default);
+
+Vue.component('chains-form', require('./components/chains/form.vue').default);
 new Vue({
     el: '#app',
 });

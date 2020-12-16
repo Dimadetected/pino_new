@@ -29,8 +29,8 @@ Route::prefix('/bill')->name('bill.')->middleware('auth')->group(function () {
     Route::post('/store', 'App\Http\Controllers\BillController@store')->name('store');
     Route::get('/{bill}', 'App\Http\Controllers\BillController@view')->name('view');
 });
-Route::middleware(['auth:sanctum', 'verified'])->group(function (){
-
+Route::prefix('/chain')->name('chain.')->middleware('auth')->group(function () {
+    Route::get('/form/{id?}', 'App\Http\Controllers\ChainController@form')->name('form');
 });
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return redirect()->route('bill.index');

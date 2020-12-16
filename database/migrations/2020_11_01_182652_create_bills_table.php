@@ -8,7 +8,6 @@ class CreateBillsTable extends Migration
 {
     /**
      * Run the migrations.
-     *
      * @return void
      */
     public function up()
@@ -22,15 +21,15 @@ class CreateBillsTable extends Migration
             $table->foreignId('bill_status_id')->nullable();
             $table->foreignId('bill_answer_id')->nullable();
             $table->foreignId('status')->default(1);
-            $table->integer('steps')->nullable();
+            $table->integer('chain_id')->nullable();
+            $table->integer('steps')->default(0);
             $table->foreignId('user_role_id')->nullable();
             $table->timestamps();
         });
     }
-
+    
     /**
      * Reverse the migrations.
-     *
      * @return void
      */
     public function down()

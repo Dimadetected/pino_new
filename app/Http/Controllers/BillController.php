@@ -6,6 +6,8 @@ use App\Http\Requests\BillFormRequest;
 use App\Models\Bill;
 use App\Models\BillAction;
 use App\Models\BillStatus;
+use App\Models\BillType;
+use App\Models\Chain;
 use App\Models\Message;
 use App\Models\User;
 use App\Models\UserRole;
@@ -71,29 +73,34 @@ class BillController extends Controller
         $bill = Bill::query()->find(\request('bill'));
         $billArr = [];
         $type = \request('type');
+        $bill_status = $bill->bill_statuses();
         if ($type == 'accept') {
             $status = 1;
-            $bill_status_id = $bill->goodNextStatus()['status'];
-            $text = BillStatus::query()->find($bill->goodNextStatus()['status'])->name;
-            $billArr['user_role_id'] = $bill->goodNextStatus()['user_role_id'];
+            $bill_status = $bill_status->where('status', 'good')->first();
+            $bill_status_id = $bill_status->id;
+            $text = $bill_status->name;
+            $billArr['steps'] = $bill->steps + 1;
+            $billArr['user_role_id'] = $bill->chain->value[$billArr['steps']];
             $return = 'good';
         } else {
+            $bill_status = $bill_status->where('status', 'bad')->first();
             $status = 2;
-            $bill_status_id = $bill->badNextStatus();
-            $text = BillStatus::query()->find($bill->badNextStatus())->name;
+            $bill_status_id = $bill_status->id;
+            $text = $bill_status->name;
             $return = 'bad';
         }
         $billArr['status'] = $status;
         $billArr['bill_status_id'] = $bill_status_id;
         
         if ($return == 'good')
-            $billArr['bill_type_id'] = $bill->bill_type_id + 1;
+            $billArr['bill_type_id'] = BillType::query()->where('user_role_id', $billArr['user_role_id'])->first()->id;
         $bill->bill_log()->create([
             'info' => [
                 'status' => $bill->status,
                 'bill_type_id' => $bill->bill_type_id,
                 'user_role_id' => $bill->user_role_id,
                 'bill_status_id' => $bill->bill_status_id,
+                'steps' => $bill->steps,
             ],
         ]);
         $bill->update($billArr);
@@ -104,7 +111,7 @@ class BillController extends Controller
             'status' => $status,
             'text' => $text,
         ]);
-    
+        
         if (\request('text'))
             Message::query()->create([
                 'type' => 'bill_action',
@@ -143,21 +150,20 @@ class BillController extends Controller
         $file = \App\Models\File::query()->create([
             'src' => $files,
         ]);
-        $bill->steps = 1;
+//        $bill->steps = 1;
 //        dd($user);
-        if (in_array($user->user_role_id, [2, 7])) {
-            $bill->steps = 2;
-        }
+//        if (in_array($user->user_role_id, [2, 7])) {
+//            $bill->steps = 2;
+//        }
         
-        $bill->user_role_id = 6;
+        $chain = Chain::query()->find(1);
+        $bill->steps = 0;
+        $bill->chain_id = $chain->id;
+        $bill->user_role_id = $chain->value[$bill->steps];
         
         $bill->text = $request->text;
         $bill->file_id = $file->id;
-        if (is_null($bill->bill_type_id))
-            $bill->bill_type_id = 1;
-        
-        if (is_null($bill->bill_status_id))
-            $bill->bill_status_id = 1;
+        $bill->bill_type_id = BillType::query()->where('user_role_id', $chain->value[$bill->steps])->first()->id;
         
         if (is_null($bill->user_id))
             $bill->user_id = $user->id;
@@ -217,7 +223,8 @@ class BillController extends Controller
         return view($this->views['index'], compact('date_start', 'date_end', 'bills', 'user', 'header', 'action'))->with('routes', $this->routes);
     }
     
-    public function delete(Bill $bill){
+    public function delete(Bill $bill)
+    {
         $bill->delete();
         return redirect()->route('bill.index');
     }

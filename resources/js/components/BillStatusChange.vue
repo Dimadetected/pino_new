@@ -54,7 +54,7 @@
 					text: this.textArea,
 				}))
 					.then(res => {
-						// location.reload()
+						location.reload()
 
 						console.log(res);
 					})

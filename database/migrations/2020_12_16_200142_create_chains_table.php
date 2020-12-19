@@ -14,7 +14,7 @@ class CreateChainsTable extends Migration
     {
         Schema::create('chains', function (Blueprint $table) {
             $table->id();
-            $table->text('name')->default('Proverka');
+            $table->text('name');
             $table->text('value');
             $table->timestamps();
         });

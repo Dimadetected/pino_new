@@ -10,6 +10,10 @@ class Bill extends Model
     use HasFactory;
     protected $guarded = ['id'];
     
+    protected $with = [
+        'chain'
+    ];
+    
     protected $casts = [
         'steps' => 'array',
     ];

@@ -23,7 +23,9 @@ class ChainController extends Controller
     
     public function index()
     {
+        $header = 'Цепочки';
     
+        return view($this->views['index'], compact('header'));
     }
     
     public function form($id = 0)

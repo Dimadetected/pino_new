@@ -28,6 +28,7 @@ class BillResource extends JsonResource
             'acceptLink' => route('api.consult',['bill' => $this->id,'type' => 'accept','user_id' => $this->use]),
             'declineLink' => route('api.consult',['bill' => $this->id,'type' => 'decline']),
             'link' => route('bill.view',['bill' => $this->id]),
+            'chain_all' => $this->chain
         ];
     }
 }

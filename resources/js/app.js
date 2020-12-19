@@ -16,6 +16,7 @@ Vue.component('message-create', require('./components/MessageCreate.vue').defaul
 Vue.component('bill-actions', require('./components/BillActions.vue').default);
 
 Vue.component('chains-form', require('./components/chains/form.vue').default);
+Vue.component('chains-index', require('./components/chains/index.vue').default);
 new Vue({
     el: '#app',
 });

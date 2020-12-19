@@ -14,6 +14,14 @@
                         <hr>
                     </div>
                     <div class="form-group">
+                        <label for="chain_id">Цепочка:</label>
+                        <select name="chain_id" id="chain_id" class="form-control">
+                            @foreach($chains as $chain)
+                                <option value="{{$chain->id}}">{{$chain->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label for="text">Описание счета:</label>
                         <textarea name="text" id="text" cols="30" rows="5" class="form-control @error('text') is-invalid @enderror"></textarea>
                     </div>

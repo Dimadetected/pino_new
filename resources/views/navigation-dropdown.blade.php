@@ -22,6 +22,9 @@
                     <x-jet-nav-link href="{{ route('bill.accepted') }}" :active="request()->routeIs('bill.accepted')">
                         Подтвержденные счета
                     </x-jet-nav-link>
+                    <x-jet-nav-link href="{{ route('chains.index') }}" :active="request()->routeIs('chains.index')">
+                        Цепочки
+                    </x-jet-nav-link>
                 </div>
             </div>
             

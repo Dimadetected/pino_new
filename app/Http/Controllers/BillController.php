@@ -44,7 +44,7 @@ class BillController extends Controller
         $bills = Bill::query()
             ->where('user_role_id', $user->user_role_id)
             ->orWhere('user_id', $user->id)
-            ->with(['user', 'bill_type', 'bill_status'])
+            ->with(['user', 'bill_type', 'bill_status','chain'])
             ->orderBy('created_at', 'desc');
         
         $bills = $bills->whereBetween('created_at', [$date_start, $date_end])->get();
@@ -64,8 +64,9 @@ class BillController extends Controller
     public function form(Bill $bill)
     {
 //        $user = auth()->user();
+        $chains = Chain::query()->get();
         $header = 'Форма счета';
-        return view($this->views['form'], compact('bill', 'header'))->with('routes', $this->routes);
+        return view($this->views['form'], compact('bill', 'header','chains'))->with('routes', $this->routes);
     }
     
     public function consult()
@@ -80,7 +81,10 @@ class BillController extends Controller
             $bill_status_id = $bill_status->id;
             $text = $bill_status->name;
             $billArr['steps'] = $bill->steps + 1;
-            $billArr['user_role_id'] = $bill->chain->value[$billArr['steps']];
+            if (isset($bill->chain->value[$billArr['steps']]))
+                $billArr['user_role_id'] = $bill->chain->value[$billArr['steps']];
+            else
+                $billArr['user_role_id'] = NULL;
             $return = 'good';
         } else {
             $bill_status = $bill_status->where('status', 'bad')->first();
@@ -92,7 +96,7 @@ class BillController extends Controller
         $billArr['status'] = $status;
         $billArr['bill_status_id'] = $bill_status_id;
         
-        if ($return == 'good')
+        if ($return == 'good' and isset($billArr['bill_type_id']))
             $billArr['bill_type_id'] = BillType::query()->where('user_role_id', $billArr['user_role_id'])->first()->id;
         $bill->bill_log()->create([
             'info' => [
@@ -156,7 +160,7 @@ class BillController extends Controller
 //            $bill->steps = 2;
 //        }
         
-        $chain = Chain::query()->find(1);
+        $chain = Chain::query()->find($request->chain_id);
         $bill->steps = 0;
         $bill->chain_id = $chain->id;
         $bill->user_role_id = $chain->value[$bill->steps];

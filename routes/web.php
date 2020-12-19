@@ -29,7 +29,8 @@ Route::prefix('/bill')->name('bill.')->middleware('auth')->group(function () {
     Route::post('/store', 'App\Http\Controllers\BillController@store')->name('store');
     Route::get('/{bill}', 'App\Http\Controllers\BillController@view')->name('view');
 });
-Route::prefix('/chain')->name('chain.')->middleware('auth')->group(function () {
+Route::prefix('/chains')->name('chains.')->middleware('auth')->group(function () {
+    Route::get('/', 'App\Http\Controllers\ChainController@index')->name('index');
     Route::get('/form/{id?}', 'App\Http\Controllers\ChainController@form')->name('form');
 });
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {

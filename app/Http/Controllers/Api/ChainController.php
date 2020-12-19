@@ -51,6 +51,7 @@ class ChainController extends Controller
      */
     public function update(Request $request, Chain $chain)
     {
+        
         return ChainResource::make($this->service->update($chain->id, $request->all()));
     }
     

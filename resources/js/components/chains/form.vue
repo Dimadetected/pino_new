@@ -1,6 +1,19 @@
 <template>
     <div class="col-12">
         <div class="row">
+            <div class="col-12 alert alert-success" v-if="alert">
+                Данные были успешно обновлены
+            </div>
+            <div class="col-12 card card-body shadow my-2">
+                <div class="row">
+                    <div class="col-md-4">
+                        Название цепочки:
+                    </div>
+                    <div class="col-md-8">
+                        <input type="text" v-model="chain_name" class="form-control">
+                    </div>
+                </div>
+            </div>
             <div class="col-12 card card-body shadow my-2" v-for="(block,index) in blocks">
                 <div class="row">
                     <div class="col-md-4">
@@ -12,7 +25,7 @@
                         </select>
                     </div>
                     <div class="col-md-1">
-                        <button class="btn btn-danger" @click="blockRemove(index)">
+                        <button class="btn btn-danger" @click="blockRemove(selects[index])">
                             X
                         </button>
                     </div>
@@ -41,6 +54,8 @@
 		},
 		data() {
 			return {
+				alert: false,
+				chain_name: '',
 				selects: [],
 				blocks: [
 					{
@@ -50,11 +65,7 @@
 				user_roles: {},
 			}
 		},
-		watch: {
-			selects() {
-				console.log(this.selects)
-			}
-		},
+		watch: {},
 		methods: {
 			get() {
 				fetch('/api/chains/' + this.chain)
@@ -62,6 +73,7 @@
 					.then(res => {
 						this.blocks = [];
 						let i = 0;
+						this.chain_name = res.data.name
 						res.data.value.map(chain => {
 							this.blocks.push({value: chain})
 							this.selects[i] = chain;
@@ -81,7 +93,7 @@
 						body: JSON.stringify(
 							{
 								token: 'base64:vfhjJc51xw1vWIRyH+JG36Xux3OP/IAAbOVQi2cjA0c=',
-								name: this.name,
+								name: this.chain_name,
 								value: arrToSend
 							}
 						),
@@ -95,6 +107,7 @@
 					.then(r => {
 							this.data = r.data;
 							console.log(r.data);
+							this.alert = true;
 						}
 					)
 			},
@@ -107,11 +120,14 @@
 			}
 			,
 
-			blockRemove(index) {
-				console.log(this.blocks);
-				console.log(this.blocks[index]);
-				this.blocks.splice(index, 1);
-				console.log(this.blocks);
+			blockRemove(role) {
+				this.blocks = this.blocks.filter(block => role !== block.value)
+				let i = 0;
+				this.selects = [];
+				this.blocks.map(chain => {
+					this.selects[i] = chain.value;
+					i += 1
+				});
 			}
 			,
 			blockAdd() {

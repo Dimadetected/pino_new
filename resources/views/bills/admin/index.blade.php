@@ -35,7 +35,7 @@
                                 <div class=" card-title" style="font-size: 16pt"><a class="text-primary" href="{{route($routes['view'],$bill)}}">Счет #{{$bill->id}}</a></div>
                                 <div class=" card-title" style="font-size: 16pt">{{\Carbon\Carbon::parse($bill->created_at)->format('d.m.Y H:i:s')}}</div>
                                 @if($bill->status != 2)
-                                    <div class="my-2  h4">{{$bill->bill_type->name??'Оплачено'}}
+                                    <div class="my-2  h4">{{$bill->bill_type->name??$bill->bill_status->name}}
                                     </div>
                                 @endif
                                 <hr>
@@ -65,7 +65,7 @@
                                         <div class="col-12 mt-2 text-center ">
                                             <hr>
                                             <div class="h4 mt-2" role="group" aria-label="Basic example">
-                                                Оплачено
+                                                Завершено
                                             </div>
                                         </div>
                                     </div>

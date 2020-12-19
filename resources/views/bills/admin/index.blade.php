@@ -69,12 +69,12 @@
                                             </div>
                                         </div>
                                     </div>
-                                @elseif(
-                    ($bill->user_role_id == $user->user_role_id and !in_array($bill->user_role_id,[4])) or ($bill->user_role_id == 6 and $bill->user_id == auth()->user()->id) or
-                    ($bill->user_role_id == $user->user_role_id and $bill->user_role_id == 4)
-                    )
+                                @elseif(($bill->user_role_id == $user->user_role_id ) or
+                                ($bill->steps == 0 and $bill->user_id == auth()->user()->id) or
+                                ($bill->user_role_id == $user->user_role_id and $bill->user_role_id == 4))
                                     <bill-status-change-component :bill="{{$bill}}"></bill-status-change-component>
                                 @endif
+
                             </div>
                         </div>
                     @endforeach

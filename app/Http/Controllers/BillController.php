@@ -186,7 +186,7 @@ class BillController extends Controller
             ->where('user_role_id', $user->user_role_id)
             ->whereBetween('created_at', [$date_start, $date_end])
             ->where('status', 1)
-            ->with(['user', 'bill_type', 'bill_status'])
+            ->with(['user', 'bill_type', 'bill_status','chain'])
             ->get();
         
         $header = 'Счета для подтверждения';
@@ -203,7 +203,7 @@ class BillController extends Controller
         $bills = Bill::query()
             ->whereIn('id', $actions)
             ->whereBetween('created_at', [$date_start, $date_end])
-            ->with(['user', 'bill_type', 'bill_status'])
+            ->with(['user', 'bill_type', 'bill_status','chain'])
             ->get();
         
         $header = 'Подтвержденные счета';
@@ -219,7 +219,7 @@ class BillController extends Controller
         $bills = Bill::query()
             ->where('user_id', $user->id)
             ->whereBetween('created_at', [$date_start, $date_end])
-            ->with(['user', 'bill_type', 'bill_status'])
+            ->with(['user', 'bill_type', 'bill_status','chain'])
             ->get();
         
         $header = 'Мои счета';

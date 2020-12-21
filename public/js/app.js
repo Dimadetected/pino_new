@@ -2034,7 +2034,7 @@ __webpack_require__.r(__webpack_exports__);
         type: this.type,
         text: this.textArea
       })).then(function (res) {
-        // location.reload()
+        location.reload();
         console.log(res);
       });
     }

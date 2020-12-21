@@ -15,6 +15,7 @@
                     <p class="my-3">{{$bill->text}}</p>
                     @if(isset($bill->file))
                         @foreach($bill->file->src as $file)
+                            <a href="/{{$file}}" target="_blank" class="btn btn-primary">Файл</a>
                             @if(explode('.',$file)[1] == 'pdf')
                                 <embed src="/{{$file}}" class="mt-1   files{{$bill->id}}" type="application/pdf" height="500px" width="100%">
                             @else
@@ -28,7 +29,7 @@
                 
                 <div class="card card-body shadow mb-5">
                     @if($bill->bill_type_id == 1 and $bill->user_id == auth()->user()->id)
-                        <a href="{{route('bill.delete',$bill->id)}}" class="btn btn-danger my-1" >Удалить</a>
+                        <a href="{{route('bill.delete',$bill->id)}}" class="btn btn-danger my-1">Удалить</a>
                     @endif
                     <button class="btn btn-primary" onclick="print()">Распечатать</button>
                     @if($bill->status == 2)

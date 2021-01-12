@@ -31,7 +31,8 @@
                     @if($bill->bill_type_id == 1 and $bill->user_id == auth()->user()->id)
                         <a href="{{route('bill.delete',$bill->id)}}" class="btn btn-danger my-1">Удалить</a>
                     @endif
-                    <a target="_blank" href="{{route('bill.print',$bill->id)}}" class="btn btn-primary" >Распечатать</a>
+{{--                    <a target="_blank" href="{{route('bill.print',$bill->id)}}" class="btn btn-primary" >Распечатать</a>--}}
+                    <a onclick="print()" class="btn btn-primary" >Распечатать</a>
                     @if($bill->status == 2)
                         <div class="row ">
                             <div class="col-12 mt-2 text-center ">

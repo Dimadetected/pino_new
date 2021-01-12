@@ -11,17 +11,27 @@ class Bill extends Model
     protected $guarded = ['id'];
     
     protected $with = [
-        'chain'
+        'chain',
     ];
     
     protected $casts = [
         'steps' => 'array',
     ];
     
-
+    public function mainUserAccept()
+    {
+        $actions = $this->bill_actions()->where('status', 1)->with('user')->get();
+        if ($actions and count($actions) > 0) {
+            foreach ($actions as $action)
+                if ($action->user->user_role_id == 1)
+                    return $action->user;
+        }
+        return FALSE;
+    }
+    
     public function bill_statuses()
     {
-        return $this->hasMany(BillStatus::class,'user_role_id','user_role_id');
+        return $this->hasMany(BillStatus::class, 'user_role_id', 'user_role_id');
     }
     
     public function bill_log()

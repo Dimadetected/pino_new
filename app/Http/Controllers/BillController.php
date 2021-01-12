@@ -44,7 +44,7 @@ class BillController extends Controller
         $bills = Bill::query()
             ->where('user_role_id', $user->user_role_id)
             ->orWhere('user_id', $user->id)
-            ->with(['user', 'bill_type', 'bill_status','chain'])
+            ->with(['user', 'bill_type', 'bill_status', 'chain'])
             ->orderBy('created_at', 'desc');
         
         $bills = $bills->whereBetween('created_at', [$date_start, $date_end])->get();
@@ -66,7 +66,7 @@ class BillController extends Controller
 //        $user = auth()->user();
         $chains = Chain::query()->get();
         $header = 'Форма счета';
-        return view($this->views['form'], compact('bill', 'header','chains'))->with('routes', $this->routes);
+        return view($this->views['form'], compact('bill', 'header', 'chains'))->with('routes', $this->routes);
     }
     
     public function consult()
@@ -186,7 +186,7 @@ class BillController extends Controller
             ->where('user_role_id', $user->user_role_id)
             ->whereBetween('created_at', [$date_start, $date_end])
             ->where('status', 1)
-            ->with(['user', 'bill_type', 'bill_status','chain'])
+            ->with(['user', 'bill_type', 'bill_status', 'chain'])
             ->get();
         
         $header = 'Счета для подтверждения';
@@ -203,7 +203,7 @@ class BillController extends Controller
         $bills = Bill::query()
             ->whereIn('id', $actions)
             ->whereBetween('created_at', [$date_start, $date_end])
-            ->with(['user', 'bill_type', 'bill_status','chain'])
+            ->with(['user', 'bill_type', 'bill_status', 'chain'])
             ->get();
         
         $header = 'Подтвержденные счета';
@@ -219,7 +219,7 @@ class BillController extends Controller
         $bills = Bill::query()
             ->where('user_id', $user->id)
             ->whereBetween('created_at', [$date_start, $date_end])
-            ->with(['user', 'bill_type', 'bill_status','chain'])
+            ->with(['user', 'bill_type', 'bill_status', 'chain'])
             ->get();
         
         $header = 'Мои счета';
@@ -231,5 +231,10 @@ class BillController extends Controller
     {
         $bill->delete();
         return redirect()->route('bill.index');
+    }
+    
+    public function printBill(Bill $bill)
+    {
+        return view('bills.admin.print',compact('bill'));
     }
 }

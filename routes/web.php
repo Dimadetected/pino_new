@@ -28,6 +28,7 @@ Route::prefix('/bill')->name('bill.')->middleware('auth')->group(function () {
     Route::get('/delete/{bill}', 'App\Http\Controllers\BillController@delete')->name('delete');
     Route::post('/store', 'App\Http\Controllers\BillController@store')->name('store');
     Route::get('/{bill}', 'App\Http\Controllers\BillController@view')->name('view');
+    Route::get('print/{bill}', 'App\Http\Controllers\BillController@printBill')->name('print');
 });
 Route::prefix('/chains')->name('chains.')->middleware('auth')->group(function () {
     Route::get('/', 'App\Http\Controllers\ChainController@index')->name('index');

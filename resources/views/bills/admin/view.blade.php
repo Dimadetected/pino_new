@@ -16,7 +16,7 @@
                     @if(isset($bill->file))
                         @foreach($bill->file->src as $file)
                             <a href="/{{$file}}" target="_blank" class="btn btn-primary">Файл</a>
-                            @if(explode('.',$file)[1] == 'pdf')
+                            @if(in_array(explode('.',$file)[1],['pdf','doc','docx','excel','xls']))
                                 <embed src="/{{$file}}" class="mt-1   files{{$bill->id}}" type="application/pdf" height="500px" width="100%">
                             @else
                                 <img src="/{{$file}}" alt="" class="mt-1   files{{$bill->id}}" style="width: 100%;">
@@ -31,7 +31,7 @@
                     @if($bill->bill_type_id == 1 and $bill->user_id == auth()->user()->id)
                         <a href="{{route('bill.delete',$bill->id)}}" class="btn btn-danger my-1">Удалить</a>
                     @endif
-                    <button class="btn btn-primary" onclick="print()">Распечатать</button>
+                    <a target="_blank" href="{{route('bill.print',$bill->id)}}" class="btn btn-primary" >Распечатать</a>
                     @if($bill->status == 2)
                         <div class="row ">
                             <div class="col-12 mt-2 text-center ">

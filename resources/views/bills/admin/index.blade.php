@@ -32,6 +32,9 @@
             <div class="col-12 mt-3">
                 <div class="row">
                     @foreach($bills as $bill)
+                        @if(!in_array($bill->chain->organisation_id,$org_ids))
+                            @continue
+                        @endif
                         <div class="col-md-4 my-2">
                             <div
                                 class="card card-body shadow mb-5 alert @if($bill->status == 1 and is_null($bill->user_role_id) ) alert-success @elseif($bill->status == 2) alert-danger @endif">

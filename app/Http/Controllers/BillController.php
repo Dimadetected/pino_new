@@ -46,14 +46,11 @@ class BillController extends Controller
             ->where('user_role_id', $user->user_role_id)
             ->orWhere('user_id', $user->id)
             ->with(['user', 'bill_type', 'bill_status', 'chain'])
-            ->whereHas('chain',function ($query) use ($org_ids){
-                $query->whereIn('organisation_id',$org_ids);
-            })
             ->orderBy('created_at', 'desc');
         $bills = $bills->whereBetween('created_at', [$date_start, $date_end])->get();
         $header = 'Счета';
         $action = '<a class="btn btn-success" href=' . route($this->routes['form']) . ' style="float: right">Создать</a>';
-        return view($this->views['index'], compact('date_start', 'date_end', 'bills', 'user', 'header', 'action'))->with('routes', $this->routes);
+        return view($this->views['index'], compact('org_ids','date_start', 'date_end', 'bills', 'user', 'header', 'action'))->with('routes', $this->routes);
     }
 
     public function view(Bill $bill)
@@ -193,16 +190,13 @@ class BillController extends Controller
         $bills = Bill::query()
             ->where('user_role_id', $user->user_role_id)
             ->whereBetween('created_at', [$date_start, $date_end])
-            ->whereHas('chain',function ($query) use ($org_ids){
-                $query->whereIn('organisation_id',$org_ids);
-            })
             ->where('status', 1)
             ->with(['user', 'bill_type', 'bill_status', 'chain'])
             ->get();
 
         $header = 'Счета для подтверждения';
         $action = '<a class="btn btn-success" href=' . route($this->routes['form']) . ' style="float: right">Создать</a>';
-        return view($this->views['index'], compact('date_end', 'date_start', 'bills', 'user', 'header', 'action'))->with('routes', $this->routes);
+        return view($this->views['index'], compact('date_end', 'org_ids','date_start', 'bills', 'user', 'header', 'action'))->with('routes', $this->routes);
     }
 
     public function accepted()
@@ -232,10 +226,11 @@ class BillController extends Controller
             ->whereBetween('created_at', [$date_start, $date_end])
             ->with(['user', 'bill_type', 'bill_status', 'chain'])
             ->get();
+        $org_ids = $user->org_ids;
 
         $header = 'Мои счета';
         $action = '<a class="btn btn-success" href=' . route($this->routes['form']) . ' style="float: right">Создать</a>';
-        return view($this->views['index'], compact('date_start', 'date_end', 'bills', 'user', 'header', 'action'))->with('routes', $this->routes);
+        return view($this->views['index'], compact('date_start', 'org_ids','date_end', 'bills', 'user', 'header', 'action'))->with('routes', $this->routes);
     }
 
     public function delete(Bill $bill)

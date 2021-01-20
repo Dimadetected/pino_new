@@ -28,7 +28,7 @@
                     <x-jet-nav-link href="{{ route('organisations.index') }}" :active="request()->routeIs('organisations.index')">
                         Организации
                     </x-jet-nav-link>
-                    <x-jet-nav-link href="{{ route('users.index') }}" :active="request()->routeIs('organisations.index')">
+                    <x-jet-nav-link href="{{ route('users.index') }}" :active="request()->routeIs('users.index')">
                         Пользователи
                     </x-jet-nav-link>
                 </div>

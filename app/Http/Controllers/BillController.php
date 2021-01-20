@@ -149,7 +149,7 @@ class BillController extends Controller
                 mkdir(public_path('files'), 0777, TRUE);
 
             $filename = time() . rand(0,1111111111111111111);
-            $extension = pathinfo($file, PATHINFO_EXTENSION);
+            $extension = $file->getClientOriginalExtension();
 
             File::put(public_path('files/' . $filename . '.' . $extension), file_get_contents($file));
             $files[] = 'files/' . $filename . '.' . $extension;

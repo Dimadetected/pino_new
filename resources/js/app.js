@@ -17,6 +17,12 @@ Vue.component('bill-actions', require('./components/BillActions.vue').default);
 
 Vue.component('chains-form', require('./components/chains/form.vue').default);
 Vue.component('chains-index', require('./components/chains/index.vue').default);
+
+Vue.component('organisations-form', require('./components/organisations/form.vue').default);
+Vue.component('organisations-index', require('./components/organisations/index.vue').default);
+
+Vue.component('users-form', require('./components/users/form.vue').default);
+Vue.component('users-index', require('./components/users/index.vue').default);
 new Vue({
     el: '#app',
 });

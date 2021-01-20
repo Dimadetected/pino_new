@@ -34,6 +34,14 @@ Route::prefix('/chains')->name('chains.')->middleware('auth')->group(function ()
     Route::get('/', 'App\Http\Controllers\ChainController@index')->name('index');
     Route::get('/form/{id?}', 'App\Http\Controllers\ChainController@form')->name('form');
 });
+Route::prefix('/organisations')->name('organisations.')->middleware('auth')->group(function () {
+    Route::get('/', 'App\Http\Controllers\OrganisationController@index')->name('index');
+    Route::get('/form/{organisation?}', 'App\Http\Controllers\OrganisationController@form')->name('form');
+});
+Route::prefix('/users')->name('users.')->middleware('auth')->group(function () {
+    Route::get('/', 'App\Http\Controllers\UserController@index')->name('index');
+    Route::get('/form/{user?}', 'App\Http\Controllers\UserController@form')->name('form');
+});
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return redirect()->route('bill.index');
 })->name('dashboard');

@@ -10,7 +10,7 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
-    
+
     /**
      * The attributes that are mass assignable.
      * @var array
@@ -19,8 +19,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'user_role_id'
     ];
-    
+
     /**
      * The attributes that should be hidden for arrays.
      * @var array
@@ -29,7 +30,7 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
-    
+
     /**
      * The attributes that should be cast to native types.
      * @var array
@@ -37,7 +38,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-    
+
     public function getBillStatusAttribute()
     {
         switch ($this->user_role_id) {
@@ -50,8 +51,15 @@ class User extends Authenticatable
         }
         return NULL;
     }
-    
+
     public function user_role(){
         return $this->belongsTo(UserRole::class);
+    }
+    public function organisations(){
+        return $this->belongsToMany(Organisation::class);
+    }
+
+    public function getOrgIdsAttribute(){
+        return $this->organisations()->pluck('organisation_id')->toArray();
     }
 }

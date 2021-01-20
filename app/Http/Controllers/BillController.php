@@ -41,12 +41,15 @@ class BillController extends Controller
         $date_end = Carbon::parse(\request('date_end', now()->endOfYear()))->endOfDay();
         $user = auth()->user();
 
+        $org_ids = $user->org_ids;
         $bills = Bill::query()
             ->where('user_role_id', $user->user_role_id)
             ->orWhere('user_id', $user->id)
             ->with(['user', 'bill_type', 'bill_status', 'chain'])
+            ->whereHas('chain',function ($query) use ($org_ids){
+                $query->whereIn('organisation_id',$org_ids);
+            })
             ->orderBy('created_at', 'desc');
-
         $bills = $bills->whereBetween('created_at', [$date_start, $date_end])->get();
         $header = 'Счета';
         $action = '<a class="btn btn-success" href=' . route($this->routes['form']) . ' style="float: right">Создать</a>';
@@ -63,8 +66,8 @@ class BillController extends Controller
 
     public function form(Bill $bill)
     {
-//        $user = auth()->user();
-        $chains = Chain::query()->get();
+        $user = auth()->user();
+        $chains = Chain::query()->whereIn('organisation_id', $user->org_ids)->get();
         $header = 'Форма счета';
         return view($this->views['form'], compact('bill', 'header', 'chains'))->with('routes', $this->routes);
     }
@@ -183,11 +186,16 @@ class BillController extends Controller
     public function accept()
     {
         $user = auth()->user();
+        $org_ids = $user->org_ids;
+
         $date_start = Carbon::parse(\request('date_start', now()->startOfYear()))->startOfDay();
         $date_end = Carbon::parse(\request('date_end', now()->endOfYear()))->endOfDay();
         $bills = Bill::query()
             ->where('user_role_id', $user->user_role_id)
             ->whereBetween('created_at', [$date_start, $date_end])
+            ->whereHas('chain',function ($query) use ($org_ids){
+                $query->whereIn('organisation_id',$org_ids);
+            })
             ->where('status', 1)
             ->with(['user', 'bill_type', 'bill_status', 'chain'])
             ->get();

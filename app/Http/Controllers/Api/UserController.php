@@ -2,37 +2,37 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Resources\OrganisationResource;
-use App\Http\Service\OrganisationService;
-use App\Models\Organisation;
+use App\Http\Resources\UserResource;
+use App\Http\Service\UserService;
+use App\Models\User;
 use Illuminate\Http\Request;
 
-class OrganisationController
+class UserController
 {
     private $service;
 
     public function __construct()
     {
-        $this->service = new OrganisationService();
+        $this->service = new UserService();
     }
 
     public function index()
     {
-        return OrganisationResource::collection($this->service->get());
+        return UserResource::collection($this->service->get());
     }
 
     public function store(Request $request)
     {
-        return OrganisationResource::make($this->service->store($request->all()));
+        return UserResource::make($this->service->store($request->all()));
     }
 
     /**
      * Display the specified resource.
      * @param int $id
      */
-    public function show(Organisation $organisation)
+    public function show(User $user)
     {
-        return OrganisationResource::make($organisation);
+        return UserResource::make($user);
     }
 
     /**
@@ -40,10 +40,10 @@ class OrganisationController
      * @param \Illuminate\Http\Request $request
      * @param int $id
      */
-    public function update(Request $request, Organisation $organisation)
+    public function update(Request $request, User $user)
     {
 
-        return OrganisationResource::make($this->service->update($organisation->id, $request->all()));
+        return UserResource::make($this->service->update($user->id, $request->all()));
     }
 
     /**

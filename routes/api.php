@@ -21,4 +21,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::resource('messages','App\Http\Controllers\Api\MessageController');
 Route::resource('user_roles','App\Http\Controllers\Api\UserRoleController');
 Route::resource('chains','App\Http\Controllers\Api\ChainController');
+Route::resource('organisations','App\Http\Controllers\Api\OrganisationController');
+Route::resource('users','App\Http\Controllers\Api\UserController');
 

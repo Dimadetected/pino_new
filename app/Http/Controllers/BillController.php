@@ -148,9 +148,11 @@ class BillController extends Controller
             if (!is_dir(public_path('files')))
                 mkdir(public_path('files'), 0777, TRUE);
 
-            $file_name = implode('',explode(' ',$file->getClientOriginalName()));
-            File::put(public_path('files/' . $file_name), file_get_contents($file));
-            $files[] = 'files/' . $file_name;
+            $filename = time() . rand(0,1111111111111111111);
+            $extension = pathinfo($file, PATHINFO_EXTENSION);
+
+            File::put(public_path('files/' . $filename . '.' . $extension), file_get_contents($file));
+            $files[] = 'files/' . $filename . '.' . $extension;
         }
         $file = \App\Models\File::query()->create([
             'src' => $files,

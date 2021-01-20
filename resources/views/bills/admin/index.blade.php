@@ -48,7 +48,8 @@
                                 <p class="my-3">{{$bill->text}}</p>
                                 @if(isset($bill->file))
                                     @foreach($bill->file->src as $file)
-                                        @if(in_array(array_pop(explode('.',$file)),['pdf','doc','docx','excel','xls']))
+                                        @php($explode = explode('.',$file))
+                                        @if(in_array(array_pop($explode),['pdf','doc','docx','excel','xls']))
                                             <embed src="/{{$file}}" class="mt-1 d-none  files{{$bill->id}}"
                                                    type="application/pdf" height="400px" width="100%">
                                         @else

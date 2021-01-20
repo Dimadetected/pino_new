@@ -9,15 +9,18 @@
             <div class="col-md-8">
                 <div class="card card-body shadow mb-1" style="min-height: 90vh">
                     <div class=" card-title" style="font-size: 16pt"><a href="#">Счет #{{$bill->id}}</a></div>
-                    <div class=" card-title" style="font-size: 16pt">{{\Carbon\Carbon::parse($bill->created_at)->format('d.m.Y')}}</div>
+                    <div class=" card-title"
+                         style="font-size: 16pt">{{\Carbon\Carbon::parse($bill->created_at)->format('d.m.Y')}}</div>
                     <div class="my-2  h4">{{$bill->bill_type->name??'Оплачено'}}</div>
                     <hr>
                     <p class="my-3">{{$bill->text}}</p>
                     @if(isset($bill->file))
                         @foreach($bill->file->src as $file)
                             <a href="/{{$file}}" target="_blank" class="btn btn-primary">Файл</a>
-                            @if(in_array(array_pop(explode('.',$file)),['pdf','doc','docx','excel','xls']))
-                                <embed src="/{{$file}}" class="mt-1   files{{$bill->id}}" type="application/pdf" height="500px" width="100%">
+                            @php($explode = explode('.',$file))
+                            @if(in_array(array_pop($explode),['pdf','doc','docx','excel','xls']))
+                                <embed src="/{{$file}}" class="mt-1   files{{$bill->id}}" type="application/pdf"
+                                       height="500px" width="100%">
                             @else
                                 <img src="/{{$file}}" alt="" class="mt-1   files{{$bill->id}}" style="width: 100%;">
                             @endif
@@ -31,8 +34,8 @@
                     @if($bill->bill_type_id == 1 and $bill->user_id == auth()->user()->id)
                         <a href="{{route('bill.delete',$bill->id)}}" class="btn btn-danger my-1">Удалить</a>
                     @endif
-{{--                    <a target="_blank" href="{{route('bill.print',$bill->id)}}" class="btn btn-primary" >Распечатать</a>--}}
-                    <a onclick="print()" class="btn btn-primary" >Распечатать</a>
+                    {{--                    <a target="_blank" href="{{route('bill.print',$bill->id)}}" class="btn btn-primary" >Распечатать</a>--}}
+                    <a onclick="print()" class="btn btn-primary">Распечатать</a>
                     @if($bill->status == 2)
                         <div class="row ">
                             <div class="col-12 mt-2 text-center ">
@@ -62,15 +65,16 @@
                     <bill-actions :messages="{{$bill->messages}}" :actions="{{$bill->bill_actions}}"></bill-actions>
                     <hr class="mt-4">
                     <div class="mt-3">
-                        <message-create :user_id="'{{auth()->user()->id}}'" :type="'bill'" external_id="{{(int)$bill->id}}"></message-create>
+                        <message-create :user_id="'{{auth()->user()->id}}'" :type="'bill'"
+                                        external_id="{{(int)$bill->id}}"></message-create>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <script>
-		function print() {
-			window.open('/{{$file}}').print();
-		}
+        function print() {
+            window.open('/{{$file}}').print();
+        }
     </script>
 @endsection

@@ -3,7 +3,7 @@
 
 
 @section('content')
-    
+
     <div class="container">
         <div class="row ">
             <div class="col-md-8">
@@ -16,7 +16,7 @@
                     @if(isset($bill->file))
                         @foreach($bill->file->src as $file)
                             <a href="/{{$file}}" target="_blank" class="btn btn-primary">Файл</a>
-                            @if(in_array(explode('.',$file)[1],['pdf','doc','docx','excel','xls']))
+                            @if(in_array(array_pop(explode('.',$file)),['pdf','doc','docx','excel','xls']))
                                 <embed src="/{{$file}}" class="mt-1   files{{$bill->id}}" type="application/pdf" height="500px" width="100%">
                             @else
                                 <img src="/{{$file}}" alt="" class="mt-1   files{{$bill->id}}" style="width: 100%;">
@@ -26,7 +26,7 @@
                 </div>
             </div>
             <div class="col-md-4">
-                
+
                 <div class="card card-body shadow mb-5">
                     @if($bill->bill_type_id == 1 and $bill->user_id == auth()->user()->id)
                         <a href="{{route('bill.delete',$bill->id)}}" class="btn btn-danger my-1">Удалить</a>

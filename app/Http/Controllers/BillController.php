@@ -202,6 +202,8 @@ class BillController extends Controller
     public function accepted()
     {
         $user = auth()->user();
+        $org_ids = $user->org_ids;
+
         $actions = BillAction::query()->where('user_id', $user->id)->pluck('bill_id')->toArray();
         $date_start = Carbon::parse(\request('date_start', now()->startOfYear()))->startOfDay();
         $date_end = Carbon::parse(\request('date_end', now()->endOfYear()))->endOfDay();
@@ -213,7 +215,7 @@ class BillController extends Controller
 
         $header = 'Подтвержденные счета';
         $action = '<a class="btn btn-success" href=' . route($this->routes['form']) . ' style="float: right">Создать</a>';
-        return view($this->views['index'], compact('date_start', 'date_end', 'bills', 'user', 'header', 'action'))->with('routes', $this->routes);
+        return view($this->views['index'], compact('org_ids','date_start', 'date_end', 'bills', 'user', 'header', 'action'))->with('routes', $this->routes);
     }
 
     public function my()

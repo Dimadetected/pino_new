@@ -3,7 +3,6 @@
 
 
 @section('content')
-
     <div class="container">
         <div class="row ">
             <div class="col-md-8">
@@ -17,6 +16,7 @@
                     @if(isset($bill->file))
                         @foreach($bill->file->src as $file)
                             <a href="/{{$file}}" target="_blank" class="btn btn-primary">Файл</a>
+
                             @php($explode = explode('.',$file))
                             @if(in_array(array_pop($explode),['pdf','doc','docx','excel','xls']))
                                 <embed src="/{{$file}}" class="mt-1   files{{$bill->id}}" type="application/pdf"
@@ -24,6 +24,7 @@
                             @else
                                 <img src="/{{$file}}" alt="" class="mt-1   files{{$bill->id}}" style="width: 100%;">
                             @endif
+
                         @endforeach
                     @endif
                 </div>
@@ -74,7 +75,7 @@
     </div>
     <script>
         function print() {
-            window.open('/{{$file}}').print();
+            window.open('/{{$print_file}}').print();
         }
     </script>
 @endsection

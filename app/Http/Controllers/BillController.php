@@ -12,9 +12,15 @@ use App\Models\Message;
 use App\Models\User;
 use App\Models\UserRole;
 use Carbon\Carbon;
+use Dompdf\Dompdf;
+use Gufy\PdfToHtml\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\File;
+use ZendPdf\Color\Html;
+use ZendPdf\Font;
+use ZendPdf\Image;
+use ZendPdf\PdfDocument;
 
 class BillController extends Controller
 {
@@ -37,6 +43,7 @@ class BillController extends Controller
 
     public function index()
     {
+
         $date_start = Carbon::parse(\request('date_start', now()->startOfYear()))->startOfDay();
         $date_end = Carbon::parse(\request('date_end', now()->endOfYear()))->endOfDay();
         $user = auth()->user();
@@ -50,15 +57,50 @@ class BillController extends Controller
         $bills = $bills->whereBetween('created_at', [$date_start, $date_end])->get();
         $header = 'Счета';
         $action = '<a class="btn btn-success" href=' . route($this->routes['form']) . ' style="float: right">Создать</a>';
-        return view($this->views['index'], compact('org_ids','date_start', 'date_end', 'bills', 'user', 'header', 'action'))->with('routes', $this->routes);
+        return view($this->views['index'], compact('org_ids', 'date_start', 'date_end', 'bills', 'user', 'header', 'action'))->with('routes', $this->routes);
     }
 
     public function view(Bill $bill)
     {
         $user = auth()->user();
-        $header = 'Инфомарция о счете';
+        $header = 'Информарция о счете';
+        $print_file = $bill->file->src[0];
+        if (isset($bill->file->src)) {
+            $src = explode('.', $bill->file->src[0]);
+            if (array_pop($src) == 'pdf') {
+                $bill_user_status = $bill->mainUserAccept();
+                if ($bill_user_status and isset($bill_user_status)) {
+                    $bill_user_status = $bill_user_status->user;
+                    $img = public_path("white.png"); // Ссылка на файл
+                    $font = public_path("9605.ttf"); // Ссылка на шрифт
+                    $font_size = 24; // Размер шрифта
+                    $degree = 0; // Угол поворота текста в градусах
+                    $text = 'Утверждено ' . $bill_user_status->name; // Ваш текст
+                    $y = 40; // Смещение сверху (координата y)
+                    $x = 40; // Смещение слева (координата x)
+                    $pic = imagecreatefrompng($img); // Функция создания изображения
+                    $color = imagecolorallocate($pic, 6, 170, 252); // Функция выделения цвета для текста
 
-        return view($this->views['view'], compact('bill', 'user', 'header'));
+                    imagettftext($pic, $font_size, $degree, $x, $y, $color, $font, $text); // Функция нанесения текста
+                    $text = Carbon::parse($bill->mainUserAccept()->created_at)->format('d.m.Y H:i:s');
+                    $y = 80; // Смещение сверху (координата y)
+                    $x = 400; // Смещение слева (координата x)
+                    imagettftext($pic, $font_size, $degree, $x, $y, $color, $font, $text); // Функция нанесения текста
+                    imagepng($pic, 'accept' . ".png"); // Сохранение рисунка
+                    imagedestroy($pic); // Освобождение памяти и закрытие рисунка
+
+                    $pdf = PdfDocument::load($bill->file->src[0]);
+                    $page = $pdf->pages[count($pdf->pages) - 1];
+                    $stampImage = Image::imageWithPath(public_path('accept.png'));
+                    $page->drawImage($stampImage, 20, 20, 500, 100);
+                    $pdf->save(public_path('files/' . $bill->id . '.pdf'));
+                    $print_file = 'files/' . $bill->id . '.pdf';
+                }
+            }
+        }
+
+
+        return view($this->views['view'], compact('bill', 'user', 'header', 'print_file'));
     }
 
     public function form(Bill $bill)
@@ -148,7 +190,7 @@ class BillController extends Controller
             if (!is_dir(public_path('files')))
                 mkdir(public_path('files'), 0777, TRUE);
 
-            $filename = time() . rand(0,1111111111111111111);
+            $filename = time() . rand(0, 1111111111111111111);
             $extension = $file->getClientOriginalExtension();
 
             File::put(public_path('files/' . $filename . '.' . $extension), file_get_contents($file));
@@ -196,7 +238,7 @@ class BillController extends Controller
 
         $header = 'Счета для подтверждения';
         $action = '<a class="btn btn-success" href=' . route($this->routes['form']) . ' style="float: right">Создать</a>';
-        return view($this->views['index'], compact('date_end', 'org_ids','date_start', 'bills', 'user', 'header', 'action'))->with('routes', $this->routes);
+        return view($this->views['index'], compact('date_end', 'org_ids', 'date_start', 'bills', 'user', 'header', 'action'))->with('routes', $this->routes);
     }
 
     public function accepted()
@@ -215,7 +257,7 @@ class BillController extends Controller
 
         $header = 'Подтвержденные счета';
         $action = '<a class="btn btn-success" href=' . route($this->routes['form']) . ' style="float: right">Создать</a>';
-        return view($this->views['index'], compact('org_ids','date_start', 'date_end', 'bills', 'user', 'header', 'action'))->with('routes', $this->routes);
+        return view($this->views['index'], compact('org_ids', 'date_start', 'date_end', 'bills', 'user', 'header', 'action'))->with('routes', $this->routes);
     }
 
     public function my()
@@ -232,7 +274,7 @@ class BillController extends Controller
 
         $header = 'Мои счета';
         $action = '<a class="btn btn-success" href=' . route($this->routes['form']) . ' style="float: right">Создать</a>';
-        return view($this->views['index'], compact('date_start', 'org_ids','date_end', 'bills', 'user', 'header', 'action'))->with('routes', $this->routes);
+        return view($this->views['index'], compact('date_start', 'org_ids', 'date_end', 'bills', 'user', 'header', 'action'))->with('routes', $this->routes);
     }
 
     public function delete(Bill $bill)
@@ -243,6 +285,6 @@ class BillController extends Controller
 
     public function printBill(Bill $bill)
     {
-        return view('bills.admin.print',compact('bill'));
+        return view('bills.admin.print', compact('bill'));
     }
 }

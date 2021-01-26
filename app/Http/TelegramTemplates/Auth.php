@@ -34,7 +34,7 @@ class Auth
         }
 
         $this->telegram->sendMessage([
-            'chat_id' => $user->tg_id,
+            'chat_id' => $tg_id,
             'text' => $text
         ]);
     }

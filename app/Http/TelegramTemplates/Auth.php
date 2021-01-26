@@ -3,13 +3,20 @@
 
 namespace App\Http\TelegramTemplates;
 
+use App\Http\Services\TgService;
 use App\Models\User;
 use Illuminate\Http\Request;
 
 
 class Auth
 {
-    public function index(Request $request,$telegram)
+
+    public function __construct()
+    {
+        $this->telegram = new TgService('1693125992:AAFku3IyNSELpLporEaWmuehK8qNok8p0z8');
+    }
+
+    public function index(Request $request)
     {
         $tg_id = $request['message']['from']['id'];
         $text = $request['message']['text'];
@@ -26,7 +33,7 @@ class Auth
                 $text = 'Для авторизации введите ваш TG_code из личного кабинета.';
         }
 
-        $telegram->sendMessage([
+        $this->telegram->sendMessage([
             'chat_id' => $user->tg_id,
             'text' => $text
         ]);

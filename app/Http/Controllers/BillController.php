@@ -197,11 +197,11 @@ class BillController extends Controller
         }
 
         if ($bill->status == 1) {
-            $chain_id = $bill->chain->id;
+            $organisation_id = $bill->chain->organisation_id;
             $users = User::query()
                 ->where('user_role_id', $bill->user_role_id)
-                ->whereHas('organisations', function ($query) use ($chain_id) {
-                    $query->whereIn('organisation_id', $chain_id);
+                ->whereHas('organisations', function ($query) use ($organisation_id) {
+                    $query->where('organisation_id', $organisation_id);
                 })->get();
             foreach ($users as $user) {
                 logger($this->telegram->sendMessage([

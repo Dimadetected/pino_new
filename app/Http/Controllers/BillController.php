@@ -187,14 +187,16 @@ class BillController extends Controller
         $buttons = [];
         $buttons[] = [['text' => 'Счет', 'url' => $bill_status->name]];
         logger($bill->user->tg_id);
-        if (isset($bill->user->tg_id))
-            dd($this->telegram->sendMessage([
+        if (isset($bill->user->tg_id)){
+
+            logger($this->telegram->sendMessage([
                 'chat_id' => $bill->user->tg_id,
                 'text' => $text,
                 'reply_markup' => json_encode(['inline_keyboard' =>
                     $buttons,
                 ]),
             ]));
+        }
 
 
         return response()->json($bill);

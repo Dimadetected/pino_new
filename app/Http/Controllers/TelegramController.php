@@ -30,7 +30,7 @@ class TelegramController extends Controller
     {
         logger($request);
         if (isset($request['message']['from']['id'])) {
-            (new Auth())->index($request);
+            (new Auth())->index($request,$this->telegram);
         }
         return 200;
     }

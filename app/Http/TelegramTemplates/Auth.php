@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class Auth
 {
-    public function index(Request $request)
+    public function index(Request $request,$telegram)
     {
         $tg_id = $request['message']['from']['id'];
         $text = $request['message']['text'];
@@ -26,7 +26,7 @@ class Auth
                 $text = 'Для авторизации введите ваш TG_code из личного кабинета.';
         }
 
-        $this->telegram->sendMessage([
+        $telegram->sendMessage([
             'chat_id' => $user->tg_id,
             'text' => $text
         ]);

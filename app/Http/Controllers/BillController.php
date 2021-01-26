@@ -150,7 +150,6 @@ class BillController extends Controller
         }
 
 
-
         $billArr['status'] = $status;
         $billArr['bill_status_id'] = $bill_status_id;
 
@@ -185,10 +184,9 @@ class BillController extends Controller
 
 
         $buttons = [];
-        $buttons[] = [['text' => 'Счет', 'url' => route('bill.view',$bill->id)]];
+        $buttons[] = [['text' => 'Счет', 'url' => route('bill.view', $bill->id)]];
         logger($bill->user->tg_id);
-        if (isset($bill->user->tg_id)){
-
+        if (isset($bill->user->tg_id)) {
             logger($this->telegram->sendMessage([
                 'chat_id' => $bill->user->tg_id,
                 'text' => $text,
@@ -196,6 +194,24 @@ class BillController extends Controller
                     $buttons,
                 ]),
             ]));
+        }
+
+        if ($bill->status == 1) {
+            $chain_id = $bill->chain->id;
+            $users = User::query()
+                ->where('user_role_id', $bill->user_role_id)
+                ->whereHas('organisations', function ($query) use ($chain_id) {
+                    $query->whereIn('organisation_id', $chain_id);
+                })->get();
+            foreach ($users as $user) {
+                logger($this->telegram->sendMessage([
+                    'chat_id' => $user->tg_id,
+                    'text' => 'В данном счете необходимо ваше внимание.',
+                    'reply_markup' => json_encode(['inline_keyboard' =>
+                        $buttons,
+                    ]),
+                ]));
+            }
         }
 
 

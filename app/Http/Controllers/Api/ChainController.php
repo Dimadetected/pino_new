@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\BillResource;
 use App\Http\Resources\ChainResource;
 use App\Http\Resources\UserRoleResource;
-use App\Http\Service\ChainService;
-use App\Http\Service\UserRoleService;
+use App\Http\Services\ChainService;
+use App\Http\Services\UserRoleService;
 use App\Models\Bill;
 use App\Models\BillAction;
 use App\Models\BillStatus;
@@ -19,22 +19,22 @@ use Illuminate\Support\Facades\Cookie;
 class ChainController extends Controller
 {
     private $service;
-    
+
     public function __construct()
     {
         $this->service = new ChainService();
     }
-    
+
     public function index()
     {
         return ChainResource::collection($this->service->get());
     }
-    
+
     public function store(Request $request)
     {
         return ChainResource::make($this->service->store($request->all()));
     }
-    
+
     /**
      * Display the specified resource.
      * @param int $id
@@ -43,7 +43,7 @@ class ChainController extends Controller
     {
         return ChainResource::make($chain);
     }
-    
+
     /**
      * Update the specified resource in storage.
      * @param \Illuminate\Http\Request $request
@@ -51,10 +51,10 @@ class ChainController extends Controller
      */
     public function update(Request $request, Chain $chain)
     {
-        
+
         return ChainResource::make($this->service->update($chain->id, $request->all()));
     }
-    
+
     /**
      * Remove the specified resource from storage.
      * @param int $id
@@ -64,5 +64,5 @@ class ChainController extends Controller
     {
         //
     }
-    
+
 }

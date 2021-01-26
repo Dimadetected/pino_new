@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Service;
+namespace App\Http\Services;
 
 use App\Models\UserRole;
 
@@ -10,7 +10,7 @@ class UserRoleService
     {
         return UserRole::query();
     }
-    
+
     public function get()
     {
         return $this->query()->get();

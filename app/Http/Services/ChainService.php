@@ -1,15 +1,16 @@
 <?php
 
-namespace App\Http\Service;
+namespace App\Http\Services;
 
-use App\Models\Organisation;
+use App\Models\Chain;
+use App\Models\UserRole;
 use Illuminate\Http\Request;
 
-class OrganisationService
+class ChainService
 {
     public function query()
     {
-        return Organisation::query();
+        return Chain::query();
     }
 
     public function get()

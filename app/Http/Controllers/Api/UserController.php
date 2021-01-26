@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Resources\UserResource;
-use App\Http\Service\UserService;
+use App\Http\Services\UserService;
 use App\Models\User;
 use Illuminate\Http\Request;
 

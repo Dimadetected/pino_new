@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::post('/' . config('telegram.bot_token') . '/webhook', 'App\Http\Controllers\TelegramController@handle');
+Route::get('/getMe', 'App\Http\Controllers\TelegramController@getMe');
+Route::get('/send', 'App\Http\Controllers\TelegramController@send');
+Route::get('/setWebHook', 'App\Http\Controllers\TelegramController@setWebHook');
+
 Route::get('/', function () {
     return view('welcome');
 });

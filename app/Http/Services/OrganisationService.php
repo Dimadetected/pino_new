@@ -1,21 +1,20 @@
 <?php
 
-namespace App\Http\Service;
+namespace App\Http\Services;
 
 use App\Models\Organisation;
-use App\Models\User;
 use Illuminate\Http\Request;
 
-class UserService
+class OrganisationService
 {
     public function query()
     {
-        return User::query();
+        return Organisation::query();
     }
 
     public function get()
     {
-        return $this->query()->with('user_role','organisations')->get();
+        return $this->query()->get();
     }
 
     public function store($array)
@@ -26,8 +25,6 @@ class UserService
     public function update($id, $array)
     {
         $item = $this->query()->find($id);
-        $item->organisations()->detach();
-        $item->organisations()->attach(Organisation::query()->find($array['organisations']));
         $item->update($array);
         return $item;
     }

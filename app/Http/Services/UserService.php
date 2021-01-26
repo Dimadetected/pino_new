@@ -1,31 +1,33 @@
 <?php
 
-namespace App\Http\Service;
+namespace App\Http\Services;
 
-use App\Models\Chain;
-use App\Models\UserRole;
+use App\Models\Organisation;
+use App\Models\User;
 use Illuminate\Http\Request;
 
-class ChainService
+class UserService
 {
     public function query()
     {
-        return Chain::query();
+        return User::query();
     }
-    
+
     public function get()
     {
-        return $this->query()->get();
+        return $this->query()->with('user_role','organisations')->get();
     }
-    
+
     public function store($array)
     {
         return $this->query()->create($array);
     }
-    
+
     public function update($id, $array)
     {
         $item = $this->query()->find($id);
+        $item->organisations()->detach();
+        $item->organisations()->attach(Organisation::query()->find($array['organisations']));
         $item->update($array);
         return $item;
     }

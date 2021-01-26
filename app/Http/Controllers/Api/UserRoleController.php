@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BillResource;
 use App\Http\Resources\UserRoleResource;
-use App\Http\Service\UserRoleService;
+use App\Http\Services\UserRoleService;
 use App\Models\Bill;
 use App\Models\BillAction;
 use App\Models\BillStatus;
@@ -19,17 +19,17 @@ class UserRoleController extends Controller
     public function __construct() {
         $this->service = new UserRoleService();
     }
-    
+
     public function index()
     {
         return UserRoleResource::collection($this->service->get());
     }
-    
+
     public function store(Request $request)
     {
         //п
     }
-    
+
     /**
      * Display the specified resource.
      * @param int $id
@@ -39,7 +39,7 @@ class UserRoleController extends Controller
     {
         //
     }
-    
+
     /**
      * Update the specified resource in storage.
      * @param \Illuminate\Http\Request $request
@@ -50,7 +50,7 @@ class UserRoleController extends Controller
     {
         //
     }
-    
+
     /**
      * Remove the specified resource from storage.
      * @param int $id
@@ -60,6 +60,6 @@ class UserRoleController extends Controller
     {
         //
     }
-    
-  
+
+
 }

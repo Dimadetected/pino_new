@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 
-use App\Services\TelegramService;
+use App\Http\Services\TgService;
 use Illuminate\Http\Request;
 
 class TelegramController extends Controller
 {
     public function __construct()
     {
-        $this->telegram = new TelegramService('1693125992:AAFku3IyNSELpLporEaWmuehK8qNok8p0z8');
+        $this->telegram = new TgService('1693125992:AAFku3IyNSELpLporEaWmuehK8qNok8p0z8');
     }
 
     public function getMe()

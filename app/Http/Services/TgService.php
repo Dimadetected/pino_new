@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Services;
+namespace App\Http\Services;
+
 
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Http;
 
-class TelegramService
+class TgService
 {
 
     private $token, $url;

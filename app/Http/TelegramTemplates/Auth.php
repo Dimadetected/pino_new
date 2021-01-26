@@ -27,8 +27,6 @@ class Auth
             $user_check_code = User::query()->where('remember_token', $text)->first();
             if ($user_check_code){
                 $user_check_code->update(['tg_id' => $tg_id]);
-                logger($tg_id);
-                logger($user_check_code);
                 $text = $user_check_code->name . ', ' . ' вы были успешно авторизованы.';
             }
             else

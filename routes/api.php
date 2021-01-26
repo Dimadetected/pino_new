@@ -23,4 +23,5 @@ Route::resource('user_roles','App\Http\Controllers\Api\UserRoleController');
 Route::resource('chains','App\Http\Controllers\Api\ChainController');
 Route::resource('organisations','App\Http\Controllers\Api\OrganisationController');
 Route::resource('users','App\Http\Controllers\Api\UserController');
+Route::resource('clients','App\Http\Controllers\Api\ClientController');
 

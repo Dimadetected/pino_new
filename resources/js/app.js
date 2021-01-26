@@ -23,6 +23,8 @@ Vue.component('organisations-index', require('./components/organisations/index.v
 
 Vue.component('users-form', require('./components/users/form.vue').default);
 Vue.component('users-index', require('./components/users/index.vue').default);
+
+Vue.component('clients-index', require('./components/clients/index.vue').default);
 new Vue({
     el: '#app',
 });

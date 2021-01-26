@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Bill extends Model
 {
     use HasFactory;
+
     protected $guarded = ['id'];
 
     protected $with = [
@@ -17,6 +18,11 @@ class Bill extends Model
     protected $casts = [
         'steps' => 'array',
     ];
+
+    public function client()
+    {
+        return $this->belongsTo(Client::class);
+    }
 
     public function mainUserAccept()
     {

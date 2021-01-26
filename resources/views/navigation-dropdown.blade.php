@@ -65,6 +65,9 @@
                     <x-jet-nav-link href="{{ route('bill.accepted') }}" :active="request()->routeIs('bill.accepted')">
                         Подтвержденные счета
                     </x-jet-nav-link>
+                    <x-jet-nav-link href="{{ route('clients.index') }}" :active="request()->routeIs('clients.index')">
+                        Контрагенты
+                    </x-jet-nav-link>
 
                 </div>
             </div>

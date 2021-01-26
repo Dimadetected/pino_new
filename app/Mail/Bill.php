@@ -19,7 +19,7 @@ class Bill extends Mailable
      *
      * @return void
      */
-    public function __construct(Bill $bill, $text)
+    public function __construct(\App\Models\Bill $bill, $text)
     {
         $this->bill = $bill;
         $this->text = $text;

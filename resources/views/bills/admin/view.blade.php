@@ -10,7 +10,29 @@
                     <div class=" card-title" style="font-size: 16pt"><a href="#">Счет #{{$bill->id}}</a></div>
                     <div class=" card-title"
                          style="font-size: 16pt">{{\Carbon\Carbon::parse($bill->created_at)->format('d.m.Y')}}</div>
-                    <div class="my-2  h4">{{$bill->bill_type->name??'Оплачено'}}</div>
+                    <div class="col-md-6 " style="font-size: 16pt">
+                        <div class="row pl-0">
+                            <div class="col-6 pl-0">Цепочка:</div>
+                            <div class="col-6 pl-0">{{$bill->chain->name}}</div>
+                            @if(isset($bill->client))
+                                <div class="col-6 pl-0">Контрагент:</div>
+                                <div class="col-6 pl-0">{{$bill->client->name}}</div>
+                            @endif
+                            @if(isset($bill->number))
+                                <div class="col-6 pl-0">Номер:</div>
+                                <div class="col-6 pl-0">{{$bill->number}}</div>
+                            @endif
+                            @if(isset($bill->date))
+                                <div class="col-6 pl-0">Дата:</div>
+                                <div class="col-6 pl-0">{{$bill->date}}</div>
+                            @endif
+                            @if(isset($bill->sum))
+                                <div class="col-6 pl-0">Сумма:</div>
+                                <div class="col-6 pl-0">{{$bill->sum}}</div>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="mt-5 mb-2  h4">{{$bill->bill_type->name??'Оплачено'}}</div>
                     <hr>
                     <p class="my-3">{{$bill->text}}</p>
                     @if(isset($bill->file))

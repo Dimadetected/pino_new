@@ -10,6 +10,7 @@ use App\Models\BillAction;
 use App\Models\BillStatus;
 use App\Models\BillType;
 use App\Models\Chain;
+use App\Models\Client;
 use App\Models\Message;
 use App\Models\User;
 use App\Models\UserRole;
@@ -51,7 +52,8 @@ class BillController extends Controller
 
     public function index()
     {
-
+        $bill = Bill::query()->find(119);
+        Mail::to('dimadetected@yandex.ru')->send(new \App\Mail\Bill($bill, 'test'));
 
         $date_start = Carbon::parse(\request('date_start', now()->startOfYear()))->startOfDay();
         $date_end = Carbon::parse(\request('date_end', now()->endOfYear()))->endOfDay();
@@ -116,9 +118,16 @@ class BillController extends Controller
     public function form(Bill $bill)
     {
         $user = auth()->user();
+        if (!isset($bill->id)) {
+            $bill = new Bill();
+            if (isset($_COOKIE['chain_id']))
+                $bill->chain_id = $_COOKIE['chain_id'];
+        }
+
+        $clients = Client::query()->get();
         $chains = Chain::query()->whereIn('organisation_id', $user->org_ids)->get();
         $header = 'Форма счета';
-        return view($this->views['form'], compact('bill', 'header', 'chains'))->with('routes', $this->routes);
+        return view($this->views['form'], compact('clients', 'bill', 'header', 'chains'))->with('routes', $this->routes);
     }
 
     public function consult()
@@ -209,7 +218,7 @@ class BillController extends Controller
             foreach ($users as $user) {
                 logger($this->telegram->sendMessage([
                     'chat_id' => $user->tg_id,
-                    'text' => 'В данном счете необходимо ваше внимание.',
+                    'text' => 'Поступил новый счет на утверждение.',
                     'reply_markup' => json_encode(['inline_keyboard' =>
                         $buttons,
                     ]),
@@ -265,6 +274,10 @@ class BillController extends Controller
         $bill->chain_id = $chain->id;
         $bill->user_role_id = $chain->value[$bill->steps];
 
+        $bill->number = $request->number;
+        $bill->sum = $request->sum;
+        $bill->client_id = $request->client_id;
+        $bill->date = $request->date;
         $bill->text = $request->text;
         $bill->file_id = $file->id;
         $bill->bill_type_id = BillType::query()->where('user_role_id', $chain->value[$bill->steps])->first()->id;

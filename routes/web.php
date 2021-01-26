@@ -29,7 +29,7 @@ Route::prefix('/bill')->name('bill.')->middleware('auth')->group(function () {
     Route::get('/accept', 'App\Http\Controllers\BillController@accept')->name('accept');
     Route::get('/accepted', 'App\Http\Controllers\BillController@accepted')->name('accepted');
     Route::get('/my', 'App\Http\Controllers\BillController@my')->name('my');
-    Route::get('/form', 'App\Http\Controllers\BillController@form')->name('form');
+    Route::get('/form/{bill?}', 'App\Http\Controllers\BillController@form')->name('form');
     Route::get('/delete/{bill}', 'App\Http\Controllers\BillController@delete')->name('delete');
     Route::post('/store', 'App\Http\Controllers\BillController@store')->name('store');
     Route::get('/{bill}', 'App\Http\Controllers\BillController@view')->name('view');
@@ -46,6 +46,12 @@ Route::prefix('/organisations')->name('organisations.')->middleware('auth')->gro
 Route::prefix('/users')->name('users.')->middleware('auth')->group(function () {
     Route::get('/', 'App\Http\Controllers\UserController@index')->name('index');
     Route::get('/form/{user?}', 'App\Http\Controllers\UserController@form')->name('form');
+});
+Route::prefix('/clients')->name('clients.')->middleware('auth')->group(function () {
+    Route::get('/', 'App\Http\Controllers\ClientController@index')->name('index');
+    Route::get('/form/{client?}', 'App\Http\Controllers\ClientController@form')->name('form');
+    Route::post('/store/{client?}', 'App\Http\Controllers\ClientController@store')->name('store');
+    Route::get('/{client}', 'App\Http\Controllers\ClientController@view')->name('view');
 });
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return redirect()->route('bill.index');

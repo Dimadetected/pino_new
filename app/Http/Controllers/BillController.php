@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\BillFormRequest;
 use App\Http\Services\TgService;
+use App\Mail\OrderShipped;
 use App\Models\Bill;
 use App\Models\BillAction;
 use App\Models\BillStatus;
@@ -18,6 +19,7 @@ use Gufy\PdfToHtml\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Mail;
 use ZendPdf\Color\Html;
 use ZendPdf\Font;
 use ZendPdf\Image;
@@ -203,6 +205,7 @@ class BillController extends Controller
                 ->whereHas('organisations', function ($query) use ($organisation_id) {
                     $query->where('organisation_id', $organisation_id);
                 })->get();
+
             foreach ($users as $user) {
                 logger($this->telegram->sendMessage([
                     'chat_id' => $user->tg_id,
@@ -211,6 +214,9 @@ class BillController extends Controller
                         $buttons,
                     ]),
                 ]));
+
+//                Mail::to($email)->send(new OrderShipped((array)$answer));
+
             }
         }
 

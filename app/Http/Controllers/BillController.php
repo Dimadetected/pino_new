@@ -185,7 +185,7 @@ class BillController extends Controller
 
 
         $buttons = [];
-        $buttons[] = [['text' => 'Счет', 'url' => $bill_status->name]];
+        $buttons[] = [['text' => 'Счет', 'url' => route('bill.view',$bill->id)]];
         logger($bill->user->tg_id);
         if (isset($bill->user->tg_id)){
 

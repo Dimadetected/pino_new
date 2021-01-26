@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\BillFormRequest;
+use App\Http\Services\TgService;
 use App\Models\Bill;
 use App\Models\BillAction;
 use App\Models\BillStatus;
@@ -39,6 +40,11 @@ class BillController extends Controller
     public function check()
     {
         return 1;
+    }
+
+    public function __construct()
+    {
+        $this->telegram = new TgService('1693125992:AAFku3IyNSELpLporEaWmuehK8qNok8p0z8');
     }
 
     public function index()
@@ -142,11 +148,15 @@ class BillController extends Controller
             $text = $bill_status->name;
             $return = 'bad';
         }
+
+
+
         $billArr['status'] = $status;
         $billArr['bill_status_id'] = $bill_status_id;
 
         if ($return == 'good' and isset($billArr['bill_type_id']))
             $billArr['bill_type_id'] = BillType::query()->where('user_role_id', $billArr['user_role_id'])->first()->id;
+
         $bill->bill_log()->create([
             'info' => [
                 'status' => $bill->status,
@@ -172,6 +182,19 @@ class BillController extends Controller
                 'user_id' => auth()->user()->id,
                 'text' => \request('text'),
             ]);
+
+
+        $buttons = [];
+        $buttons[] = [['text' => 'Счет', 'url' => $bill_status->name]];
+        if (isset($bill->user->tg_id))
+            $this->telegram->sendMessage([
+                'chat_id' => $bill->user->tg_id,
+                'text' => $text,
+                'reply_markup' => json_encode(['inline_keyboard' =>
+                    $buttons,
+                ]),
+            ]);
+
 
         return response()->json($bill);
     }

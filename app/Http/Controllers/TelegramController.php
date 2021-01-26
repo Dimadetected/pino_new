@@ -9,11 +9,11 @@ class TelegramController extends Controller
 {
     public function __construct()
     {
-        $this->telegram = new TelegramService('1693125992:AAFku3IyNSELpLporEaWmuehK8qNok8p0z8');
     }
 
     public function getMe()
     {
+        $this->telegram = new TelegramService('1693125992:AAFku3IyNSELpLporEaWmuehK8qNok8p0z8');
         dd($this->telegram->getMe());
     }
 

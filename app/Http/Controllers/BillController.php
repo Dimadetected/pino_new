@@ -44,10 +44,12 @@ class BillController extends Controller
     public function index()
     {
 
+
         $date_start = Carbon::parse(\request('date_start', now()->startOfYear()))->startOfDay();
         $date_end = Carbon::parse(\request('date_end', now()->endOfYear()))->endOfDay();
         $user = auth()->user();
-
+        if (is_null($user->remember_token))
+            $user->update(['remember_token' => rand(111111111, 99999999999)]);
         $org_ids = $user->org_ids;
         $bills = Bill::query()
             ->where('user_role_id', $user->user_role_id)

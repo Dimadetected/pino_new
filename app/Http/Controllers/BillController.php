@@ -118,6 +118,11 @@ class BillController extends Controller
         $bill = Bill::query()->find(\request('bill'));
         $billArr = [];
         $type = \request('type');
+
+        if (in_array(auth()->user()->user_role_id, $bill->chain->value) and !in_array(auth()->user()->user_role_id, [6, 7, 4])) {
+            $bill->update(['steps' => array_search(auth()->user()->user_role_id, $bill->chain->value), 'user_role_id' => auth()->user()->user_role_id]);
+        }
+
         $bill_status = $bill->bill_statuses();
         if ($type == 'accept') {
             $status = 1;

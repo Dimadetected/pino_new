@@ -32,7 +32,7 @@
             <div class="col-md-4">
 
                 <div class="card card-body shadow mb-5">
-                    @if(in_array($bill->bill_type_id,[1,6]) and $bill->user_id == auth()->user()->id)
+                    @if($bill->steps ==0  and $bill->user_id == auth()->user()->id)
                         <a href="{{route('bill.delete',$bill->id)}}" class="btn btn-danger my-1">Удалить</a>
                     @endif
                     {{--                    <a target="_blank" href="{{route('bill.print',$bill->id)}}" class="btn btn-primary" >Распечатать</a>--}}

@@ -52,8 +52,8 @@ class BillController extends Controller
 
     public function index()
     {
-        $bill = Bill::query()->find(119);
-        Mail::to('dimadetected@yandex.ru')->send(new \App\Mail\Bill($bill, 'test'));
+//        $bill = Bill::query()->find(119);
+//        Mail::to('dimadetected@yandex.ru')->send(new \App\Mail\Bill($bill, 'test'));
 
         $date_start = Carbon::parse(\request('date_start', now()->startOfYear()))->startOfDay();
         $date_end = Carbon::parse(\request('date_end', now()->endOfYear()))->endOfDay();

@@ -241,7 +241,7 @@ class BillController extends Controller
         $bill->update($log->info);
         $bill->bill_action->create([
             'bill_id' => $bill->id,
-            'user_id' => 31,
+            'user_id' => auth()->user()->id,
             'status' => $log->info['status'],
             'text' => 'Изменения были отменены',
         ]);

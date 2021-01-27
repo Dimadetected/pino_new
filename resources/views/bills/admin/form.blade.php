@@ -27,7 +27,8 @@
                     </div>
                     <div class="form-group">
                         <label for="date">Дата:</label>
-                        <input type="text" name="date" id="date" class="form-control">
+                        <input type="text" name="date" id="date" placeholder="дд.мм.гггг" class="form-control"
+                               onkeydown="dateCheck()">
                     </div>
                     <div class="form-group">
                         <label for="client_id">Контрагент:</label>
@@ -61,6 +62,16 @@
 @endsection
 @section('script')
     <script>
+        function dateCheck() {
+            let val = document.getElementById('date').value;
+            if ((val.length == 2) || (val.length == 5))
+                document.getElementById('date').value = val + '.'
+            if (val.length > 9) {
+
+                console.log(123)
+                document.getElementById('date').value = val.substring(0, 9)
+            }
+        }
 
         function changeCookies() {
             let val = document.getElementById('chain_id').value

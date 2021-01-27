@@ -3,7 +3,6 @@
         <table class="table">
             <thead>
             <tr>
-                <th>#</th>
                 <th class="text-left">Наименование</th>
                 <th class="text-left">Инн</th>
                 <th></th>
@@ -11,8 +10,7 @@
             </thead>
             <tbody>
             <tr v-for="client in clients">
-                <td><a :href="'/clients/'+ client.id">{{ client.id }}</a></td>
-                <td class="text-left">{{ client.name }}</td>
+                <td class="text-left"><a :href="'/clients/'+ client.id">{{ client.name }}</a></td>
                 <td class="text-left">{{ client.inn }}</td>
                 <td class="text-right">
                     <a :href="'/clients/form/'+client.id" class="btn btn-primary">Редактировать</a>

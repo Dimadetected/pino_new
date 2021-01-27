@@ -277,7 +277,7 @@ class BillController extends Controller
         $bill->number = $request->number;
         $bill->sum = $request->sum;
         $bill->client_id = $request->client_id;
-        $bill->date = $request->date;
+        $bill->date = Carbon::parse($request->date)->toDateString();
         $bill->text = $request->text;
         $bill->file_id = $file->id;
         $bill->bill_type_id = BillType::query()->where('user_role_id', $chain->value[$bill->steps])->first()->id;

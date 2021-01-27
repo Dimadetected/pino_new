@@ -2412,8 +2412,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     this.get();
@@ -21060,14 +21058,10 @@ var render = function() {
         "tbody",
         _vm._l(_vm.clients, function(client) {
           return _c("tr", [
-            _c("td", [
-              _c("a", { attrs: { href: "/clients/" + client.id } }, [
-                _vm._v(_vm._s(client.id))
-              ])
-            ]),
-            _vm._v(" "),
             _c("td", { staticClass: "text-left" }, [
-              _vm._v(_vm._s(client.name))
+              _c("a", { attrs: { href: "/clients/" + client.id } }, [
+                _vm._v(_vm._s(client.name))
+              ])
             ]),
             _vm._v(" "),
             _c("td", { staticClass: "text-left" }, [
@@ -21098,8 +21092,6 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("thead", [
       _c("tr", [
-        _c("th", [_vm._v("#")]),
-        _vm._v(" "),
         _c("th", { staticClass: "text-left" }, [_vm._v("Наименование")]),
         _vm._v(" "),
         _c("th", { staticClass: "text-left" }, [_vm._v("Инн")]),
@@ -33718,15 +33710,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
- // // import BillStatusChange from "@/components/BillStatusChange";
-// Vue.component('bill_status_change', require('@/components/BillStatusChange').default);
-//
-//
-// new Vue({
-//     el: '#app',
-// });
-
-console.log(123); // window.Vue = require('vue');
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('example-component', __webpack_require__(/*! ./components/ExampleComponent.vue */ "./resources/js/components/ExampleComponent.vue")["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('bill-status-change-component', __webpack_require__(/*! ./components/BillStatusChange.vue */ "./resources/js/components/BillStatusChange.vue")["default"]);

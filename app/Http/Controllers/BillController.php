@@ -16,6 +16,7 @@ use App\Models\User;
 use App\Models\UserRole;
 use Carbon\Carbon;
 use Dompdf\Dompdf;
+use Dompdf\Exception;
 use Gufy\PdfToHtml\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
@@ -102,13 +103,15 @@ class BillController extends Controller
                     imagedestroy($pic); // Освобождение памяти и закрытие рисунка
 
 
-
-                    $pdf = PdfDocument::load($bill->file->src[0]);
-                    $page = $pdf->pages[count($pdf->pages) - 1];
-                    $stampImage = Image::imageWithPath(public_path('accept.png'));
-                    $page->drawImage($stampImage, 20, 20, 500, 100);
-                    $pdf->save(public_path('files/' . $bill->id . '.pdf'));
-                    $print_file = 'files/' . $bill->id . '.pdf';
+                    try {
+                        $pdf = PdfDocument::load($bill->file->src[0]);
+                        $page = $pdf->pages[count($pdf->pages) - 1];
+                        $stampImage = Image::imageWithPath(public_path('accept.png'));
+                        $page->drawImage($stampImage, 20, 20, 500, 100);
+                        $pdf->save(public_path('files/' . $bill->id . '.pdf'));
+                        $print_file = 'files/' . $bill->id . '.pdf';
+                    } catch (Exception $e) {
+                    }
                 }
             }
         }

@@ -28,7 +28,7 @@
                     <div class="form-group">
                         <label for="date">Дата:</label>
                         <input type="text" name="date" id="date" placeholder="дд.мм.гггг" class="form-control"
-                               onkeydown="dateCheck()">
+                               onkeyup="dateCheck()">
                     </div>
                     <div class="form-group">
                         <label for="client_id">Контрагент:</label>
@@ -66,10 +66,8 @@
             let val = document.getElementById('date').value;
             if ((val.length == 2) || (val.length == 5))
                 document.getElementById('date').value = val + '.'
-            if (val.length > 9) {
-
-                console.log(123)
-                document.getElementById('date').value = val.substring(0, 9)
+            if (val.length > 10) {
+                document.getElementById('date').value = val.substring(0, 10)
             }
         }
 

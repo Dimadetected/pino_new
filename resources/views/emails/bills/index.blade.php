@@ -43,11 +43,11 @@
 
                 <tr>
                     <td class="header">
-                        <img src="https://dyatlovait.ru/logo-red.png" class="logo" alt="">
+                        <img src="https://xn--h1akdb.xn--p1acf/pino.jfif" class="logo" alt="">
                     </td>
                 </tr>
                 <!-- Email Body -->
-                <tr>
+                <tr style="text-align: center">
                     <td>
                         {{$text}}<br>
                         <a href="{{route('bill.view',$bill->id)}}">Перейти в счет</a>
@@ -61,7 +61,7 @@
 
                             <tr>
                                 <td class="content-cell" align="center">
-                                    Спасибо, ваш Пино.
+                                    Пино.
                                 </td>
                             </tr>
                         </table>

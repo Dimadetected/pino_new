@@ -23,7 +23,7 @@
                                class="form-control @error('inn') is-invalid @enderror">
                     </div>
                     <div class="form-group">
-                        <label for="address">Адресс:</label>
+                        <label for="address">Адрес:</label>
                         <input type="text" id="address" name="address" value="{{$client->address}}"
                                class="form-control">
                     </div>
@@ -48,10 +48,10 @@
                     <div class="form-group mt-3">
                         @if(!is_null($client->file_id))
                             <div class="alert alert-danger">
-                                Если вы загрузите новый файл, то старый удалится!
+                                Если вы загрузите новый договор, то старый удалится!
                             </div>
                         @endif
-                        <label for="exampleFormControlFile1">Выберите файлы</label>
+                        <label for="exampleFormControlFile1">Договор:</label>
                         <input type="file" name="files[]" class="form-control-file"
                                id="exampleFormControlFile1">
                     </div>

@@ -36,8 +36,8 @@
                             @continue
                         @endif
                         <div class="col-md-4 my-2">
-                            <div
-                                class="card card-body shadow mb-5 alert @if($bill->status == 1 and is_null($bill->user_role_id) ) alert-success @elseif($bill->status == 2) alert-danger @endif">
+                            <div style="position: relative"
+                                 class="card card-body shadow mb-5 alert @if($bill->status == 1 and is_null($bill->user_role_id) ) alert-success @elseif($bill->status == 2) alert-danger @endif">
                                 <div class=" card-title" style="font-size: 16pt"><a class="text-primary"
                                                                                     href="{{route($routes['view'],$bill)}}">Счет
                                         #{{$bill->id}}</a></div>
@@ -47,6 +47,23 @@
                                     <div class="my-2  h4">{{$bill->bill_type->name??$bill->bill_status->name}}
                                     </div>
                                 @endif
+                                <div style="position:absolute;top: 10px;right: 10px">
+                                    <ul style="font-size: 12px">
+                                        <li>
+                                            @php($name = explode(' ',$bill->user->name))
+                                            {{$name[0]}} {{isset($name[1])?$name[1].'.':''}} {{isset($name[2])?$name[2].'.':''}}
+                                        </li>
+                                        @if(isset($bill->date))
+                                            <li>Дата: {{\Carbon\Carbon::parse($bill->date)->format('d.m.Y')}}</li>
+                                        @endif
+                                        @if(isset($bill->number))
+                                            <li>№: {{$bill->number}}</li>
+                                        @endif
+                                        @if(isset($bill->summ))
+                                            <li>{{$bill->summ}}р.</li>
+                                        @endif
+                                    </ul>
+                                </div>
                                 <hr>
                                 <p class="my-3">{{$bill->text}}</p>
                                 @if(isset($bill->file))

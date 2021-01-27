@@ -104,13 +104,14 @@ class BillController extends Controller
 
 
                     try {
+
                         $pdf = PdfDocument::load($bill->file->src[0]);
                         $page = $pdf->pages[count($pdf->pages) - 1];
                         $stampImage = Image::imageWithPath(public_path('accept.png'));
                         $page->drawImage($stampImage, 20, 20, 500, 100);
                         $pdf->save(public_path('files/' . $bill->id . '.pdf'));
                         $print_file = 'files/' . $bill->id . '.pdf';
-                    } catch (Exception $e) {
+                    } catch (\Throwable $e) {
                     }
                 }
             }

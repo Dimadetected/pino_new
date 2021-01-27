@@ -101,6 +101,8 @@ class BillController extends Controller
                     imagepng($pic, 'accept' . ".png"); // Сохранение рисунка
                     imagedestroy($pic); // Освобождение памяти и закрытие рисунка
 
+
+
                     $pdf = PdfDocument::load($bill->file->src[0]);
                     $page = $pdf->pages[count($pdf->pages) - 1];
                     $stampImage = Image::imageWithPath(public_path('accept.png'));
@@ -136,9 +138,9 @@ class BillController extends Controller
         $billArr = [];
         $type = \request('type');
 
-        if (in_array(auth()->user()->user_role_id, $bill->chain->value) and !in_array(auth()->user()->user_role_id, [6, 7, 4])) {
-            $bill->update(['steps' => array_search(auth()->user()->user_role_id, $bill->chain->value), 'user_role_id' => auth()->user()->user_role_id]);
-        }
+//        if (in_array(auth()->user()->user_role_id, $bill->chain->value) and !in_array(auth()->user()->user_role_id, [6, 7, 4])) {
+//            $bill->update(['steps' => array_search(auth()->user()->user_role_id, $bill->chain->value), 'user_role_id' => auth()->user()->user_role_id]);
+//        }
 
         $bill_status = $bill->bill_statuses();
         if ($type == 'accept') {

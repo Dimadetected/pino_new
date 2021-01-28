@@ -102,12 +102,12 @@ class BillController extends Controller
 
                     try {
 
-                    $pdf = PdfDocument::load($bill->file->src[0]);
-                    $page = $pdf->pages[count($pdf->pages) - 1];
-                    $stampImage = Image::imageWithPath(public_path('accept.png'));
-                    $page->drawImage($stampImage, 20, 20, 500, 100);
-                    $pdf->save(public_path('files/' . $bill->id . '.pdf'));
-                    $print_file = 'files/' . $bill->id . '.pdf';
+                        $pdf = PdfDocument::load($bill->file->src[0]);
+                        $page = $pdf->pages[count($pdf->pages) - 1];
+                        $stampImage = Image::imageWithPath(public_path('accept.png'));
+                        $page->drawImage($stampImage, 20, 20, 500, 100);
+                        $pdf->save(public_path('files/' . $bill->id . '.pdf'));
+                        $print_file = 'files/' . $bill->id . '.pdf';
                     } catch (\Throwable $e) {
                     }
                 }
@@ -219,6 +219,7 @@ class BillController extends Controller
         if ($bill->status == 1) {
             $organisation_id = $bill->chain->organisation_id;
             $users = User::query()
+                ->where('id', '!=', 3)
                 ->where('user_role_id', $bill->user_role_id)
                 ->whereHas('organisations', function ($query) use ($organisation_id) {
                     $query->where('organisation_id', $organisation_id);

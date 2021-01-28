@@ -22,6 +22,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
+use setasign\Fpdi\Fpdi;
 use ZendPdf\Color\Html;
 use ZendPdf\Font;
 use ZendPdf\Image;
@@ -53,6 +54,8 @@ class BillController extends Controller
 
     public function index()
     {
+
+
         $date_start = Carbon::parse(\request('date_start', now()->startOfYear()))->startOfDay();
         $date_end = Carbon::parse(\request('date_end', now()->endOfYear()))->endOfDay();
         $user = auth()->user();
@@ -99,17 +102,31 @@ class BillController extends Controller
                     imagepng($pic, 'accept' . ".png"); // Сохранение рисунка
                     imagedestroy($pic); // Освобождение памяти и закрытие рисунка
 
+                    $pdf = new Fpdi();
+                    $pages_count = $pdf->setSourceFile($bill->file->src[0]);
+                    for ($i = 1; $i <= $pages_count; $i++) {
+                        $pdf->AddPage();
 
-                    try {
+                        $tplIdx = $pdf->importPage($i);
 
-                        $pdf = PdfDocument::load($bill->file->src[0]);
-                        $page = $pdf->pages[count($pdf->pages) - 1];
-                        $stampImage = Image::imageWithPath(public_path('accept.png'));
-                        $page->drawImage($stampImage, 20, 20, 500, 100);
-                        $pdf->save(public_path('files/' . $bill->id . '.pdf'));
-                        $print_file = 'files/' . $bill->id . '.pdf';
-                    } catch (\Throwable $e) {
+                        $pdf->useTemplate($tplIdx, 0, 0);
+                        if ($i == $pages_count) {
+                            $pdf->Image(public_path('accept.png'), 20, 20, 50, 10);
+                            $pdf->Output(public_path('files/' . $bill->id . '.pdf'), 'F');
+                            $print_file = 'files/' . $bill->id . '.pdf';
+                        }
                     }
+
+//                    try {
+//
+//                        $pdf = PdfDocument::load($bill->file->src[0]);
+//                        $page = $pdf->pages[count($pdf->pages) - 1];
+//                        $stampImage = Image::imageWithPath(public_path('accept.png'));
+//                        $page->drawImage($stampImage, 20, 20, 500, 100);
+//                        $pdf->save(public_path('files/' . $bill->id . '.pdf'));
+//                        $print_file = 'files/' . $bill->id . '.pdf';
+//                    } catch (\Throwable $e) {
+//                    }
                 }
             }
         }

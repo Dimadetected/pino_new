@@ -100,7 +100,7 @@ class BillController extends Controller
                     imagedestroy($pic); // Освобождение памяти и закрытие рисунка
 
 
-//                    try {
+                    try {
 
                     $pdf = PdfDocument::load($bill->file->src[0]);
                     $page = $pdf->pages[count($pdf->pages) - 1];
@@ -108,8 +108,8 @@ class BillController extends Controller
                     $page->drawImage($stampImage, 20, 20, 500, 100);
                     $pdf->save(public_path('files/' . $bill->id . '.pdf'));
                     $print_file = 'files/' . $bill->id . '.pdf';
-//                    } catch (\Throwable $e) {
-//                    }
+                    } catch (\Throwable $e) {
+                    }
                 }
             }
         }

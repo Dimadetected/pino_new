@@ -2648,6 +2648,37 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     this.getUserRoles();
@@ -2670,6 +2701,8 @@ __webpack_require__.r(__webpack_exports__);
       user_email: '',
       user_role: '',
       user_roles: [],
+      tg_notice: false,
+      email_notice: false,
       organisations: [],
       selected_organisations: []
     };
@@ -2709,6 +2742,8 @@ __webpack_require__.r(__webpack_exports__);
         _this3.user_name = res.data.name;
         _this3.user_email = res.data.email;
         _this3.user_role = res.data.user_role.id;
+        _this3.tg_notice = res.data.tg_notice;
+        _this3.email_notice = res.data.email_notice;
         res.data.organisations.map(function (org) {
           _this3.changeSelect(org.id);
         });
@@ -2724,7 +2759,9 @@ __webpack_require__.r(__webpack_exports__);
           name: this.user_name,
           email: this.user_email,
           user_role_id: this.user_role,
-          organisations: this.selected_organisations
+          organisations: this.selected_organisations,
+          tg_notice: this.tg_notice,
+          email_notice: this.email_notice
         }),
         headers: {
           'Content-Type': 'application/json',
@@ -21410,7 +21447,7 @@ var render = function() {
               return _c(
                 "button",
                 {
-                  staticClass: "mr-1 btn",
+                  staticClass: "mr-1 btn my-2",
                   class:
                     _vm.selected_organisations.indexOf(organisation.id) === -1
                       ? "btn-secondary"
@@ -21432,6 +21469,130 @@ var render = function() {
             }),
             0
           )
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-12 card card-body shadow my-2" }, [
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-md-4" }, [
+            _vm._v("\n                    Уведомления:\n                ")
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-md-8" }, [
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-auto" }, [
+                _c("div", { staticClass: "form-check" }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.tg_notice,
+                        expression: "tg_notice"
+                      }
+                    ],
+                    staticClass: "form-check-input",
+                    attrs: { type: "checkbox", id: "tg_notice" },
+                    domProps: {
+                      checked: Array.isArray(_vm.tg_notice)
+                        ? _vm._i(_vm.tg_notice, null) > -1
+                        : _vm.tg_notice
+                    },
+                    on: {
+                      change: function($event) {
+                        var $$a = _vm.tg_notice,
+                          $$el = $event.target,
+                          $$c = $$el.checked ? true : false
+                        if (Array.isArray($$a)) {
+                          var $$v = null,
+                            $$i = _vm._i($$a, $$v)
+                          if ($$el.checked) {
+                            $$i < 0 && (_vm.tg_notice = $$a.concat([$$v]))
+                          } else {
+                            $$i > -1 &&
+                              (_vm.tg_notice = $$a
+                                .slice(0, $$i)
+                                .concat($$a.slice($$i + 1)))
+                          }
+                        } else {
+                          _vm.tg_notice = $$c
+                        }
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "label",
+                    {
+                      staticClass: "form-check-label",
+                      attrs: { for: "tg_notice" }
+                    },
+                    [
+                      _vm._v(
+                        "\n                                    Telegram\n                                "
+                      )
+                    ]
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-auto" }, [
+                _c("div", { staticClass: "form-check" }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.email_notice,
+                        expression: "email_notice"
+                      }
+                    ],
+                    staticClass: "form-check-input",
+                    attrs: { type: "checkbox", id: "email_notice" },
+                    domProps: {
+                      checked: Array.isArray(_vm.email_notice)
+                        ? _vm._i(_vm.email_notice, null) > -1
+                        : _vm.email_notice
+                    },
+                    on: {
+                      change: function($event) {
+                        var $$a = _vm.email_notice,
+                          $$el = $event.target,
+                          $$c = $$el.checked ? true : false
+                        if (Array.isArray($$a)) {
+                          var $$v = null,
+                            $$i = _vm._i($$a, $$v)
+                          if ($$el.checked) {
+                            $$i < 0 && (_vm.email_notice = $$a.concat([$$v]))
+                          } else {
+                            $$i > -1 &&
+                              (_vm.email_notice = $$a
+                                .slice(0, $$i)
+                                .concat($$a.slice($$i + 1)))
+                          }
+                        } else {
+                          _vm.email_notice = $$c
+                        }
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "label",
+                    {
+                      staticClass: "form-check-label",
+                      attrs: { for: "email_notice" }
+                    },
+                    [
+                      _vm._v(
+                        "\n                                    Email\n                                "
+                      )
+                    ]
+                  )
+                ])
+              ])
+            ])
+          ])
         ])
       ]),
       _vm._v(" "),

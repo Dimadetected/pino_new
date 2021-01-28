@@ -116,16 +116,6 @@ class BillController extends Controller
                         }
                     }
 
-//                    try {
-//
-//                        $pdf = PdfDocument::load($bill->file->src[0]);
-//                        $page = $pdf->pages[count($pdf->pages) - 1];
-//                        $stampImage = Image::imageWithPath(public_path('accept.png'));
-//                        $page->drawImage($stampImage, 20, 20, 500, 100);
-//                        $pdf->save(public_path('files/' . $bill->id . '.pdf'));
-//                        $print_file = 'files/' . $bill->id . '.pdf';
-//                    } catch (\Throwable $e) {
-//                    }
                 }
             }
         }
@@ -215,8 +205,7 @@ class BillController extends Controller
 
         $buttons = [];
         $buttons[] = [['text' => 'Счет', 'url' => route('bill.view', $bill->id)]];
-        logger($bill->user->tg_id);
-        if (isset($bill->user->tg_id)) {
+        if (isset($bill->user->tg_id) and !is_null($bill->user->tg_notice)) {
             logger($this->telegram->sendMessage([
                 'chat_id' => $bill->user->tg_id,
                 'text' => $text,
@@ -226,35 +215,36 @@ class BillController extends Controller
             ]));
         }
 
-        try {
-            Mail::to($bill->user->email)->send(new \App\Mail\Bill($bill, $text));
-        } catch (\Throwable $e) {
-            logger($e->getMessage());
-        }
+        if (!is_null($bill->user->email_notice))
+            try {
+                Mail::to($bill->user->email)->send(new \App\Mail\Bill($bill, $text));
+            } catch (\Throwable $e) {
+                logger($e->getMessage());
+            }
 
         if ($bill->status == 1) {
             $organisation_id = $bill->chain->organisation_id;
             $users = User::query()
-                ->where('id', '!=', 3)
                 ->where('user_role_id', $bill->user_role_id)
                 ->whereHas('organisations', function ($query) use ($organisation_id) {
                     $query->where('organisation_id', $organisation_id);
                 })->get();
 
             foreach ($users as $user) {
-                logger($this->telegram->sendMessage([
-                    'chat_id' => $user->tg_id,
-                    'text' => 'Поступил новый счет на утверждение.',
-                    'reply_markup' => json_encode(['inline_keyboard' =>
-                        $buttons,
-                    ]),
-                ]));
-
-                try {
-                    Mail::to($user->email)->send(new \App\Mail\Bill($bill, 'Поступил новый счет на утверждение.'));
-                } catch (\Throwable $e) {
-                    logger($e->getMessage());
-                }
+                if (!is_null($user->tg_notice))
+                    logger($this->telegram->sendMessage([
+                        'chat_id' => $user->tg_id,
+                        'text' => 'Поступил новый счет на утверждение.',
+                        'reply_markup' => json_encode(['inline_keyboard' =>
+                            $buttons,
+                        ]),
+                    ]));
+                if (!is_null($user->email_notice))
+                    try {
+                        Mail::to($user->email)->send(new \App\Mail\Bill($bill, 'Поступил новый счет на утверждение.'));
+                    } catch (\Throwable $e) {
+                        logger($e->getMessage());
+                    }
 
 //                Mail::to($email)->send(new OrderShipped((array)$answer));
 

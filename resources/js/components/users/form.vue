@@ -42,10 +42,41 @@
                         Организации:
                     </div>
                     <div class="col-md-8">
-                        <button class="mr-1 btn" v-for="organisation in organisations" :class="selected_organisations.indexOf(organisation.id) === -1?'btn-secondary':'btn-primary'"
+                        <button class="mr-1 btn my-2" v-for="organisation in organisations"
+                                :class="selected_organisations.indexOf(organisation.id) === -1?'btn-secondary':'btn-primary'"
                                 @click="changeSelect(organisation.id)">
                             {{ organisation.name }}
                         </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 card card-body shadow my-2">
+                <div class="row">
+                    <div class="col-md-4">
+                        Уведомления:
+                    </div>
+                    <div class="col-md-8">
+                        <div class="row">
+                            <div class="col-auto">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" v-model="tg_notice"
+                                           id="tg_notice">
+                                    <label class="form-check-label" for="tg_notice">
+                                        Telegram
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-auto">
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" v-model="email_notice"
+                                           id="email_notice">
+                                    <label class="form-check-label" for="email_notice">
+                                        Email
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -79,7 +110,8 @@ export default {
             user_email: '',
             user_role: '',
             user_roles: [],
-
+            tg_notice: false,
+            email_notice: false,
             organisations: [],
             selected_organisations: [],
         }
@@ -91,7 +123,7 @@ export default {
             if (this.selected_organisations.indexOf(id) === -1)
                 this.selected_organisations.push(id)
             else
-                this.selected_organisations.splice(this.selected_organisations.indexOf(id),1)
+                this.selected_organisations.splice(this.selected_organisations.indexOf(id), 1)
 
         },
         getOrganisations() {
@@ -117,7 +149,8 @@ export default {
                     this.user_name = res.data.name
                     this.user_email = res.data.email
                     this.user_role = res.data.user_role.id
-
+                    this.tg_notice = res.data.tg_notice
+                    this.email_notice = res.data.email_notice
                     res.data.organisations.map(org => {
                         this.changeSelect(org.id)
                     })
@@ -134,7 +167,9 @@ export default {
                             name: this.user_name,
                             email: this.user_email,
                             user_role_id: this.user_role,
-                            organisations: this.selected_organisations
+                            organisations: this.selected_organisations,
+                            tg_notice: this.tg_notice,
+                            email_notice: this.email_notice,
                         }
                     ),
                     headers: {

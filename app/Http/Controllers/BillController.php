@@ -55,7 +55,6 @@ class BillController extends Controller
     public function index()
     {
 
-
         $date_start = Carbon::parse(\request('date_start', now()->startOfYear()))->startOfDay();
         $date_end = Carbon::parse(\request('date_end', now()->endOfYear()))->endOfDay();
         $user = auth()->user();
@@ -111,7 +110,7 @@ class BillController extends Controller
 
                         $pdf->useTemplate($tplIdx, 0, 0);
                         if ($i == $pages_count) {
-                            $pdf->Image(public_path('accept.png'), 20, 20, 50, 10);
+                            $pdf->Image(public_path('accept.png'), 20, 270, 100, 20);
                             $pdf->Output(public_path('files/' . $bill->id . '.pdf'), 'F');
                             $print_file = 'files/' . $bill->id . '.pdf';
                         }

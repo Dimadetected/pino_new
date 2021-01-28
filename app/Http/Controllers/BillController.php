@@ -53,6 +53,9 @@ class BillController extends Controller
 
     public function index()
     {
+        $bill = Bill::query()->find(119);
+        Mail::to('dimadetected@yandex.ru')->send(new \App\Mail\Bill($bill, 'test'));
+dd(1);
         $date_start = Carbon::parse(\request('date_start', now()->startOfYear()))->startOfDay();
         $date_end = Carbon::parse(\request('date_end', now()->endOfYear()))->endOfDay();
         $user = auth()->user();
@@ -100,16 +103,16 @@ class BillController extends Controller
                     imagedestroy($pic); // Освобождение памяти и закрытие рисунка
 
 
-                    try {
+//                    try {
 
-                        $pdf = PdfDocument::load($bill->file->src[0]);
-                        $page = $pdf->pages[count($pdf->pages) - 1];
-                        $stampImage = Image::imageWithPath(public_path('accept.png'));
-                        $page->drawImage($stampImage, 20, 20, 500, 100);
-                        $pdf->save(public_path('files/' . $bill->id . '.pdf'));
-                        $print_file = 'files/' . $bill->id . '.pdf';
-                    } catch (\Throwable $e) {
-                    }
+                    $pdf = PdfDocument::load($bill->file->src[0]);
+                    $page = $pdf->pages[count($pdf->pages) - 1];
+                    $stampImage = Image::imageWithPath(public_path('accept.png'));
+                    $page->drawImage($stampImage, 20, 20, 500, 100);
+                    $pdf->save(public_path('files/' . $bill->id . '.pdf'));
+                    $print_file = 'files/' . $bill->id . '.pdf';
+//                    } catch (\Throwable $e) {
+//                    }
                 }
             }
         }
@@ -208,12 +211,6 @@ class BillController extends Controller
                     $buttons,
                 ]),
             ]));
-
-            try {
-                Mail::to($bill->user->email)->send(new \App\Mail\Bill($bill, $text));
-            } catch (\Throwable $e) {
-                logger($e->getMessage());
-            }
         }
 
         if ($bill->status == 1) {
@@ -233,11 +230,7 @@ class BillController extends Controller
                     ]),
                 ]));
 
-                try {
-                    Mail::to($user->email)->send(new \App\Mail\Bill($bill, 'Поступил новый счет на утверждение.'));
-                } catch (\Throwable $e) {
-                    logger($e->getMessage());
-                }
+//                Mail::to($email)->send(new OrderShipped((array)$answer));
 
             }
         }

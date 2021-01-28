@@ -47,11 +47,11 @@
                                     <div class="my-2  h4">{{$bill->bill_type->name??$bill->bill_status->name}}
                                     </div>
                                 @endif
-                                <div style="position:absolute;top: 10px;right: 10px">
+                                <div style="position:absolute;top: 10px;right: 10px" class="text-right">
                                     <ul style="font-size: 12px">
                                         <li>
                                             @php($name = explode(' ',$bill->user->name))
-                                            {{$name[0]}} {{isset($name[1])?$name[1].'.':''}} {{isset($name[2])?$name[2].'.':''}}
+                                            {{$name[0]}} {{isset($name[1])?$name[1][0].'.':''}} {{isset($name[2])?$name[2][0].'.':''}}
                                         </li>
                                         @if(isset($bill->date))
                                             <li>Дата: {{\Carbon\Carbon::parse($bill->date)->format('d.m.Y')}}</li>
@@ -59,8 +59,8 @@
                                         @if(isset($bill->number))
                                             <li>№: {{$bill->number}}</li>
                                         @endif
-                                        @if(isset($bill->summ))
-                                            <li>{{$bill->summ}}р.</li>
+                                        @if(isset($bill->sum))
+                                            <li>{{$bill->sum}}р.</li>
                                         @endif
                                     </ul>
                                 </div>

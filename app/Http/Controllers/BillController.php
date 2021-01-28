@@ -210,6 +210,12 @@ class BillController extends Controller
             ]));
         }
 
+        try {
+            Mail::to($bill->user->email)->send(new \App\Mail\Bill($bill, $text));
+        } catch (\Throwable $e) {
+            logger($e->getMessage());
+        }
+
         if ($bill->status == 1) {
             $organisation_id = $bill->chain->organisation_id;
             $users = User::query()
@@ -226,6 +232,12 @@ class BillController extends Controller
                         $buttons,
                     ]),
                 ]));
+
+                try {
+                    Mail::to($user->email)->send(new \App\Mail\Bill($bill, 'Поступил новый счет на утверждение.'));
+                } catch (\Throwable $e) {
+                    logger($e->getMessage());
+                }
 
 //                Mail::to($email)->send(new OrderShipped((array)$answer));
 

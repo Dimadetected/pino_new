@@ -24,4 +24,6 @@ Route::resource('chains','App\Http\Controllers\Api\ChainController');
 Route::resource('organisations','App\Http\Controllers\Api\OrganisationController');
 Route::resource('users','App\Http\Controllers\Api\UserController');
 Route::resource('clients','App\Http\Controllers\Api\ClientController');
+Route::resource('kanban_columns','App\Http\Controllers\Api\KanbanColumnController');
+Route::resource('kanban_tasks','App\Http\Controllers\Api\KanbanTaskController');
 

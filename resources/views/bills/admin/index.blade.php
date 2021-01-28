@@ -50,9 +50,7 @@
                                 <div style="position:absolute;top: 10px;right: 10px" class="text-right">
                                     <ul style="font-size: 12px">
                                         <li>
-                                            @php($name = explode(' ',$bill->user->name))
-                                            {{$name[0]}} {{isset($name[1])?$name[1][0].'.':''}} {{isset($name[2])?$name[2][0].'.':''}}
-                                        </li>
+                                        {{$bill->user->name}}</li>
                                         @if(isset($bill->date))
                                             <li>Дата: {{\Carbon\Carbon::parse($bill->date)->format('d.m.Y')}}</li>
                                         @endif

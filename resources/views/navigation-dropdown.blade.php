@@ -68,7 +68,6 @@
                     <x-jet-nav-link href="{{ route('clients.index') }}" :active="request()->routeIs('clients.index')">
                         Контрагенты
                     </x-jet-nav-link>
-
                 </div>
             </div>
 
@@ -76,95 +75,10 @@
 
 
             <div class="hidden sm:flex sm:items-center">
-                <x-jet-dropdown align="right" width="48">
-                    <x-slot name="trigger">
-                        @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
-                            <button
-                                class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition duration-150 ease-in-out">
-                                <img class="h-8 w-8 rounded-full object-cover"
-                                     src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}"/>
-                            </button>
-                        @else
-                            <button
-                                class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
-                                <div>{{ Auth::user()->name }}</div>
 
-                                <div class="ml-1">
-                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
-                                         viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd"
-                                              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                              clip-rule="evenodd"/>
-                                    </svg>
-                                </div>
-                            </button>
-                        @endif
-                    </x-slot>
-
-                    <x-slot name="content">
-                        <!-- Account Management -->
-                        <div class="block px-4 py-2 text-xs text-gray-400">
-                            {{--                            {{ __('Manage Account') }}--}}
-                            Управление аккаунтом
-                        </div>
-
-                        <x-jet-dropdown-link href="{{ route('profile.show') }}">
-                            {{--                            {{ __('Profile') }}--}}
-                            Профиль
-                        </x-jet-dropdown-link>
-
-                        @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
-                            <x-jet-dropdown-link href="{{ route('api-tokens.index') }}">
-                                {{ __('API Tokens') }}
-                            </x-jet-dropdown-link>
-                        @endif
-
-                        <div class="border-t border-gray-100"></div>
-
-                        <!-- Team Management -->
-                        @if (Laravel\Jetstream\Jetstream::hasTeamFeatures())
-                            <div class="block px-4 py-2 text-xs text-gray-400">
-                                {{ __('Manage Team') }}
-                            </div>
-
-                            <!-- Team Settings -->
-                            <x-jet-dropdown-link href="{{ route('teams.show', Auth::user()->currentTeam->id) }}">
-                                {{ __('Team Settings') }}
-                            </x-jet-dropdown-link>
-
-                            @can('create', Laravel\Jetstream\Jetstream::newTeamModel())
-                                <x-jet-dropdown-link href="{{ route('teams.create') }}">
-                                    {{ __('Create New Team') }}
-                                </x-jet-dropdown-link>
-                            @endcan
-
-                            <div class="border-t border-gray-100"></div>
-
-                            <!-- Team Switcher -->
-                            <div class="block px-4 py-2 text-xs text-gray-400">
-                                {{ __('Switch Teams') }}
-                            </div>
-
-                            @foreach (Auth::user()->allTeams() as $team)
-                                <x-jet-switchable-team :team="$team"/>
-                            @endforeach
-
-                            <div class="border-t border-gray-100"></div>
-                    @endif
-
-                    <!-- Authentication -->
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-
-                            <x-jet-dropdown-link href="{{ route('logout') }}"
-                                                 onclick="event.preventDefault();
-                                                            this.closest('form').submit();">
-                                {{--                                {{ __('Logout') }}--}}
-                                Выход
-                            </x-jet-dropdown-link>
-                        </form>
-                    </x-slot>
-                </x-jet-dropdown>
+                <x-jet-dropdown-link href="{{ route('profile.show') }}">
+                    {{Auth::user()->name}}
+                </x-jet-dropdown-link>
             </div>
 
             <div class="-mr-2 flex items-center sm:hidden">
@@ -266,3 +180,59 @@
         </div>
     </div>
 </nav>
+{{--@if(in_array(auth()->user()->id,[1,2]))--}}
+    <nav x-data="{ open: false }" class="bg-white border-b border-gray-100" style="font-size: 12px">
+        <!-- Primary Navigation Menu -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between py-1">
+
+                <div class="flex">
+                    <!-- Logo -->
+                    <div class="flex-shrink-0 flex items-center">
+                        <a href="{{ route('bill.index') }}" class="text-secondary">
+                            Админка
+                        </a>
+                    </div>
+
+                    <!-- Navigation Links -->
+                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        <x-jet-nav-link href="{{ route('profile.show') }}">
+                        </x-jet-nav-link>
+                        <x-jet-nav-link href="{{ route('chains.index') }}">
+                            Цепочки
+                        </x-jet-nav-link>
+                        <x-jet-nav-link href="{{ route('organisations.index') }}">
+                            Организации
+                        </x-jet-nav-link>
+                        <x-jet-nav-link href="{{ route('users.index') }}">
+                            Пользователи
+                        </x-jet-nav-link>
+                        <x-jet-nav-link href="{{ route('users.index') }}">
+                            Пользователи
+                        </x-jet-nav-link>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Responsive Navigation Menu -->
+        <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
+            <div class="pt-2 pb-3 space-y-1">
+                <x-jet-responsive-nav-link href="{{ route('bill.my') }}" :active="request()->routeIs('bill.my')">
+                    Мои счета
+                </x-jet-responsive-nav-link>
+                <x-jet-responsive-nav-link href="{{ route('bill.accept') }}"
+                                           :active="request()->routeIs('bill.accept')">
+                    Счета для подтверждения
+                </x-jet-responsive-nav-link>
+                <x-jet-responsive-nav-link href="{{ route('bill.accepted') }}"
+                                           :active="request()->routeIs('bill.accepted')">
+                    Подтвержденные счета
+                </x-jet-responsive-nav-link>
+            </div>
+
+
+        </div>
+    </nav>
+{{--@endif--}}

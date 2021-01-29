@@ -23,7 +23,7 @@ class KanbanTaskService
 
     public function store($array)
     {
-        $array['date'] = Carbon::createFromFormat('d/m/Y H:i', $array['date'])->format('Y-m-d H:i:s');
+        $array['date'] = Carbon::createFromFormat('d/m/Y H:i', $array['date'] . ' ' . $array['hours_minutes'])->format('Y-m-d H:i:s');
         return $this->query()->create($array);
     }
 

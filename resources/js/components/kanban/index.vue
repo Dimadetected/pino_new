@@ -86,6 +86,28 @@ export default {
         log(evt) {
             window.console.log(evt);
             window.console.log(this.columnsArr);
+            this.save();
+        },save() {
+            fetch(
+                '/api/kanban_tasks/allTasksChange',
+                {
+                    method: 'POST',
+                    body: JSON.stringify(
+                        {
+                            columns: this.columnsArr,
+                        }
+                    ),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                }
+            )
+                .then(r => r.json())
+                .then(r => {
+                        console.log(r.data);
+                    }
+                )
         }
     },
     mounted() {

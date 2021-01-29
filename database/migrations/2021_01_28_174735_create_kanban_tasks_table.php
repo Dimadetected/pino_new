@@ -21,6 +21,7 @@ class CreateKanbanTasksTable extends Migration
             $table->foreignId('master_id')->nullable();
             $table->foreignId('kanban_column_id')->default(1);
             $table->string('date')->nullable();
+            $table->integer('priority')->nullable();
             $table->timestamps();
         });
     }

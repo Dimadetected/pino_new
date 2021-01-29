@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\KanbanTaskResource;
 use App\Http\Services\KanbanTaskService;
+use App\Models\KanbanTask;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class KanbanTaskController extends Controller
 {
@@ -37,7 +39,7 @@ class KanbanTaskController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -48,7 +50,7 @@ class KanbanTaskController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -59,7 +61,7 @@ class KanbanTaskController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -70,8 +72,8 @@ class KanbanTaskController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -82,11 +84,29 @@ class KanbanTaskController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         //
+    }
+
+    public function allTasksChange()
+    {
+        $columns = request('columns');
+        $taskArr = [];
+
+        foreach ($columns as $column)
+            foreach ($column['tasks'] as $key => $task)
+                $taskArr[$task['id']] = ['id' => $column['id'], 'priority' => $key];
+
+        DB::transaction(function () use ($taskArr) {
+            $tasks = KanbanTask::query()->find(array_keys($taskArr));
+            foreach ($tasks as $task)
+                $task->update(['kanban_column_id' => $taskArr[$task->id]['id'], 'priority' => $taskArr[$task->id]['priority']]);
+        });
+
+        return response()->json(200);
     }
 }

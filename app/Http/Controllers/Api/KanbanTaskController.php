@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\KanbanTaskAllInfoResource;
 use App\Http\Resources\KanbanTaskResource;
 use App\Http\Services\KanbanTaskService;
 use App\Models\KanbanTask;
+use App\Models\Message;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -53,9 +55,9 @@ class KanbanTaskController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(KanbanTask $kanbanTask)
     {
-        //
+        return KanbanTaskAllInfoResource::make($kanbanTask);
     }
 
     /**
@@ -107,6 +109,18 @@ class KanbanTaskController extends Controller
                 $task->update(['kanban_column_id' => $taskArr[$task->id]['id'], 'priority' => $taskArr[$task->id]['priority']]);
         });
 
+        return response()->json(200);
+    }
+
+    public function message()
+    {
+
+        Message::query()->create([
+            'external_id' => \request('id'),
+            'type' => 'task_comment',
+            'text' => \request('text'),
+            'user_id' => \request('user_id')
+        ]);
         return response()->json(200);
     }
 }

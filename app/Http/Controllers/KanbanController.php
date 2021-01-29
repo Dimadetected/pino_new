@@ -36,4 +36,10 @@ class KanbanController extends Controller
         return redirect()->route('kanban.index');
     }
 
+    public function destroy(KanbanTask $kanbanTask)
+    {
+        $kanbanTask->delete();
+        return redirect()->route('kanban.index');
+    }
+
 }

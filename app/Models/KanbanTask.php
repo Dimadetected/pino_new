@@ -18,4 +18,12 @@ class KanbanTask extends Model
     {
         return $this->belongsTo(User::class,'master_id','id');
     }
+    public function comments()
+    {
+        return $this->hasMany(Message::class,'external_id','id')->where('type','task_comment')->orderByDesc('id');
+    }
+    public function logs()
+    {
+        return $this->hasMany(Message::class,'external_id','id')->where('type','task_log')->orderByDesc('id');
+    }
 }

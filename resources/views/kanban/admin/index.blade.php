@@ -2,7 +2,7 @@
 
 
 @section('content')
-<kanban></kanban>
+<kanban :user_id="{{auth()->user()->id}}"></kanban>
 
 @endsection
 @section('script')

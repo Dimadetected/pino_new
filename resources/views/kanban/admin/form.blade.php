@@ -7,17 +7,17 @@
             @csrf
             <div class="form-group">
                 <label for="name">Название:</label>
-                <input type="text" class="form-control" name="name" id="name">
+                <input type="text" class="form-control" name="name" id="name" value="{{$kanbanTask->name??''}}">
             </div>
             <div class="form-group">
                 <label for="text">Описание:</label>
-                <textarea class="form-control" name="text" id="text"></textarea>
+                <textarea class="form-control" name="text" id="text">{{$kanbanTask->text??''}}</textarea>
             </div>
             <div class="form-group">
                 <label for="master_id">Исполнитель:</label>
                 <select class="form-control" name="master_id" id="master_id">
                     @foreach($masters as $master)
-                        <option value="{{$master->id}}">{{$master->name}}</option>
+                        <option @if(isset($kanbanTask->master_id) and $kanbanTask->master_id == $master->id) selected @endif value="{{$master->id}}">{{$master->name}}</option>
                     @endforeach
                 </select>
             </div>
@@ -26,9 +26,9 @@
                 <div class="col-12">
                     <div class="row">
                         <input type="text" id="selector" name="date" class="form-control col-6"
-                               placeholder="дд.мм.гггг" value="{{now()->format('d.m.Y')}}">
+                               placeholder="дд.мм.гггг" value="{{isset($kanbanTask->date)?\Carbon\Carbon::parse($kanbanTask->date)->format('d.m.Y'):now()->format('d.m.Y')}}">
                         <input type="text" id="hours_minutes" name="hours_minutes" class="form-control col-6"
-                               placeholder="" value="{{now()->addHours(6)->format('H:i')}}">
+                               placeholder="" value="{{isset($kanbanTask->date)?\Carbon\Carbon::parse($kanbanTask->date)->format('H:i'):now()->addHours(6)->format('H:i')}}">
                     </div>
                 </div>
             </div>

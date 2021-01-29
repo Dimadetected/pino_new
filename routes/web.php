@@ -51,6 +51,7 @@ Route::prefix('/kanban')->name('kanban.')->middleware('auth')->group(function ()
     Route::get('/', 'App\Http\Controllers\KanbanController@index')->name('index');
     Route::get('/form/{kanban_task?}', 'App\Http\Controllers\KanbanController@form')->name('form');
     Route::post('/store/{kanban_task?}', 'App\Http\Controllers\KanbanController@store')->name('store');
+    Route::get('/destroy/{kanban_task?}', 'App\Http\Controllers\KanbanController@destroy')->name('destroy');
 });
 Route::prefix('/clients')->name('clients.')->middleware('auth')->group(function () {
     Route::get('/', 'App\Http\Controllers\ClientController@index')->name('index');

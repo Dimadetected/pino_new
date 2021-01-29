@@ -30,6 +30,7 @@
         "jquery-ui": "^1.12.1",
         "jquery.inputmask": "^3.3.4",
         "vue": "^2.6.12",
+        "vue-js-modal": "^2.0.0-rc.6",
         "vuedraggable": "^2.24.3"
     }
 }

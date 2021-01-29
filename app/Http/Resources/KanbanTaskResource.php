@@ -23,7 +23,9 @@ class KanbanTaskResource extends JsonResource
             'text' => $this->text,
             'user' => $user[0] . ' ' . (isset($user[1])?$this->mb_str_split($user[1])[0]. '. ':'')  . (isset($user[2])?$this->mb_str_split($user[2])[0]. '. ':''),
             'master' => $master[0] . ' ' . (isset($master[1])?$this->mb_str_split($master[1])[0]. '. ':'')  . (isset($master[2])?$this->mb_str_split($master[2])[0]. '. ':''),
-            'date' => now()->diffInHours(Carbon::parse($this->date))
+            'date' => now()->diffInHours(Carbon::parse($this->date)),
+//            'comments' => $this->comments,
+//            'logs' => $this->logs,
         ];
     }
 

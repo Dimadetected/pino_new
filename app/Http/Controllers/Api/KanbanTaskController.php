@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\KanbanTaskAllInfoResource;
 use App\Http\Resources\KanbanTaskResource;
 use App\Http\Services\KanbanTaskService;
+use App\Models\KanbanColumn;
 use App\Models\KanbanTask;
 use App\Models\Message;
 use Illuminate\Http\Request;
@@ -102,11 +103,22 @@ class KanbanTaskController extends Controller
         foreach ($columns as $column)
             foreach ($column['tasks'] as $key => $task)
                 $taskArr[$task['id']] = ['id' => $column['id'], 'priority' => $key];
+        $user_id = \request('user_id');
 
-        DB::transaction(function () use ($taskArr) {
+        $columnsDB = KanbanColumn::query()->pluck('text','id')->toArray();
+
+        DB::transaction(function () use ($taskArr,$user_id,$columnsDB) {
             $tasks = KanbanTask::query()->find(array_keys($taskArr));
-            foreach ($tasks as $task)
+            foreach ($tasks as $task){
+                if($taskArr[$task->id]['id'] != $task->kanban_column_id)
+                    Message::query()->create([
+                        'type' => 'task_log',
+                        'external_id' => $task->id,
+                        'text' => 'Статус задачи был изменен на ' . $columnsDB[$taskArr[$task->id]['id']],
+                        'user_id' => $user_id
+                    ]);
                 $task->update(['kanban_column_id' => $taskArr[$task->id]['id'], 'priority' => $taskArr[$task->id]['priority']]);
+            }
         });
 
         return response()->json(200);

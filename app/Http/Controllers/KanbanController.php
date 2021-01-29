@@ -32,7 +32,7 @@ class KanbanController extends Controller
         if (isset($kanbanTask->id))
             $this->service->update($kanbanTask->id, $request->except('_token'));
         else
-            $this->service->store(array_merge($request->except('_token'),['user_id' => auth()->user()->id,'kanban_column_id' => 1]));
+            $this->service->store(array_merge($request->except('_token'),['kanban_column_id' => 1]));
         return redirect()->route('kanban.index');
     }
 

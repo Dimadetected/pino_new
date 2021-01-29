@@ -22,12 +22,16 @@
                                 <table class="table table-borderless mt-1">
                                     <tbody>
                                     <tr>
-                                        <td class="p-0">Дал:</td>
+                                        <td class="p-0">Заказчик:</td>
                                         <td class="p-0">{{ task.user }}</td>
                                     </tr>
                                     <tr>
-                                        <td class="p-0">Делает:</td>
+                                        <td class="p-0">Ответственный:</td>
                                         <td class="p-0">{{ task.master }}</td>
+                                    </tr>
+                                    <tr v-if="task.worker !== null">
+                                        <td class="p-0">Исполнитель:</td>
+                                        <td class="p-0">{{ task.worker }}</td>
                                     </tr>
                                     <tr>
                                         <td class="p-0">Осталось:</td>
@@ -42,21 +46,21 @@
             </div>
 
         </div>
-        <modal name="example" height="70%"  width="80%" styles="overflow-y: hidden;max-height:70%;">
+        <modal name="example" height="70%" width="80%" styles="overflow-y: hidden;max-height:70%;">
             <div class="col-12 p-md-5 p-3">
                 <div class="row">
-                    <div class="col-md-6 border-right" >
-                        <h3>{{modalObject.name}}</h3>
+                    <div class="col-md-6 border-right">
+                        <h3>{{ modalObject.name }}</h3>
                         <hr>
                         <p class="lead mt-4">
-                            {{modalObject.text}}
+                            {{ modalObject.text }}
                         </p>
                         <div class="row mt-5">
-                            <div class="col-md-6 text-primary" >Дал: {{modalObject.user}}</div>
-                            <div class="col-md-6 text-right text-success">Исполнитель: {{modalObject.master}}</div>
-                            <div class="col-12 text-right text-danger">Осталось: {{modalObject.date}}ч.</div>
+                            <div class="col-md-6 text-primary">Дал: {{ modalObject.user }}</div>
+                            <div class="col-md-6 text-right text-success">Исполнитель: {{ modalObject.master }}</div>
+                            <div class="col-12 text-right text-danger">Осталось: {{ modalObject.date }}ч.</div>
                         </div>
-                        <div class="row mt-3">
+                        <div class="row mt-3" v-if="(user_id == modalObject.user_id) || (user_id == modalObject.master_id)">
                             <div class="col-12 text-right">
                                 <a :href="'/kanban/form/' + modalObject.id" class="btn btn-warning">Редактировать</a>
                                 <a :href="'/kanban/destroy/' + modalObject.id" class="btn btn-danger">Удалить</a>
@@ -80,8 +84,8 @@ export default {
     components: {
         draggable,
     },
-    props:{
-      user_id: Number,
+    props: {
+        user_id: Number,
     },
     data() {
         return {
@@ -128,6 +132,7 @@ export default {
                     body: JSON.stringify(
                         {
                             columns: this.columnsArr,
+                            user_id: this.user_id
                         }
                     ),
                     headers: {

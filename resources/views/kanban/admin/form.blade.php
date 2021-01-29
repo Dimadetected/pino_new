@@ -14,12 +14,24 @@
                 <textarea class="form-control" name="text" id="text">{{$kanbanTask->text??''}}</textarea>
             </div>
             <div class="form-group">
-                <label for="master_id">Исполнитель:</label>
+                <label for="user_id">Заказчик:</label>
+                <select class="form-control" name="user_id" id="user_id">
+                    @foreach($masters as $master)
+                        <option @if((isset($kanbanTask->user_id) and $kanbanTask->user_id == $master->id) or (!isset($kanbanTask->user_id) and auth()->user()->id == $master->id)) selected @endif value="{{$master->id}}">{{$master->name}}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="master_id">Ответственный:</label>
                 <select class="form-control" name="master_id" id="master_id">
                     @foreach($masters as $master)
                         <option @if(isset($kanbanTask->master_id) and $kanbanTask->master_id == $master->id) selected @endif value="{{$master->id}}">{{$master->name}}</option>
                     @endforeach
                 </select>
+            </div>
+            <div class="form-group">
+                <label for="worker">Исполнитель:</label>
+                <input type="text" class="form-control" name="worker" id="worker" value="{{$kanbanTask->worker??''}}">
             </div>
             <div class="form-group">
                 <label for="">Введите время выполнения:</label>

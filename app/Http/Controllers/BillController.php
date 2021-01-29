@@ -77,6 +77,10 @@ class BillController extends Controller
         $user = auth()->user();
         $header = 'Информарция о счете';
         $print_file = $bill->file->src[0];
+        foreach ($bill->bill_actions as $action)
+            $action->new_date = Carbon::parse($action->created_at)->format('d.m.Y H:i');
+        foreach ($bill->messages as $message)
+            $message->new_date = Carbon::parse($message->created_at)->format('d.m.Y H:i');
         if (isset($bill->file->src)) {
             $src = explode('.', $bill->file->src[0]);
             if (array_pop($src) == 'pdf') {

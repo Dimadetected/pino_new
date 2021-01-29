@@ -10,17 +10,14 @@ class BillAction extends Model
     use HasFactory;
     protected $guarded = ['id'];
     protected $with = ['user','message'];
-    
-    protected $casts = [
-        'created_at' => 'datetime:d.m.Y H:i',
-    ];
-    
+
+
     public function user(){
         return $this->belongsTo(User::class);
     }
     public function message(){
-        
+
         return $this->hasOne(Message::class,'external_id','id')->where('type','bill_action');
     }
-    
+
 }

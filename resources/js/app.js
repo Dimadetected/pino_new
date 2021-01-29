@@ -4,7 +4,6 @@ import Vue from 'vue';
 require('jquery-ui')
 require('jquery-mask-plugin/dist/jquery.mask.min')
 
-
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'

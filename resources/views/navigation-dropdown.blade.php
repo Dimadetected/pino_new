@@ -68,6 +68,9 @@
                     <x-jet-nav-link href="{{ route('clients.index') }}" :active="request()->routeIs('clients.index')">
                         Контрагенты
                     </x-jet-nav-link>
+                    <x-jet-nav-link href="{{ route('kanban.index') }}" :active="request()->routeIs('kanban.index')">
+                        Задачи
+                    </x-jet-nav-link>
                 </div>
             </div>
 

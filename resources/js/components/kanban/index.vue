@@ -56,9 +56,10 @@
                             {{ modalObject.text }}
                         </p>
                         <div class="row mt-5">
-                            <div class="col-md-6 text-primary">Дал: {{ modalObject.user }}</div>
-                            <div class="col-md-6 text-right text-success">Исполнитель: {{ modalObject.master }}</div>
-                            <div class="col-12 text-right text-danger">Осталось: {{ modalObject.date }}ч.</div>
+                            <div class="col-md-6 text-primary">Заказчик: {{ modalObject.user }}</div>
+                            <div class="col-md-6 text-right text-success">Ответственный: {{ modalObject.master }}</div>
+                            <div class="col-md-6 ">Исполнитель: {{ modalObject.worker }}</div>
+                            <div class="col-md-6 text-right text-danger">Осталось: {{ modalObject.date }}ч.</div>
                         </div>
                         <div class="row mt-3" v-if="(user_id == modalObject.user_id) || (user_id == modalObject.master_id)">
                             <div class="col-12 text-right">

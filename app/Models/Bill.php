@@ -24,6 +24,14 @@ class Bill extends Model
         return $this->belongsTo(Client::class);
     }
 
+    public function printFile()
+    {
+        $file = public_path('files/' . $this->id . '.pdf');
+        if (is_file($file))
+            return 'files/' . $this->id . '.pdf';
+        return $this->file->src[0];
+    }
+
     public function mainUserAccept()
     {
         $actions = $this->bill_actions()->where('status', 1)->with('user')->get();

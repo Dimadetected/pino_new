@@ -35,19 +35,13 @@
                     <div class="mt-5 mb-2  h4">{{$bill->bill_type->name??'Оплачено'}}</div>
                     <hr>
                     <p class="my-3">{{$bill->text}}</p>
-                    @if(isset($bill->file))
-                        @foreach($bill->file->src as $file)
-                            <a href="/{{$file}}" target="_blank" class="btn btn-primary">Файл</a>
-
-                            @php($explode = explode('.',$file))
-                            @if(in_array(array_pop($explode),['pdf','doc','docx','excel','xls']))
-                                <embed src="/{{$file}}" class="mt-1   files{{$bill->id}}" type="application/pdf"
-                                       height="500px" width="100%">
-                            @else
-                                <img src="/{{$file}}" alt="" class="mt-1   files{{$bill->id}}" style="width: 100%;">
-                            @endif
-
-                        @endforeach
+                    @if($bill->printFile())
+                        <embed src="/{{$bill->printFile()}}" class="mt-1  files{{$bill->id}}"
+                               type="application/pdf" height="400px" width="100%">
+                        <button class="btn btn-primary mt-2 shadow btnShowFile"
+                                onclick="showOrHideFile(this.id)" id="{{$bill->id}}"
+                                data-file="{{$bill->id}}">Файл
+                        </button>
                     @endif
                 </div>
             </div>

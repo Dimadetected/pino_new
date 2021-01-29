@@ -50,7 +50,7 @@
                                 <div style="position:absolute;top: 10px;right: 10px" class="text-right">
                                     <ul style="font-size: 12px">
                                         <li>
-                                        {{$bill->user->name}}</li>
+                                            {{$bill->user->name}}</li>
                                         @if(isset($bill->date))
                                             <li>Дата: {{\Carbon\Carbon::parse($bill->date)->format('d.m.Y')}}</li>
                                         @endif
@@ -64,17 +64,9 @@
                                 </div>
                                 <hr>
                                 <p class="my-3">{{$bill->text}}</p>
-                                @if(isset($bill->file))
-                                    @foreach($bill->file->src as $file)
-                                        @php($explode = explode('.',$file))
-                                        @if(in_array(array_pop($explode),['pdf','doc','docx','excel','xls']))
-                                            <embed src="/{{$file}}" class="mt-1 d-none  files{{$bill->id}}"
-                                                   type="application/pdf" height="400px" width="100%">
-                                        @else
-                                            <img src="/{{$file}}" alt=""
-                                                 class="img-fluid mt-1 d-none  files{{$bill->id}}">
-                                        @endif
-                                    @endforeach
+                                @if($bill->printFile())
+                                    <embed src="/{{$bill->printFile()}}" class="mt-1 d-none  files{{$bill->id}}"
+                                           type="application/pdf" height="400px" width="100%">
                                     <button class="btn btn-primary mt-2 shadow btnShowFile"
                                             onclick="showOrHideFile(this.id)" id="{{$bill->id}}"
                                             data-file="{{$bill->id}}">Файл

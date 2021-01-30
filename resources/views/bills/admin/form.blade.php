@@ -62,14 +62,15 @@
 @endsection
 @section('script')
     <script>
-        function dateCheck() {
-            let val = document.getElementById('date').value;
-            if ((val.length == 2) || (val.length == 5))
-                document.getElementById('date').value = val + '.'
-            if (val.length > 10) {
-                document.getElementById('date').value = val.substring(0, 10)
-            }
-        }
+        $('#date').mask('00.00.0000');
+        // function dateCheck() {
+        //     let val = document.getElementById('date').value;
+        //     if ((val.length == 2) || (val.length == 5))
+        //         document.getElementById('date').value = val + '.'
+        //     if (val.length > 10) {
+        //         document.getElementById('date').value = val.substring(0, 10)
+        //     }
+        // }
 
         function changeCookies() {
             let val = document.getElementById('chain_id').value

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Bill extends Model
 {
@@ -22,6 +23,27 @@ class Bill extends Model
     public function client()
     {
         return $this->belongsTo(Client::class);
+    }
+
+    public function bill_alert($id)
+    {
+        return $this->hasOne(BillAlert::class)->where('user_id', $id);
+    }
+
+    public function bill_alerts()
+    {
+        return $this->hasMany(BillAlert::class);
+    }
+
+    public function alerts_count_inc()
+    {
+        DB::transaction(function () {
+            foreach ($this->bill_alerts as $alert) {
+                $alert->update([
+                    'count' => $alert->count + 1
+                ]);
+            }
+        });
     }
 
     public function printFile()

@@ -35,7 +35,15 @@
                         @if(!in_array($bill->chain->organisation_id,$org_ids))
                             @continue
                         @endif
-                        <div class="col-md-4 my-2">
+                        <div class="col-md-4 my-2" style="position:relative;">
+                            @if(isset($bill->bill_alerts[0]->count) and $bill->bill_alerts[0]->count != 0)
+                                <div style="position:absolute; top: -15px;right: 0; z-index: 999">
+                                    <div class="text-center text-light "
+                                         style="background-color: rgba(165,49,49,.8);border-radius: 50px;width: 50px;height: 30px;box-shadow: 0 0 10px 0 rgba(0,0,0,.2);will-change: transform;-webkit-transition: -webkit-transform 0.2s ease-in-out;transition: transform 0.2s ease-in-out;overflow: hidden;">
+                                        {{$bill->bill_alerts[0]->count}}
+                                    </div>
+                                </div>
+                            @endif
                             <div style="position: relative"
                                  class="card card-body shadow mb-5 alert @if($bill->status == 1 and is_null($bill->user_role_id) ) alert-success @elseif($bill->status == 2) alert-danger @endif">
                                 <div class=" card-title" style="font-size: 16pt"><a class="text-primary"
@@ -67,10 +75,27 @@
                                 @if($bill->printFile())
                                     <embed src="/{{$bill->printFile()}}" class="mt-1 d-none  files{{$bill->id}}"
                                            type="application/pdf" height="400px" width="100%">
-                                    <button class="btn btn-primary mt-2 shadow btnShowFile"
-                                            onclick="showOrHideFile(this.id)" id="{{$bill->id}}"
-                                            data-file="{{$bill->id}}">Файл
-                                    </button>
+                                        <div class="col-12">
+                                            <div class="row text-center">
+                                                <button class=" col-md-10 btn btn-block btn-primary mt-2 shadow btnShowFile"
+                                                        onclick="showOrHideFile(this.id)" id="{{$bill->id}}"
+                                                        data-file="{{$bill->id}}">Файл
+                                                </button>
+                                                    <a href="/{{$bill->printFile()}}" class="col-md-2 text-center  mt-2 btn  btn-warning "
+                                                       download>
+                                                        <svg height="28" viewBox="0 0 512 512" width="28"
+                                                             xmlns="http://www.w3.org/2000/svg">
+                                                            <g id="Solid">
+                                                                <path
+                                                                    d="m239.029 384.97a24 24 0 0 0 33.942 0l90.509-90.509a24 24 0 0 0 0-33.941 24 24 0 0 0 -33.941 0l-49.539 49.539v-262.059a24 24 0 0 0 -48 0v262.059l-49.539-49.539a24 24 0 0 0 -33.941 0 24 24 0 0 0 0 33.941z"/>
+                                                                <path
+                                                                    d="m464 232a24 24 0 0 0 -24 24v184h-368v-184a24 24 0 0 0 -48 0v192a40 40 0 0 0 40 40h384a40 40 0 0 0 40-40v-192a24 24 0 0 0 -24-24z"/>
+                                                            </g>
+                                                        </svg>
+                                                    </a>
+                                            </div>
+                                        </div>
+
                                 @endif
 
                                 @if($bill->status == 2)

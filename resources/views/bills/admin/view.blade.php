@@ -38,10 +38,28 @@
                     @if($bill->printFile())
                         <embed src="/{{$bill->printFile()}}" class="mt-1  files{{$bill->id}}"
                                type="application/pdf" height="400px" width="100%">
-                        <button class="btn btn-primary mt-2 shadow btnShowFile"
-                                onclick="showOrHideFile(this.id)" id="{{$bill->id}}"
-                                data-file="{{$bill->id}}">Файл
-                        </button>
+                        <div class="col-12">
+                            <div class="row text-center">
+                                <button class=" col-md-10 btn btn-block btn-primary mt-2 shadow btnShowFile"
+                                        onclick="showOrHideFile(this.id)" id="{{$bill->id}}"
+                                        data-file="{{$bill->id}}">Файл
+                                </button>
+                                <div class="col-md-2 text-center">
+                                    <a href="/{{$bill->printFile()}}" class=" mt-2 btn  btn-warning "
+                                       download>
+                                        <svg height="28" viewBox="0 0 512 512" width="28"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                            <g id="Solid">
+                                                <path
+                                                    d="m239.029 384.97a24 24 0 0 0 33.942 0l90.509-90.509a24 24 0 0 0 0-33.941 24 24 0 0 0 -33.941 0l-49.539 49.539v-262.059a24 24 0 0 0 -48 0v262.059l-49.539-49.539a24 24 0 0 0 -33.941 0 24 24 0 0 0 0 33.941z"/>
+                                                <path
+                                                    d="m464 232a24 24 0 0 0 -24 24v184h-368v-184a24 24 0 0 0 -48 0v192a40 40 0 0 0 40 40h384a40 40 0 0 0 40-40v-192a24 24 0 0 0 -24-24z"/>
+                                            </g>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     @endif
                 </div>
             </div>

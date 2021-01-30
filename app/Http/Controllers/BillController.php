@@ -61,11 +61,15 @@ class BillController extends Controller
         if (is_null($user->remember_token))
             $user->update(['remember_token' => rand(111111111, 99999999999)]);
         $org_ids = $user->org_ids;
+        $user_id = $user->id;
         $bills = Bill::query()
             ->orderByDesc('id')
             ->where('user_role_id', $user->user_role_id)
             ->orWhere('user_id', $user->id)
-            ->with(['user', 'bill_type', 'bill_status', 'chain'])
+            ->with(['user', 'bill_type', 'bill_status', 'chain','bill_actions'])
+            ->with('bill_alerts',function ($query) use ($user_id){
+                $query->where('user_id',$user_id);
+            })
             ->orderBy('created_at', 'desc');
         $bills = $bills->whereBetween('created_at', [$date_start, $date_end])->get();
         $header = 'Счета';
@@ -124,8 +128,9 @@ class BillController extends Controller
                 }
             }
         }
-
-
+        $alert = $bill->bill_alerts()->where('user_id', $user->id)->first();
+        if (isset($alert->count))
+            $alert->update(['count' => 0]);
         return view($this->views['view'], compact('bill', 'user', 'header', 'print_file'));
     }
 
@@ -218,7 +223,10 @@ class BillController extends Controller
                     $buttons,
                 ]),
             ]));
+
         }
+
+        $bill->alerts_count_inc();
 
         if (!is_null($bill->user->email_notice))
             try {
@@ -239,20 +247,24 @@ class BillController extends Controller
                 if (!is_null($user->tg_notice))
                     logger($this->telegram->sendMessage([
                         'chat_id' => $user->tg_id,
-                        'text' => 'Поступил счет '. $bill->id . ' на утверждение от ' . $bill->user->name .'.',
+                        'text' => 'Поступил счет ' . $bill->id . ' на утверждение от ' . $bill->user->name . '.',
                         'reply_markup' => json_encode(['inline_keyboard' =>
                             $buttons,
                         ]),
                     ]));
                 if (!is_null($user->email_notice))
                     try {
-                        Mail::to($user->email)->send(new \App\Mail\Bill($bill, 'Поступил счет '. $bill->id . ' на утверждение от ' . $bill->user->name .'.'));
+                        Mail::to($user->email)->send(new \App\Mail\Bill($bill, 'Поступил счет ' . $bill->id . ' на утверждение от ' . $bill->user->name . '.'));
                     } catch (\Throwable $e) {
                         logger($e->getMessage());
                     }
 
-//                Mail::to($email)->send(new OrderShipped((array)$answer));
-
+                $bill->bill_alerts()->updateOrCreate([
+                    'user_id' => $user->id
+                ], [
+                    'user_id' => $user->id,
+                    'count' => 1
+                ]);
             }
         }
 
@@ -270,6 +282,8 @@ class BillController extends Controller
             'status' => $log->info['status'],
             'text' => 'Изменения были отменены',
         ]);
+        $bill->alerts_count_inc();
+
         return redirect()->back();
     }
 
@@ -302,7 +316,7 @@ class BillController extends Controller
         $bill->user_role_id = $chain->value[$bill->steps];
 
         $bill->number = $request->number;
-        $bill->sum = str_replace(',','.',$request->sum);
+        $bill->sum = str_replace(',', '.', $request->sum);
         $bill->client_id = $request->client_id;
         $bill->date = Carbon::parse($request->date)->toDateString();
         $bill->text = $request->text;
@@ -314,6 +328,9 @@ class BillController extends Controller
 
         $bill->save();
 
+        $bill->bill_alerts()->create([
+            'user_id' => $user->id
+        ]);
         return redirect()->route($this->routes['view'], $bill);
     }
 
@@ -321,7 +338,7 @@ class BillController extends Controller
     {
         $user = auth()->user();
         $org_ids = $user->org_ids;
-
+        $user_id = $user->id;
         $date_start = Carbon::parse(\request('date_start', now()->startOfYear()))->startOfDay();
         $date_end = Carbon::parse(\request('date_end', now()->endOfYear()))->endOfDay();
         $bills = Bill::query()
@@ -330,6 +347,9 @@ class BillController extends Controller
             ->whereBetween('created_at', [$date_start, $date_end])
             ->where('status', 1)
             ->with(['user', 'bill_type', 'bill_status', 'chain'])
+            ->with('bill_alerts',function ($query) use ($user_id){
+                $query->where('user_id',$user_id);
+            })
             ->get();
 
         $header = 'Счета для подтверждения';
@@ -341,7 +361,7 @@ class BillController extends Controller
     {
         $user = auth()->user();
         $org_ids = $user->org_ids;
-
+        $user_id = $user->id;
         $actions = BillAction::query()->where('user_id', $user->id)->pluck('bill_id')->toArray();
         $date_start = Carbon::parse(\request('date_start', now()->startOfYear()))->startOfDay();
         $date_end = Carbon::parse(\request('date_end', now()->endOfYear()))->endOfDay();
@@ -350,7 +370,10 @@ class BillController extends Controller
             ->whereIn('id', $actions)
             ->whereBetween('created_at', [$date_start, $date_end])
             ->with(['user', 'bill_type', 'bill_status', 'chain'])
-            ->where('status',1)
+            ->with('bill_alerts',function ($query) use ($user_id){
+                $query->where('user_id',$user_id);
+            })
+            ->where('status', 1)
             ->get();
 
         $header = 'Подтвержденные счета';
@@ -363,11 +386,15 @@ class BillController extends Controller
         $user = auth()->user();
         $date_start = Carbon::parse(\request('date_start', now()->startOfYear()))->startOfDay();
         $date_end = Carbon::parse(\request('date_end', now()->endOfYear()))->endOfDay();
+        $user_id = $user->id;
         $bills = Bill::query()
             ->orderByDesc('id')
             ->where('user_id', $user->id)
             ->whereBetween('created_at', [$date_start, $date_end])
-            ->with(['user', 'bill_type', 'bill_status', 'chain'])
+            ->with(['user', 'bill_type', 'bill_status', 'chain', 'bill_actions'])
+            ->with('bill_alerts',function ($query) use ($user_id){
+                $query->where('user_id',$user_id);
+            })
             ->get();
         $org_ids = $user->org_ids;
 

@@ -14,13 +14,16 @@ use Illuminate\Support\Facades\Cookie;
 
 class MessageController extends Controller
 {
-    
+
     public function index()
     {
     }
-    
+
     public function store(Request $request)
     {
+        if($request->type == 'bill')
+            Bill::query()->find($request->external_id)->alerts_count_inc();
+
         return response()->json(Message::query()->create([
             'type' => $request->type,
             'external_id' => $request->external_id,
@@ -28,7 +31,7 @@ class MessageController extends Controller
             'text' => $request->text,
         ]));
     }
-    
+
     /**
      * Display the specified resource.
      * @param int $id
@@ -38,7 +41,7 @@ class MessageController extends Controller
     {
         //
     }
-    
+
     /**
      * Update the specified resource in storage.
      * @param \Illuminate\Http\Request $request
@@ -49,7 +52,7 @@ class MessageController extends Controller
     {
         //
     }
-    
+
     /**
      * Remove the specified resource from storage.
      * @param int $id
@@ -59,6 +62,6 @@ class MessageController extends Controller
     {
         //
     }
-    
-  
+
+
 }

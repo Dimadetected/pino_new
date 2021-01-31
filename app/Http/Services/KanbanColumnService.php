@@ -16,7 +16,7 @@ class KanbanColumnService
 
     public function get(array $arg = [])
     {
-        return $this->query()->with('tasks.user','tasks.master')->with('tasks',function ($query) use ($arg){
+        return $this->query()->with('tasks.user','tasks.master','tasks.worker')->with('tasks',function ($query) use ($arg){
             if(isset($arg['master_id']) and $arg['master_id'] != 0 ) $query->where('master_id',$arg['master_id']);
             if(isset($arg['worker_id']) and $arg['worker_id'] != 0 ) $query->where('worker_id',$arg['worker_id']);
             if(isset($arg['client_id']) and $arg['client_id'] != 0 ) $query->where('user_id',$arg['client_id']);

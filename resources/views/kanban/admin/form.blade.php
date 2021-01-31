@@ -30,8 +30,12 @@
                 </select>
             </div>
             <div class="form-group">
-                <label for="worker">Исполнитель:</label>
-                <input type="text" class="form-control" name="worker" id="worker" value="{{$kanbanTask->worker??''}}">
+                <label for="worker_id">Исполнитель:</label>
+                <select class="form-control" name="worker_id" id="worker_id">
+                    @foreach($masters as $master)
+                        <option @if(isset($kanbanTask->worker_id) and $kanbanTask->worker_id == $master->id) selected @endif value="{{$master->id}}">{{$master->name}}</option>
+                    @endforeach
+                </select>
             </div>
             <div class="form-group">
                 <label for="">Введите время выполнения:</label>

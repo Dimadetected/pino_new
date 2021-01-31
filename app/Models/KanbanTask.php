@@ -18,6 +18,10 @@ class KanbanTask extends Model
     {
         return $this->belongsTo(User::class,'master_id','id');
     }
+    public function worker()
+    {
+        return $this->belongsTo(User::class,'worker_id','id');
+    }
     public function comments()
     {
         return $this->hasMany(Message::class,'external_id','id')->where('type','task_comment')->orderByDesc('id');

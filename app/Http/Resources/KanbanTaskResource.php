@@ -17,15 +17,16 @@ class KanbanTaskResource extends JsonResource
     {
         $user = explode(' ', $this->user->name);
         $master = explode(' ', $this->master->name);
+        $worker = explode(' ', $this->worker->name);
         return [
             'id' => $this->id,
             'name' => $this->name,
             'text' => $this->text,
             'user_id' => $this->user_id,
             'master_id' => $this->master_id,
-            'worker' => $this->worker,
             'user' => $user[0] . ' ' . (isset($user[1]) ? $this->mb_str_split($user[1])[0] . '. ' : '') . (isset($user[2]) ? $this->mb_str_split($user[2])[0] . '. ' : ''),
             'master' => $master[0] . ' ' . (isset($master[1]) ? $this->mb_str_split($master[1])[0] . '. ' : '') . (isset($master[2]) ? $this->mb_str_split($master[2])[0] . '. ' : ''),
+            'worker' => $worker[0] . ' ' . (isset($worker[1]) ? $this->mb_str_split($worker[1])[0] . '. ' : '') . (isset($worker[2]) ? $this->mb_str_split($worker[2])[0] . '. ' : ''),
             'date' => now()->diffInHours(Carbon::parse($this->date)),
 //            'comments' => $this->comments,
 //            'logs' => $this->logs,

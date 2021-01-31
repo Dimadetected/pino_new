@@ -152,6 +152,8 @@ export default {
             }
         },
         getColumns() {
+            this.master_id = this.user_id;
+
             fetch('/api/kanban_columns?'+ new URLSearchParams({
                 user_id:this.user_id,
                 master_id: this.master_id,
@@ -164,7 +166,6 @@ export default {
                 })
         },
         getMasters() {
-            this.master_id = this.user_id;
             fetch('/api/users' )
                 .then(res => res.json())
                 .then(res => {

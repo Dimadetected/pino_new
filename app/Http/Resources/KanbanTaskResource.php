@@ -17,7 +17,7 @@ class KanbanTaskResource extends JsonResource
     {
         $user = explode(' ', $this->user->name);
         $master = explode(' ', $this->master->name);
-        $worker = explode(' ', $this->worker->name);
+        $worker = explode(' ', $this->worker->name??'');
         return [
             'id' => $this->id,
             'name' => $this->name,

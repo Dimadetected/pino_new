@@ -19,9 +19,9 @@ class KanbanColumnController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return KanbanColumnResource::collection($this->service->get());
+        return KanbanColumnResource::collection($this->service->get($request->all()));
     }
 
     /**

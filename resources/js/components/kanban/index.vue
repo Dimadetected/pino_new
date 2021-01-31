@@ -1,7 +1,40 @@
 <template>
     <div class="col-12 mt-5">
         <div class="row mt-5">
-            <div class="col-1"></div>
+            <div class="col-md-1">
+
+            </div>
+            <div class="col-md-10">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="">Заказчик</label>
+                            <select class="form-control" @change="getColumns" v-model="client_id">
+                                <option v-for="master in masters" :value="master.id">{{ master.name }}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="">Отвественный</label>
+                            <select  class="form-control" @change="getColumns" v-model="master_id">
+                                <option v-for="master in masters" :value="master.id">{{ master.name }}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="">Исполнитель</label>
+                            <select class="form-control" @change="getColumns" v-model="worker_id">
+                                <option v-for="master in masters" :value="master.id">{{ master.name }}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-md-1"></div>
             <div class="col-md-2" v-for="(column,index) in columnsArr">
                 <div class="p-2 alert " :class="alertsArr[index]">
                     <h3>{{ column.text }} {{ alertsArr.shift }}</h3>
@@ -61,7 +94,8 @@
                             <div class="col-md-6 ">Исполнитель: {{ modalObject.worker }}</div>
                             <div class="col-md-6 text-right text-danger">Осталось: {{ modalObject.date }}ч.</div>
                         </div>
-                        <div class="row mt-3" v-if="(user_id == modalObject.user_id) || (user_id == modalObject.master_id)">
+                        <div class="row mt-3"
+                             v-if="(user_id == modalObject.user_id) || (user_id == modalObject.master_id)">
                             <div class="col-12 text-right">
                                 <a :href="'/kanban/form/' + modalObject.id" class="btn btn-warning">Редактировать</a>
                                 <a :href="'/kanban/destroy/' + modalObject.id" class="btn btn-danger">Удалить</a>
@@ -90,6 +124,10 @@ export default {
     },
     data() {
         return {
+            masters: {},
+            master_id: 0,
+            worker_id: 0,
+            client_id: 0,
             modalObject: {},
             alertsArr: {
                 0: 'alert-secondary',
@@ -114,10 +152,23 @@ export default {
             }
         },
         getColumns() {
-            fetch('/api/kanban_columns')
+            fetch('/api/kanban_columns?'+ new URLSearchParams({
+                user_id:this.user_id,
+                master_id: this.master_id,
+                worker_id: this.worker_id,
+                client_id: this.client_id,
+            }))
                 .then(res => res.json())
                 .then(res => {
                     this.columnsArr = res.data;
+                })
+        },
+        getMasters() {
+            this.master_id = this.user_id;
+            fetch('/api/users' )
+                .then(res => res.json())
+                .then(res => {
+                    this.masters = res.data;
                 })
         },
         log(evt) {
@@ -133,7 +184,8 @@ export default {
                     body: JSON.stringify(
                         {
                             columns: this.columnsArr,
-                            user_id: this.user_id
+                            user_id: this.user_id,
+
                         }
                     ),
                     headers: {
@@ -155,6 +207,7 @@ export default {
     },
     mounted() {
         this.getColumns();
+        this.getMasters();
 
     },
 }

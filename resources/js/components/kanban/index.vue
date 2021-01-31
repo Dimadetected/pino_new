@@ -10,6 +10,7 @@
                         <div class="form-group">
                             <label for="">Заказчик</label>
                             <select class="form-control" @change="getColumns" v-model="client_id">
+                                <option value="all">Все</option>
                                 <option v-for="master in masters" :value="master.id">{{ master.name }}</option>
                             </select>
                         </div>
@@ -17,7 +18,8 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="">Отвественный</label>
-                            <select  class="form-control" @change="getColumns" v-model="master_id">
+                            <select class="form-control" @change="getColumns" v-model="master_id">
+                                <option value="all">Все</option>
                                 <option v-for="master in masters" :value="master.id">{{ master.name }}</option>
                             </select>
                         </div>
@@ -26,6 +28,7 @@
                         <div class="form-group">
                             <label for="">Исполнитель</label>
                             <select class="form-control" @change="getColumns" v-model="worker_id">
+                                <option value="all">Все</option>
                                 <option v-for="master in masters" :value="master.id">{{ master.name }}</option>
                             </select>
                         </div>
@@ -153,11 +156,11 @@ export default {
         },
         getColumns() {
 
-            fetch('/api/kanban_columns?'+ new URLSearchParams({
-                user_id:this.user_id,
-                master_id: this.master_id,
-                worker_id: this.worker_id,
-                client_id: this.client_id,
+            fetch('/api/kanban_columns?' + new URLSearchParams({
+                user_id: this.user_id,
+                master_id: (this.master_id === 'all' ? 0 : this.master_id),
+                worker_id: (this.worker_id === 'all' ? 0 : this.worker_id),
+                client_id: (this.client_id === 'all' ? 0 : this.client_id),
             }))
                 .then(res => res.json())
                 .then(res => {
@@ -165,7 +168,7 @@ export default {
                 })
         },
         getMasters() {
-            fetch('/api/users' )
+            fetch('/api/users')
                 .then(res => res.json())
                 .then(res => {
                     this.masters = res.data;

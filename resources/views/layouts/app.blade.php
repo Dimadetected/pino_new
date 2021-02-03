@@ -47,23 +47,25 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Admin
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{ route('chains.index') }}">
-                                    Цепочки
+                        @if(in_array(Auth::user()->id,[1,2]))
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Admin
                                 </a>
-                                <a class="dropdown-item" href="{{ route('organisations.index') }}">
-                                    Организации
-                                </a>
-                                <a class="dropdown-item" href="{{ route('users.index') }}">
-                                    Пользователи
-                                </a>
-                            </div>
-                        </li>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ route('chains.index') }}">
+                                        Цепочки
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('organisations.index') }}">
+                                        Организации
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('users.index') }}">
+                                        Пользователи
+                                    </a>
+                                </div>
+                            </li>
+                        @endif
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -79,14 +81,15 @@
                                 <a class="dropdown-item" href="{{ route('bill.accepted') }}">
                                     Подтвержденные счета
                                 </a>
-                                <a class="dropdown-item" href="{{ route('clients.index') }}">
-                                    Контрагенты
-                                </a>
-
                             </div>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link " href="{{ route('kanban.index') }}">Задачи</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('clients.index') }}">
+                                Контрагенты
+                            </a>
                         </li>
                     </ul>
                     <form class="form-inline my-2 my-lg-0">

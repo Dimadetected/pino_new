@@ -48,7 +48,7 @@
                     <div class="form-group mt-3">
                         @if(!is_null($client->file_id))
                             <div class="alert alert-danger">
-                                Если вы загрузите новый договор, то старый удалится!
+                                Если вы загрузите новый контракт, то старый удалится!
                             </div>
                         @endif
                         <label for="exampleFormControlFile1">Договор:</label>

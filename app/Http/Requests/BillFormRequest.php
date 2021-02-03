@@ -25,6 +25,7 @@ class BillFormRequest extends FormRequest
     {
         return [
             'text' => 'required',
+            'files' => 'required|mimes:pdf'
         ];
     }
 }

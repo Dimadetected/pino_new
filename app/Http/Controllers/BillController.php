@@ -55,8 +55,10 @@ class BillController extends Controller
     public function index()
     {
 
-        $date_start = Carbon::parse(\request('date_start', now()->startOfYear()))->startOfDay();
-        $date_end = Carbon::parse(\request('date_end', now()->endOfYear()))->endOfDay();
+        $date_start = Carbon::parse(\request('date_start', ($_COOKIE['bill_date_start'] ?? now()->startOfYear())))->startOfDay();
+        $date_end = Carbon::parse(\request('date_end', ($_COOKIE['bill_end_start'] ?? now()->endOfYear())))->endOfDay();
+        setcookie('bill_date_start',$date_start);
+        setcookie('bill_end_start',$date_end);
         $user = auth()->user();
         if (is_null($user->remember_token))
             $user->update(['remember_token' => rand(111111111, 99999999999)]);
@@ -66,9 +68,9 @@ class BillController extends Controller
             ->orderByDesc('id')
             ->where('user_role_id', $user->user_role_id)
             ->orWhere('user_id', $user->id)
-            ->with(['user', 'bill_type', 'bill_status', 'chain','bill_actions'])
-            ->with('bill_alerts',function ($query) use ($user_id){
-                $query->where('user_id',$user_id);
+            ->with(['user', 'bill_type', 'bill_status', 'chain', 'bill_actions'])
+            ->with('bill_alerts', function ($query) use ($user_id) {
+                $query->where('user_id', $user_id);
             })
             ->orderBy('created_at', 'desc');
         $bills = $bills->whereBetween('created_at', [$date_start, $date_end])->get();
@@ -347,8 +349,8 @@ class BillController extends Controller
             ->whereBetween('created_at', [$date_start, $date_end])
             ->where('status', 1)
             ->with(['user', 'bill_type', 'bill_status', 'chain'])
-            ->with('bill_alerts',function ($query) use ($user_id){
-                $query->where('user_id',$user_id);
+            ->with('bill_alerts', function ($query) use ($user_id) {
+                $query->where('user_id', $user_id);
             })
             ->get();
 
@@ -370,8 +372,8 @@ class BillController extends Controller
             ->whereIn('id', $actions)
             ->whereBetween('created_at', [$date_start, $date_end])
             ->with(['user', 'bill_type', 'bill_status', 'chain'])
-            ->with('bill_alerts',function ($query) use ($user_id){
-                $query->where('user_id',$user_id);
+            ->with('bill_alerts', function ($query) use ($user_id) {
+                $query->where('user_id', $user_id);
             })
             ->where('status', 1)
             ->get();
@@ -392,8 +394,8 @@ class BillController extends Controller
             ->where('user_id', $user->id)
             ->whereBetween('created_at', [$date_start, $date_end])
             ->with(['user', 'bill_type', 'bill_status', 'chain', 'bill_actions'])
-            ->with('bill_alerts',function ($query) use ($user_id){
-                $query->where('user_id',$user_id);
+            ->with('bill_alerts', function ($query) use ($user_id) {
+                $query->where('user_id', $user_id);
             })
             ->get();
         $org_ids = $user->org_ids;

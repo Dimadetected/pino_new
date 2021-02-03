@@ -38,7 +38,7 @@
     <div class="row">
         <div class="col-md-8 offset-md-2">
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <a class="navbar-brand" href="#">Пино</a>
+                <a class="navbar-brand" href="/bill">Пино</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse"
                         data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">

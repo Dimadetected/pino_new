@@ -29,7 +29,13 @@
 				default() {
 					return {}
 				}
-			}
+			},
+            user_id:{
+			    type : Number,
+                default() {
+                    return 0;
+                }
+            }
 		},
 		data() {
 			return {
@@ -52,6 +58,7 @@
 					bill: this.bill.id,
 					type: this.type,
 					text: this.textArea,
+                    user_id: this.user_id
 				}))
 					.then(res => {
 						location.reload()

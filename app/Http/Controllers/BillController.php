@@ -121,7 +121,7 @@ class BillController extends Controller
 
                         $pdf->useTemplate($tplIdx, 0, 0);
                         if ($i == $pages_count) {
-                            $pdf->Image(public_path('accept.png'), 20, 270, 100, 20);
+                            $pdf->Image(public_path('accept.png'), 20, 250, 100, 20);
                             $pdf->Output(public_path('files/' . $bill->id . '.pdf'), 'F');
                             $print_file = 'files/' . $bill->id . '.pdf';
                         }
@@ -156,7 +156,7 @@ class BillController extends Controller
         $bill = Bill::query()->find(\request('bill'));
         $billArr = [];
         $type = \request('type');
-
+        $user = User::query()->find(\request('user_id'));
 //        if (in_array(auth()->user()->user_role_id, $bill->chain->value) and !in_array(auth()->user()->user_role_id, [6, 7, 4])) {
 //            $bill->update(['steps' => array_search(auth()->user()->user_role_id, $bill->chain->value), 'user_role_id' => auth()->user()->user_role_id]);
 //        }
@@ -168,6 +168,10 @@ class BillController extends Controller
             $bill_status_id = $bill_status->id;
             $text = $bill_status->name;
             $billArr['steps'] = $bill->steps + 1;
+
+            if(isset($bill->chain->value[$billArr['steps']]) and $user->user_role_id != $bill->chain->value[$billArr['steps']] )
+                return response()->json($bill);
+
             if (isset($bill->chain->value[$billArr['steps']]))
                 $billArr['user_role_id'] = $bill->chain->value[$billArr['steps']];
             else

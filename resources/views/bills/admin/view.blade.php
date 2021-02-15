@@ -92,7 +92,7 @@
                     @elseif(($bill->user_role_id == $user->user_role_id ) or
                                 ($bill->steps == 0 and $bill->user_id == auth()->user()->id) or
                                 ($bill->user_role_id == $user->user_role_id and $bill->user_role_id == 4))
-                        <bill-status-change-component :bill="{{$bill}}"></bill-status-change-component>
+                        <bill-status-change-component :user_id="{{auth()->user()->id}}" :bill="{{$bill}}"></bill-status-change-component>
                     @endif
                     @if(isset($bill->bill_action->user_id) and ($bill->bill_action->user_id == $user->id) and ($bill->user_role_id != $user->user_role_id))
                         <a href="{{route('bill.back',$bill->id)}}" class="btn btn-dark mt-3">Изменить</a>

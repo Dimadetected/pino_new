@@ -167,10 +167,11 @@ class BillController extends Controller
             $bill_status = $bill_status->where('status', 'good')->first();
             $bill_status_id = $bill_status->id;
             $text = $bill_status->name;
-            $billArr['steps'] = $bill->steps + 1;
-
-            if(isset($bill->chain->value[$billArr['steps']]) and $user->user_role_id != $bill->chain->value[$billArr['steps']] )
+            $billArr['steps'] = $bill->steps;
+            if($billArr['steps'] != 0 and isset($bill->chain->value[$billArr['steps']]) and $user->user_role_id != $bill->chain->value[$billArr['steps']] ){
                 return response()->json($bill);
+            }
+            $billArr['steps'] = $bill->steps + 1;
 
             if (isset($bill->chain->value[$billArr['steps']]))
                 $billArr['user_role_id'] = $bill->chain->value[$billArr['steps']];

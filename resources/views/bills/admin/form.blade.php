@@ -48,6 +48,12 @@
                                   class="form-control @error('text') is-invalid @enderror">{{old('text')}}</textarea>
                     </div>
                     <div class="form-group mt-3 @error('files') is-invalid @enderror">
+                        @error('badVersionFile')
+                        <div class="alert alert-danger">
+                            Данный файл имеет неподдерживаемую версию.<br> Для того, чтобы файл был успешно обработан вам необходимо загрузить его на
+                            <a target="_blank" href="https://online2pdf.com/convert-pdf-to-pdf">сайт</a> и полученный файл загрузить сюда.
+                        </div>
+                        @enderror
                         @error('files')
                         <div class="alert alert-danger">
                             Необходимо загрузить файл PDF формата

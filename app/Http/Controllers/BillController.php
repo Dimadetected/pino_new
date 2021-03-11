@@ -57,8 +57,8 @@ class BillController extends Controller
 
         $date_start = Carbon::parse(\request('date_start', ($_COOKIE['bill_date_start'] ?? now()->startOfYear())))->startOfDay();
         $date_end = Carbon::parse(\request('date_end', ($_COOKIE['bill_end_start'] ?? now()->endOfYear())))->endOfDay();
-        setcookie('bill_date_start',$date_start);
-        setcookie('bill_end_start',$date_end);
+        setcookie('bill_date_start', $date_start);
+        setcookie('bill_end_start', $date_end);
         $user = auth()->user();
         if (is_null($user->remember_token))
             $user->update(['remember_token' => rand(111111111, 99999999999)]);
@@ -168,7 +168,7 @@ class BillController extends Controller
             $bill_status_id = $bill_status->id;
             $text = $bill_status->name;
             $billArr['steps'] = $bill->steps;
-            if($billArr['steps'] != 0 and isset($bill->chain->value[$billArr['steps']]) and $user->user_role_id != $bill->chain->value[$billArr['steps']] ){
+            if ($billArr['steps'] != 0 and isset($bill->chain->value[$billArr['steps']]) and $user->user_role_id != $bill->chain->value[$billArr['steps']]) {
                 return response()->json($bill);
             }
             $billArr['steps'] = $bill->steps + 1;
@@ -307,6 +307,15 @@ class BillController extends Controller
 
             File::put(public_path('files/' . $filename . '.' . $extension), file_get_contents($file));
             $files[] = 'files/' . $filename . '.' . $extension;
+
+            $pdf = new Fpdi();
+            try {
+                $pdf->setSourceFile('files/' . $filename . '.' . $extension);
+            } catch (\Throwable $e) {
+                $request->validate([
+                    'badVersionFile' => 'required'
+                ]);
+            }
         }
         $file = \App\Models\File::query()->create([
             'src' => $files,
@@ -348,8 +357,8 @@ class BillController extends Controller
         $user_id = $user->id;
         $date_start = Carbon::parse(\request('date_start', ($_COOKIE['bill_date_start'] ?? now()->startOfYear())))->startOfDay();
         $date_end = Carbon::parse(\request('date_end', ($_COOKIE['bill_end_start'] ?? now()->endOfYear())))->endOfDay();
-        setcookie('bill_date_start',$date_start);
-        setcookie('bill_end_start',$date_end);
+        setcookie('bill_date_start', $date_start);
+        setcookie('bill_end_start', $date_end);
         $bills = Bill::query()
             ->orderByDesc('id')
             ->where('user_role_id', $user->user_role_id)
@@ -374,8 +383,8 @@ class BillController extends Controller
         $actions = BillAction::query()->where('user_id', $user->id)->pluck('bill_id')->toArray();
         $date_start = Carbon::parse(\request('date_start', ($_COOKIE['bill_date_start'] ?? now()->startOfYear())))->startOfDay();
         $date_end = Carbon::parse(\request('date_end', ($_COOKIE['bill_end_start'] ?? now()->endOfYear())))->endOfDay();
-        setcookie('bill_date_start',$date_start);
-        setcookie('bill_end_start',$date_end);
+        setcookie('bill_date_start', $date_start);
+        setcookie('bill_end_start', $date_end);
         $bills = Bill::query()
             ->orderByDesc('id')
             ->whereIn('id', $actions)
@@ -397,8 +406,8 @@ class BillController extends Controller
         $user = auth()->user();
         $date_start = Carbon::parse(\request('date_start', ($_COOKIE['bill_date_start'] ?? now()->startOfYear())))->startOfDay();
         $date_end = Carbon::parse(\request('date_end', ($_COOKIE['bill_end_start'] ?? now()->endOfYear())))->endOfDay();
-        setcookie('bill_date_start',$date_start);
-        setcookie('bill_end_start',$date_end);
+        setcookie('bill_date_start', $date_start);
+        setcookie('bill_end_start', $date_end);
         $user_id = $user->id;
         $bills = Bill::query()
             ->orderByDesc('id')

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BillResource;
+use App\Http\Services\TgService;
 use App\Models\Bill;
 use App\Models\BillAction;
 use App\Models\BillStatus;
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\Cookie;
 
 class MessageController extends Controller
 {
+    private $telegram;
 
     public function index()
     {
@@ -21,6 +23,8 @@ class MessageController extends Controller
 
     public function store(Request $request)
     {
+        $this->telegram = new TgService('1693125992:AAFku3IyNSELpLporEaWmuehK8qNok8p0z8');
+
         if ($request->type == 'bill') {
             $bill = Bill::query()->find($request->external_id);
             $bill->alerts_count_inc();

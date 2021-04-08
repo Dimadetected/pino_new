@@ -44,7 +44,7 @@ class MessageController extends Controller
                     echo $user->tg_id . "\n";
                     logger($this->telegram->sendMessage([
                         'chat_id' => $user->tg_id,
-                        'text' => "В счете №" . $bill->id .".\n". $sender->name . "оставлил комментарий: \n" . $request->text,
+                        'text' => "В счете №" . $bill->id .".\n". $sender->name . " оставлил комментарий: \n" . $request->text,
                         'reply_markup' => json_encode(['inline_keyboard' =>
                             $buttons,
                         ]),

@@ -35,6 +35,7 @@ class MessageController extends Controller
                 ->groupBy("user_id")
                 ->pluck("user_id")
                 ->toArray();
+            $users_id = array_merge($users_id,$bill->messages()->groupBy("user_id")->pluck("user_id")->toArray());
             $users = User::query()->find($users_id);
             foreach ($users as $user) {
                 $buttons[] = [['text' => 'Счет', 'url' => route('bill.view', $bill->id)]];

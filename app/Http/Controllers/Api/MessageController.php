@@ -24,7 +24,7 @@ class MessageController extends Controller
     public function store(Request $request)
     {
         $this->telegram = new TgService('1693125992:AAFku3IyNSELpLporEaWmuehK8qNok8p0z8');
-
+        $sender = User::query()->find($request->user_id);
         if ($request->type == 'bill') {
             $bill = Bill::query()->find($request->external_id);
             $bill->alerts_count_inc();
@@ -44,7 +44,7 @@ class MessageController extends Controller
                     echo $user->tg_id . "\n";
                     logger($this->telegram->sendMessage([
                         'chat_id' => $user->tg_id,
-                        'text' => "В счете №" . $bill->id . " был оставлен комментарий: \n" . $request->text,
+                        'text' => "В счете №" . $bill->id .".\n". $sender->name . "оставлил комментарий: \n" . $request->text,
                         'reply_markup' => json_encode(['inline_keyboard' =>
                             $buttons,
                         ]),

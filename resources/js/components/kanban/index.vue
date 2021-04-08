@@ -9,13 +9,13 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="">Начало периода</label>
-                            <input type="text" class="form-control" v-model="date_start" placeholder="дд.мм.гггг">
+                            <input type="text" class="form-control" v-model="date_start" @change="getColumns" placeholder="дд.мм.гггг">
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="">Окончание периода</label>
-                            <input type="text" class="form-control" v-model="date_end" placeholder="дд.мм.гггг">
+                            <input type="text" class="form-control" v-model="date_end" @change="getColumns" placeholder="дд.мм.гггг">
                         </div>
                     </div>
                     <div class="col-md-4">

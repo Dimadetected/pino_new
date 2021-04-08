@@ -26,7 +26,11 @@ class MessageController extends Controller
             $bill->alerts_count_inc();
 
             $buttons = [];
-            $users_id = $bill->bill_actions()->groupBy("user_id")->pluck("user_id")->toArray();
+            $users_id = BillAction::query()
+                ->where("bill_id",$bill->id)
+                ->groupBy("user_id")
+                ->pluck("user_id")
+                ->toArray();
             $users = User::query()->find($users_id);
             foreach ($users as $user) {
                 $buttons[] = [['text' => 'Счет', 'url' => route('bill.view', $bill->id)]];

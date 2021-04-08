@@ -8,6 +8,24 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
+                            <label for="">Начало периода</label>
+                            <input type="text" class="form-control" v-model="date_start" placeholder="дд.мм.гггг">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="">Окончание периода</label>
+                            <input type="text" class="form-control" v-model="date_end" placeholder="дд.мм.гггг">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="">&nbsp;</label>
+                        <button class="btn btn-block btn-primary" @click="typeShowTextSwap">{{ typeShowText }}</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
                             <label for="">Заказчик</label>
                             <select class="form-control" @change="getColumns" v-model="client_id">
                                 <option value="all">Все</option>
@@ -37,50 +55,75 @@
             </div>
         </div>
         <div class="row mt-5">
-            <div class="col-md-1"></div>
-            <div class="col-md-2" v-for="(column,index) in columnsArr">
-                <div class="p-2 alert " :class="alertsArr[index]">
-                    <h3>{{ column.text }} {{ alertsArr.shift }}</h3>
-                    <!-- Backlog draggable component. Pass arrBackLog to list prop -->
-                    <draggable
-                        class="list-group kanban-column"
-                        :list="column.tasks"
-                        group="tasks"
-                        @change="log"
-                    >
-                        <div @click="viewModal(task)"
-                             class="list-group-item"
-                             v-for="task in column.tasks"
-                             :key="task.name"
-                        >
-                            <div class="pb-2 border-bottom">{{ task.name }}</div>
-                            <div style="font-size: 10px">
-                                <table class="table table-borderless mt-1">
-                                    <tbody>
-                                    <tr>
-                                        <td class="p-0">Заказчик:</td>
-                                        <td class="p-0">{{ task.user }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="p-0">Ответственный:</td>
-                                        <td class="p-0">{{ task.master }}</td>
-                                    </tr>
-                                    <tr v-if="task.worker !== null">
-                                        <td class="p-0">Исполнитель:</td>
-                                        <td class="p-0">{{ task.worker }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="p-0">Осталось:</td>
-                                        <td class="p-0">{{ task.date }}ч.</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+
+            <div v-if="typeShowText == 'Таблица'" class="col-12">
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div  class="col-md-2" v-for="(column,index) in columnsArr">
+                        <div class="p-2 alert " :class="alertsArr[index]">
+                            <h3>{{ column.text }} {{ alertsArr.shift }}</h3>
+                            <!-- Backlog draggable component. Pass arrBackLog to list prop -->
+                            <draggable
+                                class="list-group kanban-column"
+                                :list="column.tasks"
+                                group="tasks"
+                                @change="log"
+                            >
+                                <div @click="viewModal(task)"
+                                     class="list-group-item"
+                                     v-for="task in column.tasks"
+                                     :key="task.name"
+                                >
+                                    <div class="pb-2 border-bottom">{{ task.name }}</div>
+                                    <div style="font-size: 10px">
+                                        <table class="table table-borderless mt-1">
+                                            <tbody>
+                                            <tr>
+                                                <td class="p-0">Заказчик:</td>
+                                                <td class="p-0">{{ task.user }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="p-0">Ответственный:</td>
+                                                <td class="p-0">{{ task.master }}</td>
+                                            </tr>
+                                            <tr v-if="task.worker !== null">
+                                                <td class="p-0">Исполнитель:</td>
+                                                <td class="p-0">{{ task.worker }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="p-0">Осталось:</td>
+                                                <td class="p-0">{{ task.date }}ч.</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </draggable>
                         </div>
-                    </draggable>
+                    </div>
                 </div>
             </div>
-
+            <div v-else class="col-md-10 offset-md-1">
+                <table class="table table-bordered " v-for="(column,index) in columnsArr" v-if="column.tasks.length > 0">
+                    <thead>
+                    <th>Задача</th>
+                    <th>Заказчик</th>
+                    <th>Ответственный</th>
+                    <th>Исполнитель</th>
+                    <th>Статус</th>
+                    </thead>
+                    <tbody>
+                    <tr :class="column.id === 1? 'table-secondary': (column.id === 2? 'table-primary':(column.id === 3?'table-warning':(column.id === 4?'table-success':'table-danger')))"
+                        v-for="task in column.tasks">
+                        <td class="p-2">{{ task.name }}</td>
+                        <td class="p-2">{{ task.user }}</td>
+                        <td class="p-2">{{ task.master }}</td>
+                        <td class="p-2">{{ task.worker }}</td>
+                        <td class="p-2">{{ column.text }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
         <modal name="example" height="70%" width="80%" styles="overflow-y: hidden;max-height:70%;">
             <div class="col-12 p-md-5 p-3">
@@ -127,6 +170,10 @@ export default {
     },
     data() {
         return {
+            typeShowText: "Таблица",
+            load: false,
+            date_start: "",
+            date_end: "",
             masters: {},
             master_id: 0,
             worker_id: 0,
@@ -147,6 +194,14 @@ export default {
     },
     watch: {},
     methods: {
+        typeShowTextSwap() {
+            if (this.typeShowText == "Таблица") {
+                this.typeShowText = "Столбцы"
+            } else {
+                this.typeShowText = "Таблица"
+            }
+            console.log(this.typeShowText)
+        },
         //add new tasks method
         add() {
             if (this.newTask) {
@@ -155,16 +210,19 @@ export default {
             }
         },
         getColumns() {
-
+            this.load = false
             fetch('/api/kanban_columns?' + new URLSearchParams({
                 user_id: this.user_id,
                 master_id: (this.master_id === 'all' ? 0 : this.master_id),
                 worker_id: (this.worker_id === 'all' ? 0 : this.worker_id),
                 client_id: (this.client_id === 'all' ? 0 : this.client_id),
+                date_start: this.date_start,
+                date_end: this.date_end,
             }))
                 .then(res => res.json())
                 .then(res => {
                     this.columnsArr = res.data;
+                    this.load = true
                 })
         },
         getMasters() {

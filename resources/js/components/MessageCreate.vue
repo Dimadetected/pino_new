@@ -58,7 +58,7 @@
 					}
 				)
 					.then(r => {
-						location.reload()
+						// location.reload()
 					})
 
 			}

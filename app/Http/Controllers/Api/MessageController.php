@@ -27,17 +27,20 @@ class MessageController extends Controller
 
             $buttons = [];
             $users_id = BillAction::query()
-                ->where("bill_id",$bill->id)
+                ->where("bill_id", $bill->id)
                 ->groupBy("user_id")
                 ->pluck("user_id")
                 ->toArray();
             $users = User::query()->find($users_id);
             foreach ($users as $user) {
                 $buttons[] = [['text' => 'Счет', 'url' => route('bill.view', $bill->id)]];
+                echo $user->id . "\n";
+                echo $user->tg_notice . "\n";
                 if (isset($user->tg_id) and !is_null($user->tg_notice)) {
+                    echo $user->tg_id . "\n";
                     logger($this->telegram->sendMessage([
                         'chat_id' => $user->tg_id,
-                        'text' => "В счете №" . $bill->id . " был оставлен комментарий: \n". $request->text,
+                        'text' => "В счете №" . $bill->id . " был оставлен комментарий: \n" . $request->text,
                         'reply_markup' => json_encode(['inline_keyboard' =>
                             $buttons,
                         ]),

@@ -21,8 +21,28 @@ class MessageController extends Controller
 
     public function store(Request $request)
     {
-        if($request->type == 'bill')
-            Bill::query()->find($request->external_id)->alerts_count_inc();
+        if ($request->type == 'bill') {
+            $bill = Bill::query()->find($request->external_id);
+            $bill->alerts_count_inc();
+
+            $buttons = [];
+            $users_id = $bill->bill_actions()->groupBy("user_id")->pluck("user_id")->toArray();
+            $users = User::query()->find($users_id);
+            foreach ($users as $user) {
+                $buttons[] = [['text' => 'Счет', 'url' => route('bill.view', $bill->id)]];
+                if (isset($user->tg_id) and !is_null($user->tg_notice)) {
+                    logger($this->telegram->sendMessage([
+                        'chat_id' => $user->tg_id,
+                        'text' => "В счете №" . $bill->id . " был оставлен комментарий: \n". $request->text,
+                        'reply_markup' => json_encode(['inline_keyboard' =>
+                            $buttons,
+                        ]),
+                    ]));
+
+                }
+            }
+        }
+
 
         return response()->json(Message::query()->create([
             'type' => $request->type,

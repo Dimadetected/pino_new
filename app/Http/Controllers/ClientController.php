@@ -31,8 +31,9 @@ class ClientController extends Controller
         $id = $user->id ?? 0;
 
         $files = [];
-        foreach ($client->file_id as $file)
-            $files[$file['file_id']] = \App\Models\File::query()->find($file['file_id']);
+        if (is_array($client->file_id) and count($client->file_id) > 0)
+            foreach ($client->file_id as $file)
+                $files[$file['file_id']] = \App\Models\File::query()->find($file['file_id']);
 
         return view('clients.admin.form', compact('client', 'header', 'id', 'files'));
     }
@@ -54,11 +55,11 @@ class ClientController extends Controller
     {
         $header = '<a href="' . route('clients.index') . '"> Контрагенты </a> / Контракты';
 
-        $files = \App\Models\File::query()->pluck('src','id')->toArray();
+        $files = \App\Models\File::query()->pluck('src', 'id')->toArray();
 
         $clients = Client::query()->whereNotNull('file_id')->get();
 
-        return view('clients.admin.contracts',compact('header','files','clients'));
+        return view('clients.admin.contracts', compact('header', 'files', 'clients'));
     }
 
     public function store(ClientRequest $request, Client $client)

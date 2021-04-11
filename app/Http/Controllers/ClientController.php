@@ -67,37 +67,38 @@ class ClientController extends Controller
     {
         $fileArr = [];
         $j = 0;
-        foreach ($request->ids as $key => $id) {
-            $files = [];
-            if ($id == 0) {
-                if (!isset($request->file()['files'][$j]))
-                    continue;
+        if (is_array($request->ids) and count($request->ids) > 0)
+            foreach ($request->ids as $key => $id) {
+                $files = [];
+                if ($id == 0) {
+                    if (!isset($request->file()['files'][$j]))
+                        continue;
 
-                $file = $request->file()['files'][$j];
-                if (!is_dir(public_path('clients_files')))
-                    mkdir(public_path('clients_files'), 0777, TRUE);
+                    $file = $request->file()['files'][$j];
+                    if (!is_dir(public_path('clients_files')))
+                        mkdir(public_path('clients_files'), 0777, TRUE);
 
-                $filename = time() . rand(0, 1111111111111111111);
-                $extension = $file->getClientOriginalExtension();
+                    $filename = time() . rand(0, 1111111111111111111);
+                    $extension = $file->getClientOriginalExtension();
 
-                File::put(public_path('clients_files/' . $filename . '.' . $extension), file_get_contents($file));
-                $files[] = 'clients_files/' . $filename . '.' . $extension;
+                    File::put(public_path('clients_files/' . $filename . '.' . $extension), file_get_contents($file));
+                    $files[] = 'clients_files/' . $filename . '.' . $extension;
 
-                $file = \App\Models\File::query()->create([
-                    'src' => $files,
-                ]);
-                $fileArr[] = ['file_id' => $file->id, 'numb' => ($request->numbers[$key] ?? ""), 'date' => Carbon::parse(($request->dates[$key]) ?? now())->format('Y-m-d')];
-                $j++;
-            } else {
-                $info = [];
-                foreach ($client->file_id as $file)
-                    if ($file['file_id'] == $id) {
-                        $info = $file;
-                        break;
-                    }
-                $fileArr[] = $info;
+                    $file = \App\Models\File::query()->create([
+                        'src' => $files,
+                    ]);
+                    $fileArr[] = ['file_id' => $file->id, 'numb' => ($request->numbers[$key] ?? ""), 'date' => Carbon::parse(($request->dates[$key]) ?? now())->format('Y-m-d')];
+                    $j++;
+                } else {
+                    $info = [];
+                    foreach ($client->file_id as $file)
+                        if ($file['file_id'] == $id) {
+                            $info = $file;
+                            break;
+                        }
+                    $fileArr[] = $info;
+                }
             }
-        }
         if (empty($fileArr))
             $fileArr = $client->file_id;
 

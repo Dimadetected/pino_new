@@ -44,9 +44,10 @@ class ClientController extends Controller
         $id = $user->id ?? 0;
 
         $files = [];
-        foreach ($client->file_id as $file)
-            if (isset($file['file_id']))
-                $files[$file['file_id']] = \App\Models\File::query()->find($file['file_id']);
+        if (is_array($client->file_id) and count($client->file_id) > 0)
+            foreach ($client->file_id as $file)
+                if (isset($file['file_id']))
+                    $files[$file['file_id']] = \App\Models\File::query()->find($file['file_id']);
 
         return view('clients.admin.view', compact('client', 'header', 'id', 'files'));
     }

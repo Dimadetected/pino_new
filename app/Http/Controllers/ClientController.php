@@ -67,7 +67,7 @@ class ClientController extends Controller
     {
         $fileArr = [];
         $j = 0;
-        if (is_array($request->ids) and count($request->ids) > 0)
+        if (is_array($request->ids) and count($request->ids) > 0) {
             foreach ($request->ids as $key => $id) {
                 $files = [];
                 if ($id == 0) {
@@ -99,8 +99,7 @@ class ClientController extends Controller
                     $fileArr[] = $info;
                 }
             }
-        if (empty($fileArr))
-            $fileArr = $client->file_id;
+        }
 
         $arr = array_merge($request->except([0, 1]), ['file_id' => $fileArr]);
         if (isset($client->id))

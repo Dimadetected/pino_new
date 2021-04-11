@@ -71,7 +71,7 @@ class ClientController extends Controller
             foreach ($request->ids as $key => $id) {
                 $files = [];
                 if ($id == 0) {
-                    if (!isset($request->file()['files'][$j]))
+                    if (!isset($request->file()['files'][$j]) or !isset($request->numbers[$key]) or !isset($request->dates[$key]))
                         continue;
 
                     $file = $request->file()['files'][$j];

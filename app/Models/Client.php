@@ -11,6 +11,9 @@ class Client extends Model
 
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'file_id' => "array"
+    ];
 
     public function file()
     {

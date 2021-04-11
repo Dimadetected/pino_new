@@ -55,6 +55,7 @@ Route::prefix('/kanban')->name('kanban.')->middleware('auth')->group(function ()
 });
 Route::prefix('/clients')->name('clients.')->middleware('auth')->group(function () {
     Route::get('/', 'App\Http\Controllers\ClientController@index')->name('index');
+    Route::get('/contracts', 'App\Http\Controllers\ClientController@contracts')->name('contracts');
     Route::get('/form/{client?}', 'App\Http\Controllers\ClientController@form')->name('form');
     Route::post('/store/{client?}', 'App\Http\Controllers\ClientController@store')->name('store');
     Route::get('/{client}', 'App\Http\Controllers\ClientController@view')->name('view');

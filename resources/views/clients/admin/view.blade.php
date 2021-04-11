@@ -106,8 +106,8 @@
                                     <tbody>
                                     @foreach($client->file_id as $clientFile)
                                         <tr>
-                                            <td>{{$clientFile['numb']}}</td>
-                                            <td>{{\Carbon\Carbon::parse($clientFile['date'])->format('d.m.Y')}}</td>
+                                            <td>{{$clientFile['numb'] != ""?$clientFile['numb']:"Нет"}}</td>
+                                            <td>{{$clientFile['date'] != ""?\Carbon\Carbon::parse($clientFile['date'])->format('d.m.Y'):"Нет"}}</td>
                                             <td><a target="_blank" href="/{{$files[$clientFile['file_id']]->src[0]}}" class="btn btn-primary">Файл</a></td>
                                         </tr>
                                     @endforeach

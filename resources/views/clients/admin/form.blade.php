@@ -50,32 +50,35 @@
                     <button class="btn btn-block btn-success mt-3">Создать</button>
                 </div>
                 <div class="col-md-4 card card-body">
-                    @foreach($client->file_id as $clientFile)
-                        <div class="form-group mt-3">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label for="">Номер</label>
-                                    <input type="text" name="numbers[]" value="{{$clientFile['numb']}}"
-                                           class="form-control">
+                    @if(is_array($client->file_id) and count($client->file_id) > 0)
+                        @foreach($client->file_id as $clientFile)
+                            <div class="form-group mt-3">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="">Номер</label>
+                                        <input type="text" name="numbers[]" value="{{$clientFile['numb']}}"
+                                               class="form-control">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="">Дата</label>
+                                        <input type="text" name="dates[]" class="form-control date"
+                                               value="{{\Carbon\Carbon::parse($clientFile['date'])->format('d.m.Y')}}"
+                                               placeholder="00.00.0000">
+                                    </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <label for="">Дата</label>
-                                    <input type="text" name="dates[]" class="form-control date"
-                                           value="{{\Carbon\Carbon::parse($clientFile['date'])->format('d.m.Y')}}" placeholder="00.00.0000">
+                                <input type="text" hidden value="{{$clientFile['file_id']}}" name="ids[]">
+                                <div class="row mt-3">
+                                    <div class="col-md-6">
+                                        <a href="/{{$files[$clientFile['file_id']]->src[0]}}" target="_blank"
+                                           class="btn btn-block btn-primary">Договор</a>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <button class="btn btn-block btn-danger delete">Удалить</button>
+                                    </div>
                                 </div>
                             </div>
-                            <input type="text" hidden value="{{$clientFile['file_id']}}" name="ids[]">
-                            <div class="row mt-3">
-                                <div class="col-md-6">
-                                    <a href="/{{$files[$clientFile['file_id']]->src[0]}}" target="_blank"
-                                       class="btn btn-block btn-primary">Договор</a>
-                                </div>
-                                <div class="col-md-6">
-                                    <button class="btn btn-block btn-danger delete">Удалить</button>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    @endif
                     <div class="form-group mt-3">
                         <div class="row">
                             <div class="col-md-6"><label for="">Номер</label><input type="text" name="numbers[]"
@@ -114,7 +117,7 @@
             $('#blockAdd').before("<div class=\"form-group mt-3\"><div class=\"row\"><div class=\"col-md-6\"><label for=\"\">Номер</label><input type=\"text\" name=\"numbers[]\" class=\"form-control\"></div><div class=\"col-md-6\"><label for=\"\">Дата</label><input type=\"text\" name=\"dates[]\" class=\"form-control date\" placeholder=\"00.00.0000\"></div></div><input type=\"text\" hidden value=\"0\" name=\"ids[]\"><div class=\"row mt-3\"><div class=\"col-md-6\"><label for=\"exampleFormControlFile1\">Договор:</label><input type=\"file\" name=\"files[]\" class=\"form-control-file\" id=\"exampleFormControlFile1\"></div><div class=\"col-md-6\"><label for=\"\">&nbsp;</label><button class=\"btn btn-block btn-danger delete\">Удалить</button></div></div></div>")
             $('.date').mask('00.00.0000');
         })
-            $('.date').mask('00.00.0000');
+        $('.date').mask('00.00.0000');
 
         function changeCookies() {
             let val = document.getElementById('chain_id').value

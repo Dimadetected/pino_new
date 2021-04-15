@@ -105,19 +105,23 @@ class KanbanTaskController extends Controller
                 $taskArr[$task['id']] = ['id' => $column['id'], 'priority' => $key];
         $user_id = \request('user_id');
 
-        $columnsDB = KanbanColumn::query()->pluck('text','id')->toArray();
+        $columnsDB = KanbanColumn::query()->pluck('text', 'id')->toArray();
 
-        DB::transaction(function () use ($taskArr,$user_id,$columnsDB) {
+        DB::transaction(function () use ($taskArr, $user_id, $columnsDB) {
             $tasks = KanbanTask::query()->find(array_keys($taskArr));
-            foreach ($tasks as $task){
-                if($taskArr[$task->id]['id'] != $task->kanban_column_id)
+            foreach ($tasks as $task) {
+                if ($taskArr[$task->id]['id'] != $task->kanban_column_id)
                     Message::query()->create([
                         'type' => 'task_log',
                         'external_id' => $task->id,
                         'text' => 'Статус задачи был изменен на ' . $columnsDB[$taskArr[$task->id]['id']],
                         'user_id' => $user_id
                     ]);
-                $task->update(['kanban_column_id' => $taskArr[$task->id]['id'], 'priority' => $taskArr[$task->id]['priority']]);
+                if (in_array($taskArr[$task->id]['id'], [4, 5]))
+                    $success = now();
+                else
+                    $success = null;
+                $task->update(['kanban_column_id' => $taskArr[$task->id]['id'], 'priority' => $taskArr[$task->id]['priority'],'success' => $success]);
             }
         });
 

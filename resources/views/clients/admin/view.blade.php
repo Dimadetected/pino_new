@@ -90,7 +90,7 @@
                     <div class="form-group">
                         <div class="row">
                             <div class="col-12 text-center py-3 border-bottom">
-                                <h2>Контракты:</h2>
+                                <h2>Договоры:</h2>
                             </div>
                         </div>
                         <div class="row pt-3">

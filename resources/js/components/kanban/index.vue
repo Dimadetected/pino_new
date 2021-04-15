@@ -222,6 +222,7 @@ export default {
                 .then(res => res.json())
                 .then(res => {
                     this.columnsArr = res.data;
+                    console.log(this.columnsArr)
                     this.load = true
                 })
         },

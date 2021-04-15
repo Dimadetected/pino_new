@@ -90,7 +90,7 @@
                     <div class="form-group">
                         <div class="row">
                             <div class="col-12 text-center py-3 border-bottom">
-                                <h2>Договоры:</h2>
+                                <h2>Документы:</h2>
                             </div>
                         </div>
                         <div class="row pt-3">
@@ -109,6 +109,33 @@
                                             <td>{{$clientFile['numb'] != ""?$clientFile['numb']:"Нет"}}</td>
                                             <td>{{$clientFile['date'] != ""?\Carbon\Carbon::parse($clientFile['date'])->format('d.m.Y'):"Нет"}}</td>
                                             <td><a target="_blank" href="/{{$files[$clientFile['file_id']]->src[0]}}" class="btn btn-primary">Файл</a></td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 text-center py-3 border-bottom">
+                                <h2>Договоры:</h2>
+                            </div>
+                        </div>
+                        <div class="row pt-3">
+                            <div class="col-12">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>Номер</th>
+                                        <th>Дата</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($client->contracts as $contract)
+                                        <tr>
+                                            <td>{{$contract->number}}</td>
+                                            <td>{{$contract->date != ""?\Carbon\Carbon::parse($contract->date)->format('d.m.Y'):"Нет"}}</td>
+                                            <td><a target="_blank" href="/{{$contract->file->src[0]}}" class="btn btn-primary">Файл</a></td>
                                         </tr>
                                     @endforeach
                                     </tbody>

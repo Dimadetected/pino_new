@@ -70,7 +70,7 @@
                                 <div class="row mt-3">
                                     <div class="col-md-6">
                                         <a href="/{{$files[$clientFile['file_id']]->src[0]}}" target="_blank"
-                                           class="btn btn-block btn-primary">Договор</a>
+                                           class="btn btn-block btn-primary">документ</a>
                                     </div>
                                     <div class="col-md-6">
                                         <button class="btn btn-block btn-danger delete">Удалить</button>
@@ -89,7 +89,7 @@
                         </div>
                         <input type="text" hidden value="0" name="ids[]">
                         <div class="row mt-3">
-                            <div class="col-md-6"><label for="exampleFormControlFile1">Договор:</label><input
+                            <div class="col-md-6"><label for="exampleFormControlFile1">Документ:</label><input
                                     type="file" name="files[]" class="form-control-file" id="exampleFormControlFile1">
                             </div>
                             <div class="col-md-6"><label for="">&nbsp;</label>
@@ -98,7 +98,7 @@
                         </div>
                     </div>
                     <button class="btn btn-primary" id="blockAdd">
-                        Добавить договор
+                        Добавить Документ
                     </button>
                 </div>
             </div>
@@ -114,7 +114,7 @@
         })
         $('#blockAdd').click(function (e) {
             e.preventDefault()
-            $('#blockAdd').before("<div class=\"form-group mt-3\"><div class=\"row\"><div class=\"col-md-6\"><label for=\"\">Номер</label><input type=\"text\" name=\"numbers[]\" class=\"form-control\"></div><div class=\"col-md-6\"><label for=\"\">Дата</label><input type=\"text\" name=\"dates[]\" class=\"form-control date\" placeholder=\"00.00.0000\"></div></div><input type=\"text\" hidden value=\"0\" name=\"ids[]\"><div class=\"row mt-3\"><div class=\"col-md-6\"><label for=\"exampleFormControlFile1\">Договор:</label><input type=\"file\" name=\"files[]\" class=\"form-control-file\" id=\"exampleFormControlFile1\"></div><div class=\"col-md-6\"><label for=\"\">&nbsp;</label><button class=\"btn btn-block btn-danger delete\">Удалить</button></div></div></div>")
+            $('#blockAdd').before("<div class=\"form-group mt-3\"><div class=\"row\"><div class=\"col-md-6\"><label for=\"\">Номер</label><input type=\"text\" name=\"numbers[]\" class=\"form-control\"></div><div class=\"col-md-6\"><label for=\"\">Дата</label><input type=\"text\" name=\"dates[]\" class=\"form-control date\" placeholder=\"00.00.0000\"></div></div><input type=\"text\" hidden value=\"0\" name=\"ids[]\"><div class=\"row mt-3\"><div class=\"col-md-6\"><label for=\"exampleFormControlFile1\">Документ:</label><input type=\"file\" name=\"files[]\" class=\"form-control-file\" id=\"exampleFormControlFile1\"></div><div class=\"col-md-6\"><label for=\"\">&nbsp;</label><button class=\"btn btn-block btn-danger delete\">Удалить</button></div></div></div>")
             $('.date').mask('00.00.0000');
         })
         $('.date').mask('00.00.0000');

@@ -19,4 +19,9 @@ class Client extends Model
     {
         return $this->belongsTo(File::class);
     }
+
+    public function contracts()
+    {
+        return $this->hasMany(Contract::class, 'client_id', 'id')->where('status', Contract::LAST_ID);
+    }
 }

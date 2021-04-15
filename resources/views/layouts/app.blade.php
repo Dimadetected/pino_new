@@ -95,7 +95,7 @@
                                 <a class="dropdown-item" href="{{ route('clients.index') }}">
                                     Контрагенты
                                 </a>
-                                <a class="dropdown-item" href="{{ route('clients.contracts') }}">
+                                <a class="dropdown-item" href="{{ route('contracts.index') }}">
                                     Договоры
                                 </a>
                             </div>

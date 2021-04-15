@@ -52,16 +52,6 @@ class ClientController extends Controller
         return view('clients.admin.view', compact('client', 'header', 'id', 'files'));
     }
 
-    public function contracts()
-    {
-        $header = '<a href="' . route('clients.index') . '"> Контрагенты </a> / Контракты';
-
-        $files = \App\Models\File::query()->pluck('src', 'id')->toArray();
-
-        $clients = Client::query()->whereNotNull('file_id')->get();
-
-        return view('clients.admin.contracts', compact('header', 'files', 'clients'));
-    }
 
     public function store(ClientRequest $request, Client $client)
     {

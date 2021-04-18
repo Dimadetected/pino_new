@@ -38,20 +38,20 @@ class ContractController extends Controller
 
     public function form(Contract $contract)
     {
-        if (isset($contract->id)) {
-            if (!in_array(auth()->user()->id, Contract::IDS) and $contract->user_id != auth()->user()->Id)
-                abort(401);
+        if (in_array(auth()->user()->id, Contract::IDS) or $contract->user_id == auth()->user()->Id) {
+
+            if (\request('type') == 1)
+                $btn = "Утвердить";
+            else
+                $btn = "Изменить";
+
+            $header = '<a href="' . route('contracts.index') . '"> Контракты  </a> / Добавить';
+            $clients = Client::query()->pluck("name", "id")->toArray();
+
+            return view('contracts.admin.form', compact('header', 'contract', 'clients', 'btn'));
+        } else {
+            abort(401);
         }
-
-        if (\request('type') == 1)
-            $btn = "Утвердить";
-        else
-            $btn = "Изменить";
-
-        $header = '<a href="' . route('contracts.index') . '"> Контракты  </a> / Добавить';
-        $clients = Client::query()->pluck("name", "id")->toArray();
-
-        return view('contracts.admin.form', compact('header', 'contract', 'clients', 'btn'));
     }
 
     public function store(Contract $contract, ContractFormRequest $request)

@@ -39,7 +39,7 @@ class ContractController extends Controller
     public function form(Contract $contract)
     {
         if (isset($contract->id)) {
-            if ($contract->status != auth()->user()->id or !in_array(auth()->user()->id, Contract::IDS))
+            if (!in_array(auth()->user()->id, Contract::IDS) and $contract->user_id != auth()->user()->Id)
                 abort(401);
         }
 

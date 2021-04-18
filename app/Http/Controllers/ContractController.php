@@ -38,7 +38,7 @@ class ContractController extends Controller
 
     public function form(Contract $contract)
     {
-        if (in_array(auth()->user()->id, Contract::IDS) or $contract->user_id == auth()->user()->Id) {
+        if (in_array(auth()->user()->id, Contract::IDS) or $contract->user_id == auth()->user()->id) {
 
             if (\request('type') == 1)
                 $btn = "Утвердить";

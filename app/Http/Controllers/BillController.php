@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\BillFormRequest;
+use App\Http\Services\SmsService;
 use App\Http\Services\TgService;
 use App\Mail\OrderShipped;
 use App\Models\Bill;
@@ -50,11 +51,15 @@ class BillController extends Controller
     public function __construct()
     {
         $this->telegram = new TgService('1693125992:AAFku3IyNSELpLporEaWmuehK8qNok8p0z8');
+        $this->sms = new SmsService();
     }
 
     public function index()
     {
 
+        if (auth()->user()->id == 1) {
+            dd($this->sms->send("79892123124", "Testing"));
+        }
         $date_start = Carbon::parse(\request('date_start', ($_COOKIE['bill_date_start'] ?? now()->startOfYear())))->startOfDay();
         $date_end = Carbon::parse(\request('date_end', ($_COOKIE['bill_end_start'] ?? now()->endOfYear())))->endOfDay();
         setcookie('bill_date_start', $date_start);

@@ -4,6 +4,8 @@
 namespace App\Http\Services;
 
 
+use Illuminate\Support\Facades\Http;
+
 class SmsService
 {
     private $login, $password;
@@ -17,7 +19,7 @@ class SmsService
     public function send($phone, $text)
     {
         $data = [
-            "scheduleTime" => now()->addSeconds(10),
+            "scheduleTime" => now()->addSeconds(10)->toDateTime(),
             "login" => $this->login,
             "password" => $this->password,
             "messages" => [
@@ -26,6 +28,8 @@ class SmsService
                 "text" => $text
             ]
         ];
-        dd($data);
+
+        $post = Http::post("http://api.prostor-sms.ru/messages/v2/send.json",$data);
+        dd($post->body());
     }
 }

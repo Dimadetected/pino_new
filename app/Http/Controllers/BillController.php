@@ -56,10 +56,6 @@ class BillController extends Controller
 
     public function index()
     {
-
-        if (auth()->user()->id == 1) {
-            dd($this->sms->send("79892123124", "Testing"));
-        }
         $date_start = Carbon::parse(\request('date_start', ($_COOKIE['bill_date_start'] ?? now()->startOfYear())))->startOfDay();
         $date_end = Carbon::parse(\request('date_end', ($_COOKIE['bill_end_start'] ?? now()->endOfYear())))->endOfDay();
         setcookie('bill_date_start', $date_start);
@@ -235,7 +231,9 @@ class BillController extends Controller
                     $buttons,
                 ]),
             ]));
-
+        }
+        if (isset($bill->user->phone) and !is_null($bill->user->sms_notice)){
+            $this->sms->send($bill->user->phone, $text . "\n" . "Счет: " . route('bill.view', $bill->id));
         }
 
         $bill->alerts_count_inc();
@@ -256,6 +254,11 @@ class BillController extends Controller
                 })->get();
 
             foreach ($users as $user) {
+
+                if (isset($user->phone) and !is_null($user->sms_notice)){
+                    $this->sms->send($user->phone, $text . "\n" . "Счет: " . route('bill.view', $bill->id));
+                }
+
                 if (!is_null($user->tg_notice))
                     logger($this->telegram->sendMessage([
                         'chat_id' => $user->tg_id,

@@ -22,6 +22,8 @@ class UserResource extends JsonResource
             'organisations' => $this->organisations,
             'tg_notice' => $this->tg_notice,
             'email_notice' => $this->email_notice,
+            'sms_notice' => $this->sms_notice,
+            'phone' => $this->phone,
         ];
     }
 }

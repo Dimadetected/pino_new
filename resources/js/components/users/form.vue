@@ -27,6 +27,16 @@
             <div class="col-12 card card-body shadow my-2">
                 <div class="row">
                     <div class="col-md-4">
+                        Телефон:
+                    </div>
+                    <div class="col-md-8">
+                        <input type="text" v-model="phone" placeholder="Формат: 70000000000" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 card card-body shadow my-2">
+                <div class="row">
+                    <div class="col-md-4">
                         Роль:
                     </div>
                     <div class="col-md-8">
@@ -67,12 +77,20 @@
                                 </div>
                             </div>
                             <div class="col-auto">
-
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" v-model="email_notice"
                                            id="email_notice">
                                     <label class="form-check-label" for="email_notice">
                                         Email
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" v-model="sms_notice"
+                                           id="sms_notice">
+                                    <label class="form-check-label" for="sms_notice">
+                                        СМС:
                                     </label>
                                 </div>
                             </div>
@@ -107,11 +125,13 @@ export default {
         return {
             alert: false,
             user_name: '',
+            phone: '',
             user_email: '',
             user_role: '',
             user_roles: [],
             tg_notice: false,
             email_notice: false,
+            sms_notice: false,
             organisations: [],
             selected_organisations: [],
         }
@@ -148,9 +168,11 @@ export default {
                     console.log(res.data)
                     this.user_name = res.data.name
                     this.user_email = res.data.email
+                    this.phone = res.data.phone
                     this.user_role = res.data.user_role.id
                     this.tg_notice = res.data.tg_notice
                     this.email_notice = res.data.email_notice
+                    this.sms_notice = res.data.sms_notice
                     res.data.organisations.map(org => {
                         this.changeSelect(org.id)
                     })
@@ -170,6 +192,8 @@ export default {
                             organisations: this.selected_organisations,
                             tg_notice: this.tg_notice,
                             email_notice: this.email_notice,
+                            sms_notice: this.sms_notice,
+                            phone: this.phone,
                         }
                     ),
                     headers: {

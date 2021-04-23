@@ -19,17 +19,16 @@ class SmsService
     public function send($phone, $text)
     {
         $data = [
-            "scheduleTime" => now()->addSeconds(10)->toDateTime(),
             "login" => $this->login,
             "password" => $this->password,
+            "sender" => "Pino",
             "messages" => [
                 "phone" => $phone,
-                "sender" => "Pino",
                 "text" => $text
             ]
         ];
 
-        $post = Http::post("http://api.prostor-sms.ru/messages/v2/send.json",$data);
+        $post = Http::post("http://api.prostor-sms.ru/messages/v2/send.json", $data);
         dd($post->body());
     }
 }

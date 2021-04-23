@@ -108,7 +108,6 @@
 export default {
     mounted() {
         this.getUserRoles();
-        console.log(this.user);
         if (this.user !== 0)
             this.get();
         this.getOrganisations()
@@ -139,7 +138,6 @@ export default {
     watch: {},
     methods: {
         changeSelect(id) {
-            console.log(this.selected_organisations);
             if (this.selected_organisations.indexOf(id) === -1)
                 this.selected_organisations.push(id)
             else
@@ -157,7 +155,6 @@ export default {
             fetch('/api/user_roles')
                 .then(res => res.json())
                 .then(res => {
-                    console.log(res);
                     this.user_roles = res.data
                 });
         },
@@ -165,7 +162,6 @@ export default {
             fetch('/api/users/' + this.user)
                 .then(res => res.json())
                 .then(res => {
-                    console.log(res.data)
                     this.user_name = res.data.name
                     this.user_email = res.data.email
                     this.phone = res.data.phone
@@ -179,7 +175,6 @@ export default {
                 })
         },
         save() {
-            console.log(this.sms_notice)
             fetch(
                 '/api/users' + (this.user == 0 ? '' : '/' + this.user),
                 {
@@ -206,7 +201,6 @@ export default {
                 .then(r => r.json())
                 .then(r => {
                         this.data = r.data;
-                        console.log(r.data);
                         this.alert = true;
                     }
                 )

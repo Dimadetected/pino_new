@@ -24,6 +24,8 @@ class User extends Authenticatable
         'tg_id',
         'tg_notice',
         'email_notice',
+        'sms_notice',
+        'phone',
     ];
 
     /**

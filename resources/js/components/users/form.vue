@@ -90,7 +90,7 @@
                                     <input class="form-check-input" type="checkbox" v-model="sms_notice"
                                            id="sms_notice">
                                     <label class="form-check-label" for="sms_notice">
-                                        СМС:
+                                        СМС
                                     </label>
                                 </div>
                             </div>
@@ -179,6 +179,7 @@ export default {
                 })
         },
         save() {
+            console.log(this.sms_notice)
             fetch(
                 '/api/users' + (this.user == 0 ? '' : '/' + this.user),
                 {

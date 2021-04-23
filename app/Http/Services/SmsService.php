@@ -24,12 +24,14 @@ class SmsService
             "sender" => "Pino",
             "messages" => [
                 "phone" => $phone,
-                "text" => $text
+                "text" => $text,
+                "sender" => "Pino",
             ]
         ];
 
         $post = Http::post("http://api.prostor-sms.ru/messages/v2/send.json", $data);
 
+        logger($data);
         logger($post->body());
     }
 }

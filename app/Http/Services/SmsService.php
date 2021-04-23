@@ -29,5 +29,7 @@ class SmsService
         ];
 
         $post = Http::post("http://api.prostor-sms.ru/messages/v2/send.json", $data);
+
+        log($post->body());
     }
 }

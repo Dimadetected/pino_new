@@ -24,7 +24,7 @@ class SmsService
             "password" => $this->password,
             "messages" => [
                 "phone" => $phone,
-                "sender" => "Пино",
+                "sender" => "Pino",
                 "text" => $text
             ]
         ];

@@ -52,7 +52,7 @@ class MessageController extends Controller
                     ]));
                 }
                 if (isset($user->phone) and !is_null($user->sms_notice)){
-                    $this->sms->send($user->phone, "В счете №" . $bill->id .".\n". $sender->name . " оставлил комментарий: \n" . $request->text . "\n"  . route('bill.view', $bill->id));
+                    $this->sms->send($user->phone, "В счете №" . $bill->id .".\n". $sender->name . " оставлил комментарий: \n");
                 }
             }
         }

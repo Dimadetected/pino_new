@@ -233,7 +233,7 @@ class BillController extends Controller
             ]));
         }
         if (isset($bill->user->phone) and !is_null($bill->user->sms_notice)){
-            $this->sms->send($bill->user->phone, $text . "\n" . "Счет: " . route('bill.view', $bill->id));
+            $this->sms->send($bill->user->phone, $text . "\n" . "Счет: " . $bill->id);
         }
 
         $bill->alerts_count_inc();
@@ -256,7 +256,7 @@ class BillController extends Controller
             foreach ($users as $user) {
 
                 if (isset($user->phone) and !is_null($user->sms_notice)){
-                    $this->sms->send($user->phone, $text . "\n" . "Счет: " . route('bill.view', $bill->id));
+                    $this->sms->send($user->phone, $text . "\n" . "Счет: " . $bill->id);
                 }
 
                 if (!is_null($user->tg_notice))

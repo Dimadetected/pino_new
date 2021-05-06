@@ -104,13 +104,17 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @foreach($client->file_id as $clientFile)
-                                        <tr>
-                                            <td>{{$clientFile['numb'] != ""?$clientFile['numb']:"Нет"}}</td>
-                                            <td>{{$clientFile['date'] != ""?\Carbon\Carbon::parse($clientFile['date'])->format('d.m.Y'):"Нет"}}</td>
-                                            <td><a target="_blank" href="/{{$files[$clientFile['file_id']]->src[0]}}" class="btn btn-primary">Файл</a></td>
-                                        </tr>
-                                    @endforeach
+                                    @if(is_array($client->file_id))
+                                        @foreach($client->file_id as $clientFile)
+                                            <tr>
+                                                <td>{{$clientFile['numb'] != ""?$clientFile['numb']:"Нет"}}</td>
+                                                <td>{{$clientFile['date'] != ""?\Carbon\Carbon::parse($clientFile['date'])->format('d.m.Y'):"Нет"}}</td>
+                                                <td><a target="_blank"
+                                                       href="/{{$files[$clientFile['file_id']]->src[0]}}"
+                                                       class="btn btn-primary">Файл</a></td>
+                                            </tr>
+                                        @endforeach
+                                    @endif
                                     </tbody>
                                 </table>
                             </div>
@@ -135,7 +139,8 @@
                                         <tr>
                                             <td>{{$contract->number}}</td>
                                             <td>{{$contract->date != ""?\Carbon\Carbon::parse($contract->date)->format('d.m.Y'):"Нет"}}</td>
-                                            <td><a target="_blank" href="/{{$contract->file->src[0]}}" class="btn btn-primary">Файл</a></td>
+                                            <td><a target="_blank" href="/{{$contract->file->src[0]}}"
+                                                   class="btn btn-primary">Файл</a></td>
                                         </tr>
                                     @endforeach
                                     </tbody>

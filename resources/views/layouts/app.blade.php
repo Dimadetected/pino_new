@@ -86,19 +86,11 @@
                         <li class="nav-item">
                             <a class="nav-link " href="{{ route('kanban.index') }}">Задачи</a>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownContr" role="button"
-                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Контрагенты
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdownContr">
-                                <a class="dropdown-item" href="{{ route('clients.index') }}">
-                                    Контрагенты
-                                </a>
-                                <a class="dropdown-item" href="{{ route('contracts.index') }}">
-                                    Договоры
-                                </a>
-                            </div>
+                        <li class="nav-item">
+                            <a class="nav-link "  href="{{ route('clients.index') }}">Контрагенты</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link " href="{{ route('contracts.index') }}">Договоры</a>
                         </li>
                     </ul>
                     <form class="form-inline my-2 my-lg-0">

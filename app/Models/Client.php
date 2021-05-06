@@ -22,6 +22,6 @@ class Client extends Model
 
     public function contracts()
     {
-        return $this->hasMany(Contract::class, 'client_id', 'id')->where('status', Contract::LAST_ID);
+        return $this->hasMany(Contract::class, 'client_id', 'id');
     }
 }

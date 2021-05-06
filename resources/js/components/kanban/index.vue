@@ -9,13 +9,15 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="">Начало периода</label>
-                            <input type="text" class="form-control" v-model="date_start" @change="getColumns" placeholder="дд.мм.гггг">
+                            <input type="text" class="form-control" v-model="date_start" @change="getColumns"
+                                   placeholder="дд.мм.гггг">
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="">Окончание периода</label>
-                            <input type="text" class="form-control" v-model="date_end" @change="getColumns" placeholder="дд.мм.гггг">
+                            <input type="text" class="form-control" v-model="date_end" @change="getColumns"
+                                   placeholder="дд.мм.гггг">
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -59,7 +61,7 @@
             <div v-if="typeShowText == 'Таблица'" class="col-12">
                 <div class="row">
                     <div class="col-md-1"></div>
-                    <div  class="col-md-2" v-for="(column,index) in columnsArr">
+                    <div class="col-md-2" v-for="(column,index) in columnsArr">
                         <div class="p-2 alert " :class="alertsArr[index]">
                             <h3>{{ column.text }} {{ alertsArr.shift }}</h3>
                             <!-- Backlog draggable component. Pass arrBackLog to list prop -->
@@ -104,7 +106,8 @@
                 </div>
             </div>
             <div v-else class="col-md-10 offset-md-1">
-                <table class="table table-bordered " v-for="(column,index) in columnsArr" v-if="column.tasks.length > 0">
+                <table class="table table-bordered " v-for="(column,index) in columnsArr"
+                       v-if="column.tasks.length > 0">
                     <thead>
                     <th>Задача</th>
                     <th>Заказчик</th>
@@ -159,122 +162,156 @@
 </template>
 
 <script>
-import draggable from 'vuedraggable';
+    import draggable from 'vuedraggable';
 
-export default {
-    components: {
-        draggable,
-    },
-    props: {
-        user_id: Number,
-    },
-    data() {
-        return {
-            typeShowText: "Таблица",
-            load: false,
-            date_start: "",
-            date_end: "",
-            masters: {},
-            master_id: 0,
-            worker_id: 0,
-            client_id: 0,
-            modalObject: {},
-            alertsArr: {
-                0: 'alert-secondary',
-                1: 'alert-primary',
-                2: 'alert-warning',
-                3: 'alert-success',
-                4: 'alert-danger'
+    export default {
+        components: {
+            draggable,
+        },
+        props: {
+            user_id: Number,
+        },
+        data() {
+            return {
+                typeShowText: "Таблица",
+                load: false,
+                date_start: "",
+                date_end: "",
+                masters: {},
+                master_id: 0,
+                worker_id: 0,
+                client_id: 0,
+                modalObject: {},
+                alertsArr: {
+                    0: 'alert-secondary',
+                    1: 'alert-primary',
+                    2: 'alert-warning',
+                    3: 'alert-success',
+                    4: 'alert-danger'
+                },
+                columnsArr: [],
+                // for new tasks
+                newTask: "",
+                // 4 arrays to keep track of our 4 statuses
+            };
+        },
+        watch: {
+            date_start(new_date) {
+                localStorage.date_start = new_date
             },
-            columnsArr: [],
-            // for new tasks
-            newTask: "",
-            // 4 arrays to keep track of our 4 statuses
-        };
-    },
-    watch: {},
-    methods: {
-        typeShowTextSwap() {
-            if (this.typeShowText == "Таблица") {
-                this.typeShowText = "Столбцы"
-            } else {
-                this.typeShowText = "Таблица"
-            }
-            console.log(this.typeShowText)
+            date_end(new_date) {
+                localStorage.date_end = new_date
+            },
+            client_id(value) {
+                localStorage.client_id = value
+            },
+            master_id(value) {
+                localStorage.master_id = value
+            },
+            worker_id(value) {
+                localStorage.worker_id = value
+            },
         },
-        //add new tasks method
-        add() {
-            if (this.newTask) {
-                this.arrBackLog.push({name: this.newTask});
-                this.newTask = "";
-            }
-        },
-        getColumns() {
-            this.load = false
-            fetch('/api/kanban_columns?' + new URLSearchParams({
-                user_id: this.user_id,
-                master_id: (this.master_id === 'all' ? 0 : this.master_id),
-                worker_id: (this.worker_id === 'all' ? 0 : this.worker_id),
-                client_id: (this.client_id === 'all' ? 0 : this.client_id),
-                date_start: this.date_start,
-                date_end: this.date_end,
-            }))
-                .then(res => res.json())
-                .then(res => {
-                    this.columnsArr = res.data;
-                    console.log(this.columnsArr)
-                    this.load = true
-                })
-        },
-        getMasters() {
-            fetch('/api/users')
-                .then(res => res.json())
-                .then(res => {
-                    this.masters = res.data;
-                })
-        },
-        log(evt) {
-            window.console.log(evt);
-            window.console.log(this.columnsArr);
-            this.save();
-        },
-        save() {
-            fetch(
-                '/api/kanban_tasks/allTasksChange',
-                {
-                    method: 'POST',
-                    body: JSON.stringify(
-                        {
-                            columns: this.columnsArr,
-                            user_id: this.user_id,
-
-                        }
-                    ),
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    }
+        methods: {
+            lsFill() {
+                if (localStorage.date_start) {
+                    this.date_start = localStorage.date_start
                 }
-            )
-                .then(r => r.json())
-                .then(r => {
-                        // console.log(r.data);
+                if (localStorage.date_end) {
+                    this.date_end = localStorage.date_end
+                }
+                if (localStorage.client_id) {
+                    this.client_id = localStorage.client_id
+                }
+                if (localStorage.master_id) {
+                    this.master_id = localStorage.master_id
+                }
+                if (localStorage.worker_id) {
+                    this.worker_id = localStorage.worker_id
+                }
+            },
+            typeShowTextSwap() {
+                if (this.typeShowText == "Таблица") {
+                    this.typeShowText = "Столбцы"
+                } else {
+                    this.typeShowText = "Таблица"
+                }
+                console.log(this.typeShowText)
+            },
+            //add new tasks method
+            add() {
+                if (this.newTask) {
+                    this.arrBackLog.push({name: this.newTask});
+                    this.newTask = "";
+                }
+            },
+            getColumns() {
+                this.load = false
+                fetch('/api/kanban_columns?' + new URLSearchParams({
+                    user_id: this.user_id,
+                    master_id: (this.master_id === 'all' ? 0 : this.master_id),
+                    worker_id: (this.worker_id === 'all' ? 0 : this.worker_id),
+                    client_id: (this.client_id === 'all' ? 0 : this.client_id),
+                    date_start: this.date_start,
+                    date_end: this.date_end,
+                }))
+                    .then(res => res.json())
+                    .then(res => {
+                        this.columnsArr = res.data;
+                        console.log(this.columnsArr)
+                        this.load = true
+                    })
+            },
+            getMasters() {
+                fetch('/api/users')
+                    .then(res => res.json())
+                    .then(res => {
+                        this.masters = res.data;
+                    })
+            },
+            log(evt) {
+                window.console.log(evt);
+                window.console.log(this.columnsArr);
+                this.save();
+            },
+            save() {
+                fetch(
+                    '/api/kanban_tasks/allTasksChange',
+                    {
+                        method: 'POST',
+                        body: JSON.stringify(
+                            {
+                                columns: this.columnsArr,
+                                user_id: this.user_id,
+
+                            }
+                        ),
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        }
                     }
                 )
+                    .then(r => r.json())
+                    .then(r => {
+                            // console.log(r.data);
+                        }
+                    )
+            },
+            viewModal(task) {
+                this.modalObject = task;
+                this.$modal.show('example')
+            },
         },
-        viewModal(task) {
-            this.modalObject = task;
-            this.$modal.show('example')
+        mounted() {
+            this.lsFill()
+            this.master_id = this.user_id;
+
+            this.getColumns();
+            this.getMasters();
+
         },
-    },
-    mounted() {
-        this.master_id = this.user_id;
-
-        this.getColumns();
-        this.getMasters();
-
-    },
-}
+    }
 </script>
 
 <style scoped>

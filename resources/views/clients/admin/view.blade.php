@@ -121,7 +121,7 @@
                         </div>
                         <div class="row">
                             <div class="col-12 text-center py-3 border-bottom">
-                                <h2>Договоры:</h2>
+                                <h2>Утвержденные Договоры:</h2>
                             </div>
                         </div>
                         <div class="row pt-3">

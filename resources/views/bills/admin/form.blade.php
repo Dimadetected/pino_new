@@ -32,7 +32,7 @@
                     </div>
                     <div class="form-group">
                         <label for="client_id">Контрагент:</label>
-                        <select name="client_id" id="client_id" class="form-control">
+                        <select name="client_id" id="client_id" class="form-control js-example-basic-single">
                             @foreach($clients as $client)
                                 <option @if(old('text') and old('client_id') == $client->id) selected @endif value="{{$client->id}}">{{$client->name}}</option>
                             @endforeach
@@ -72,6 +72,8 @@
 
 @endsection
 @section('script')
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         $('#date').mask('00.00.0000');
         // function dateCheck() {
@@ -82,7 +84,9 @@
         //         document.getElementById('date').value = val.substring(0, 10)
         //     }
         // }
-
+        $(document).ready(function() {
+            $('.js-example-basic-single').select2();
+        });
         function changeCookies() {
             let val = document.getElementById('chain_id').value
             console.log(val)

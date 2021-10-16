@@ -20,6 +20,29 @@
                                 <input type="text" name="date_end" class="date form-control"
                                        value="{{\Carbon\Carbon::parse($date_end)->format('d.m.Y')}}">
                             </div>
+                            <div class="col-md-4 mt-2">
+                                <label for="">Номер счета:</label>
+                                <input type="text" name="bill_number" class="form-control"
+                                       value="{{$billNumber == 0?"":$billNumber}}">
+                            </div>
+                            <div class="col-md-4 mt-2">
+                                <label for="">Создатель счета:</label>
+                                <select name="bill_creator_id" class="form-control js-example-basic-single">
+                                    <option value="">Не указано</option>
+                                    @foreach($billsCreators as $billCreator)
+                                        <option @if($billCreatorID == $billCreator->id) selected @endif value="{{$billCreator->id}}">{{$billCreator->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-4 mt-2">
+                                <label for="">Контрагент:</label>
+                                <select name="contragent_id" class="form-control js-example-basic-single">
+                                    <option value="">Не указано</option>
+                                    @foreach($contragents as $contragent)
+                                        <option @if($contragentID == $contragent->id) selected @endif value="{{$contragent->id}}">{{$contragent->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                             <div class="col-md-12 mt-3 text-right">
                                 <button class="btn btn-primary">
                                     Применить
@@ -59,6 +82,9 @@
                                     <ul style="font-size: 12px">
                                         <li>
                                             {{$bill->user->name}}</li>
+                                        @if(isset($bill->client->name))
+                                            <li>{{$bill->client->name}}</li>
+                                        @endif
                                         @if(isset($bill->date))
                                             <li>Дата: {{\Carbon\Carbon::parse($bill->date)->format('d.m.Y')}}</li>
                                         @endif
@@ -133,9 +159,14 @@
 @endsection
 @section('script')
 
+
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
+
         $(function () {
             $.datepicker.regional['ru'] = {
                 closeText: 'Закрыть',
@@ -159,7 +190,9 @@
 
         });
 
-
+        $(document).ready(function() {
+            $('.js-example-basic-single').select2();
+        });
         function showOrHideFile(id) {
             elem = document.getElementById(id);
             file_class = elem.dataset.file;

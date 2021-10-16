@@ -76,7 +76,7 @@
                                      v-for="task in column.tasks"
                                      :key="task.name"
                                 >
-                                    <div class="pb-2 border-bottom">{{ task.name }}</div>
+                                    <div class="pb-2 border-bottom">#{{task.id}} <br>{{ task.name }}</div>
                                     <div style="font-size: 10px">
                                         <table class="table table-borderless mt-1">
                                             <tbody>
@@ -114,15 +114,19 @@
                     <th>Ответственный</th>
                     <th>Исполнитель</th>
                     <th>Статус</th>
+                    <th>Дата постановки</th>
+                    <th>Дата выполнения</th>
                     </thead>
                     <tbody>
                     <tr :class="column.id === 1? 'table-secondary': (column.id === 2? 'table-primary':(column.id === 3?'table-warning':(column.id === 4?'table-success':'table-danger')))"
                         v-for="task in column.tasks">
-                        <td class="p-2">{{ task.name }}</td>
+                        <td class="p-2">#{{task.id}} {{ task.name }}</td>
                         <td class="p-2">{{ task.user }}</td>
                         <td class="p-2">{{ task.master }}</td>
                         <td class="p-2">{{ task.worker }}</td>
                         <td class="p-2">{{ column.text }}</td>
+                        <td class="p-2">{{ task.date_created }}</td>
+                        <td class="p-2">{{ task.date_closed }}</td>
                     </tr>
                     </tbody>
                 </table>

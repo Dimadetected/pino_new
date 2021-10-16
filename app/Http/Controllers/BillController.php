@@ -56,6 +56,12 @@ class BillController extends Controller
 
     public function index()
     {
+        $billsCreators = User::query()->orderBy("name","asc")->get();
+        $contragents = Client::query()->orderBy("name","asc")->get();
+
+        $billCreatorID = \request("bill_creator_id", 0);
+        $contragentID = \request("contragent_id", 0);
+        $billNumber = \request("bill_number", 0);
         $date_start = Carbon::parse(\request('date_start', ($_COOKIE['bill_date_start'] ?? now()->startOfYear())))->startOfDay();
         $date_end = Carbon::parse(\request('date_end', ($_COOKIE['bill_end_start'] ?? now()->endOfYear())))->endOfDay();
         setcookie('bill_date_start', $date_start);
@@ -75,9 +81,19 @@ class BillController extends Controller
             })
             ->orderBy('created_at', 'desc');
         $bills = $bills->whereBetween('created_at', [$date_start, $date_end])->get();
+        if ($billNumber != 0 and $billNumber != "") {
+            $bills = $bills->where("id", "=", $billNumber);
+        }
+        if ($contragentID != 0) {
+            $bills = $bills->where("client_id", "=", $contragentID);
+        }
+        if ($billCreatorID != 0) {
+            $bills = $bills->where("user_id", "=", $billCreatorID);
+        }
         $header = 'Счета';
         $action = '<a class="btn btn-success" href=' . route($this->routes['form']) . ' style="float: right">Создать</a>';
-        return view($this->views['index'], compact('org_ids', 'date_start', 'date_end', 'bills', 'user', 'header', 'action'))->with('routes', $this->routes);
+        return view($this->views['index'],
+            compact('org_ids', 'date_start', 'date_end', 'bills', 'user', 'header', 'action', 'billsCreators', 'contragents','billNumber','contragentID','billCreatorID'))->with('routes', $this->routes);
     }
 
     public function view(Bill $bill)
@@ -146,7 +162,7 @@ class BillController extends Controller
                 $bill->chain_id = $_COOKIE['chain_id'];
         }
 
-        $clients = Client::query()->get();
+        $clients = Client::query()->orderBy("name", "asc")->get();
         $chains = Chain::query()->whereIn('organisation_id', $user->org_ids)->get();
         $header = 'Форма счета';
         return view($this->views['form'], compact('clients', 'bill', 'header', 'chains'))->with('routes', $this->routes);
@@ -232,7 +248,7 @@ class BillController extends Controller
                 ]),
             ]));
         }
-        if (isset($bill->user->phone) and !is_null($bill->user->sms_notice)){
+        if (isset($bill->user->phone) and !is_null($bill->user->sms_notice)) {
             $this->sms->send($bill->user->phone, $text . "\n" . "Счет: " . $bill->id);
         }
 
@@ -255,7 +271,7 @@ class BillController extends Controller
 
             foreach ($users as $user) {
 
-                if (isset($user->phone) and !is_null($user->sms_notice)){
+                if (isset($user->phone) and !is_null($user->sms_notice)) {
                     $this->sms->send($user->phone, $text . "\n" . "Счет: " . $bill->id);
                 }
 
@@ -360,6 +376,13 @@ class BillController extends Controller
 
     public function accept()
     {
+        $billsCreators = User::query()->orderBy("name","asc")->get();
+        $contragents = Client::query()->orderBy("name","asc")->get();
+
+        $billCreatorID = \request("bill_creator_id", 0);
+        $contragentID = \request("contragent_id", 0);
+        $billNumber = \request("bill_number", 0);
+
         $user = auth()->user();
         $org_ids = $user->org_ids;
         $user_id = $user->id;
@@ -375,16 +398,31 @@ class BillController extends Controller
             ->with(['user', 'bill_type', 'bill_status', 'chain'])
             ->with('bill_alerts', function ($query) use ($user_id) {
                 $query->where('user_id', $user_id);
-            })
-            ->get();
-
+            });
+        if ($billNumber != 0 and $billNumber != "") {
+            $bills = $bills->where("id", "=", $billNumber);
+        }
+        if ($contragentID != 0) {
+            $bills = $bills->where("client_id", "=", $contragentID);
+        }
+        if ($billCreatorID != 0) {
+            $bills = $bills->where("user_id", "=", $billCreatorID);
+        }
+        $bills = $bills->get();
         $header = 'Счета для подтверждения';
         $action = '<a class="btn btn-success" href=' . route($this->routes['form']) . ' style="float: right">Создать</a>';
-        return view($this->views['index'], compact('date_end', 'org_ids', 'date_start', 'bills', 'user', 'header', 'action'))->with('routes', $this->routes);
+        return view($this->views['index'], compact('date_end', 'org_ids', 'date_start', 'bills', 'user', 'header', 'action','billsCreators', 'contragents','billNumber','contragentID','billCreatorID'))->with('routes', $this->routes);
     }
 
     public function accepted()
     {
+        $billsCreators = User::query()->orderBy("name","asc")->get();
+        $contragents = Client::query()->orderBy("name","asc")->get();
+
+        $billCreatorID = \request("bill_creator_id", 0);
+        $contragentID = \request("contragent_id", 0);
+        $billNumber = \request("bill_number", 0);
+
         $user = auth()->user();
         $org_ids = $user->org_ids;
         $user_id = $user->id;
@@ -401,16 +439,33 @@ class BillController extends Controller
             ->with('bill_alerts', function ($query) use ($user_id) {
                 $query->where('user_id', $user_id);
             })
-            ->where('status', 1)
-            ->get();
+            ->where('status', 1);
+        if ($billNumber != 0 and $billNumber != "") {
+            $bills = $bills->where("id", "=", $billNumber);
+        }
+        if ($contragentID != 0) {
+            $bills = $bills->where("client_id", "=", $contragentID);
+        }
+        if ($billCreatorID != 0) {
+            $bills = $bills->where("user_id", "=", $billCreatorID);
+        }
+
+        $bills = $bills->get();
 
         $header = 'Подтвержденные счета';
         $action = '<a class="btn btn-success" href=' . route($this->routes['form']) . ' style="float: right">Создать</a>';
-        return view($this->views['index'], compact('org_ids', 'date_start', 'date_end', 'bills', 'user', 'header', 'action'))->with('routes', $this->routes);
+        return view($this->views['index'], compact('org_ids', 'date_start', 'date_end', 'bills', 'user', 'header', 'action','billsCreators', 'contragents','billNumber','contragentID','billCreatorID'))->with('routes', $this->routes);
     }
 
     public function my()
     {
+        $billsCreators = User::query()->orderBy("name","asc")->get();
+        $contragents = Client::query()->orderBy("name","asc")->get();
+
+        $billCreatorID = \request("bill_creator_id", 0);
+        $contragentID = \request("contragent_id", 0);
+        $billNumber = \request("bill_number", 0);
+
         $user = auth()->user();
         $date_start = Carbon::parse(\request('date_start', ($_COOKIE['bill_date_start'] ?? now()->startOfYear())))->startOfDay();
         $date_end = Carbon::parse(\request('date_end', ($_COOKIE['bill_end_start'] ?? now()->endOfYear())))->endOfDay();
@@ -424,13 +479,23 @@ class BillController extends Controller
             ->with(['user', 'bill_type', 'bill_status', 'chain', 'bill_actions'])
             ->with('bill_alerts', function ($query) use ($user_id) {
                 $query->where('user_id', $user_id);
-            })
-            ->get();
+            });
+        if ($billNumber != 0 and $billNumber != "") {
+            $bills = $bills->where("id", "=", $billNumber);
+        }
+        if ($contragentID != 0) {
+            $bills = $bills->where("client_id", "=", $contragentID);
+        }
+        if ($billCreatorID != 0) {
+            $bills = $bills->where("user_id", "=", $billCreatorID);
+        }
+
+        $bills = $bills->get();
         $org_ids = $user->org_ids;
 
         $header = 'Мои счета';
         $action = '<a class="btn btn-success" href=' . route($this->routes['form']) . ' style="float: right">Создать</a>';
-        return view($this->views['index'], compact('date_start', 'org_ids', 'date_end', 'bills', 'user', 'header', 'action'))->with('routes', $this->routes);
+        return view($this->views['index'], compact('date_start', 'org_ids', 'date_end', 'bills', 'user', 'header', 'action','billsCreators', 'contragents','billNumber','contragentID','billCreatorID'))->with('routes', $this->routes);
     }
 
     public function delete(Bill $bill)

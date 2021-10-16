@@ -46,7 +46,6 @@ class KanbanColumnService
                     $query->whereIn("id", $newQ1->pluck("id")->toArray());
                 }
             })->get();
-
         return $answer;
     }
 

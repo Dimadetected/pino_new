@@ -18,6 +18,10 @@ class KanbanTaskResource extends JsonResource
         $user = explode(' ', $this->user->name);
         $master = explode(' ', $this->master->name);
         $worker = explode(' ', $this->worker->name??'');
+        $dateClosed = "";
+        if ($this->kanban_column_id == 4 ){
+            $dateClosed = Carbon::parse($this->updated_at)->format("d.m.Y H:i");
+        }
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -28,6 +32,8 @@ class KanbanTaskResource extends JsonResource
             'master' => $master[0] . ' ' . (isset($master[1]) ? $this->mb_str_split($master[1])[0] . '. ' : '') . (isset($master[2]) ? $this->mb_str_split($master[2])[0] . '. ' : ''),
             'worker' => $worker[0] . ' ' . (isset($worker[1]) ? $this->mb_str_split($worker[1])[0] . '. ' : '') . (isset($worker[2]) ? $this->mb_str_split($worker[2])[0] . '. ' : ''),
             'date' => Carbon::parse($this->date) > now() ?now()->diffInHours(Carbon::parse($this->date)) : 0,
+            'date_created' => Carbon::parse($this->created_at)->format("d.m.Y H:i"),
+            'date_closed' => $dateClosed
 //            'comments' => $this->comments,
 //            'logs' => $this->logs,
         ];

@@ -30,4 +30,9 @@ class KanbanTask extends Model
     {
         return $this->hasMany(Message::class,'external_id','id')->where('type','task_log')->orderByDesc('id');
     }
+
+    protected $casts = [
+        'date'  => 'date:d.m.Y H:i',
+        'success' => 'date:d.m.Y H:i',
+    ];
 }

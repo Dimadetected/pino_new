@@ -103,7 +103,7 @@ class BillController extends Controller
     {
         $user = auth()->user();
 
-        if ($bill->chain()->type == 1)
+        if ($bill->chain->type == 1)
             $header = 'Информарция о счете';
         else
             $header = 'Информарция о заявке';

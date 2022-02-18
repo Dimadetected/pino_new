@@ -51,7 +51,7 @@ class Bill extends Model
         $file = public_path('files/' . $this->id . '.pdf');
         if (is_file($file))
             return 'files/' . $this->id . '.pdf';
-        return $this->file->src[0];
+        return $this->file->src[0] ?? "";
     }
 
     public function mainUserAccept()

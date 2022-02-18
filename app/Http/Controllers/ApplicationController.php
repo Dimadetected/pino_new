@@ -92,9 +92,10 @@ class ApplicationController extends Controller
             $bills = $bills->where("user_id", "=", $billCreatorID);
         }
         $bills = $bills->get();
+        $bill_type = 'заявки';
         $header = 'Заявки для подтверждения';
         $action = '<a class="btn btn-success" href=' . route($this->routes['form']) . ' style="float: right">Создать</a>';
-        return view($this->views['index'], compact('date_end', 'org_ids', 'date_start', 'bills', 'user', 'header', 'action', 'billsCreators', 'contragents', 'billNumber', 'contragentID', 'billCreatorID'))->with('routes', $this->routes);
+        return view($this->views['index'], compact('bill_type','date_end', 'org_ids', 'date_start', 'bills', 'user', 'header', 'action', 'billsCreators', 'contragents', 'billNumber', 'contragentID', 'billCreatorID'))->with('routes', $this->routes);
     }
 
     public function accepted()

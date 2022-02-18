@@ -336,7 +336,7 @@ class BillController extends Controller
                 'files.*' => 'required|mimes:pdf'
             ]);
         } else {
-            if (isset($request->file()['files']) and count($request->file()['files']) > 0) {
+            if (isset($request->files) and count($request->files) > 0) {
                 $request->validate([
                     'text' => 'required',
                     'files.*' => 'required|mimes:pdf,jpeg,doc'
@@ -351,8 +351,9 @@ class BillController extends Controller
 
         $user = auth()->user();
         $files = [];
-        if (isset($request->file()['files'])) {
-            foreach ([$request->file()['files']] as $file) {
+
+        if (isset($request->files)) {
+            foreach ($request->files as $file) {
                 if (!is_dir(public_path('files')))
                     mkdir(public_path('files'), 0777, TRUE);
 

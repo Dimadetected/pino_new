@@ -330,7 +330,7 @@ class BillController extends Controller
                 'files.*' => 'required|mimes:pdf'
             ]);
         } else{
-            if(count([$request->file()['files']]) > 0){
+            if(isset($request->file()['files']) and count($request->file()['files']) > 0){
                 $request->validate([
                     'text' => 'required',
                     'files.*' => 'required|mimes:pdf,jpeg,doc'

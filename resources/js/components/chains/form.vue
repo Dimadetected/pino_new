@@ -123,6 +123,7 @@ export default {
                     this.blocks = [];
                     let i = 0;
                     this.chain_name = res.data.name
+                    this.type_chain = res.data.type
                     res.data.value.map(chain => {
                         this.blocks.push({value: chain})
                         this.selects[i] = chain;

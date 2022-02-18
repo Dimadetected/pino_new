@@ -21,12 +21,12 @@
                                        value="{{\Carbon\Carbon::parse($date_end)->format('d.m.Y')}}">
                             </div>
                             <div class="col-md-4 mt-2">
-                                <label for="">Номер {{$billType}}:</label>
+                                <label for="">Номер {{$bill_type}}:</label>
                                 <input type="text" name="bill_number" class="form-control"
                                        value="{{$billNumber == 0?"":$billNumber}}">
                             </div>
                             <div class="col-md-4 mt-2">
-                                <label for="">Создатель {{$billType}}:</label>
+                                <label for="">Создатель {{$bill_type}}:</label>
                                 <select name="bill_creator_id" class="form-control js-example-basic-single">
                                     <option value="">Не указано</option>
                                     @foreach($billsCreators as $billCreator)

@@ -13,7 +13,7 @@ class AddBillType extends Migration
      */
     public function up()
     {
-        Schema::table('bills', function (Blueprint $table) {
+        Schema::table('chains', function (Blueprint $table) {
             $table->integer('type')->nullable();
         });
     }
@@ -25,9 +25,8 @@ class AddBillType extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string("phone");
-            $table->dropColumn("sms_notice");
+        Schema::table('bills', function (Blueprint $table) {
+            $table->dropColumn("type");
         });
     }
 }

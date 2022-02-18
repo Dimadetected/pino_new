@@ -55,7 +55,7 @@
             <div class="col-12 mt-3">
                 <div class="row">
                     @foreach($bills as $bill)
-                        @if(!in_array($bill->chain->organisation_id,$org_ids))
+                        @if(!isset($bill->chain->organisation_id) or !in_array($bill->chain->organisation_id,$org_ids))
                             @continue
                         @endif
                         <div class="col-md-4 my-2" style="position:relative;">

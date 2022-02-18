@@ -21,12 +21,12 @@
                                        value="{{\Carbon\Carbon::parse($date_end)->format('d.m.Y')}}">
                             </div>
                             <div class="col-md-4 mt-2">
-                                <label for="">Номер счета:</label>
+                                <label for="">Номер {{$billType}}:</label>
                                 <input type="text" name="bill_number" class="form-control"
                                        value="{{$billNumber == 0?"":$billNumber}}">
                             </div>
                             <div class="col-md-4 mt-2">
-                                <label for="">Создатель счета:</label>
+                                <label for="">Создатель {{$billType}}:</label>
                                 <select name="bill_creator_id" class="form-control js-example-basic-single">
                                     <option value="">Не указано</option>
                                     @foreach($billsCreators as $billCreator)
@@ -70,7 +70,7 @@
                             <div style="position: relative"
                                  class="card card-body shadow mb-5 alert @if($bill->status == 1 and is_null($bill->user_role_id) ) alert-success @elseif($bill->status == 2) alert-danger @endif">
                                 <div class=" card-title" style="font-size: 16pt"><a class="text-primary"
-                                                                                    href="{{route($routes['view'],$bill)}}">Счет
+                                                                                    href="{{route($routes['view'],$bill)}}">@if($bill->chain->type == 1)Счет @else Заявка @endif
                                         #{{$bill->id}}</a></div>
                                 <div class=" card-title"
                                      style="font-size: 16pt">{{\Carbon\Carbon::parse($bill->created_at)->format('d.m.Y H:i:s')}}</div>

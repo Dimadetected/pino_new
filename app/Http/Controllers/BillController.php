@@ -102,7 +102,7 @@ class BillController extends Controller
     {
         $user = auth()->user();
         $header = 'Информарция о счете';
-        $print_file = $bill->file->src[0];
+        $print_file = $bill->file->src[0] ?? "";
         foreach ($bill->bill_actions as $action)
             $action->new_date = Carbon::parse($action->created_at)->format('d.m.Y H:i');
         foreach ($bill->messages as $message)

@@ -346,23 +346,25 @@ class BillController extends Controller
 
         $user = auth()->user();
         $files = [];
-        foreach ([$request->file()['files']] as $file) {
-            if (!is_dir(public_path('files')))
-                mkdir(public_path('files'), 0777, TRUE);
+        if (isset($request->file()['files'])) {
+            foreach ([$request->file()['files']] as $file) {
+                if (!is_dir(public_path('files')))
+                    mkdir(public_path('files'), 0777, TRUE);
 
-            $filename = time() . rand(0, 1111111111111111111);
-            $extension = $file->getClientOriginalExtension();
+                $filename = time() . rand(0, 1111111111111111111);
+                $extension = $file->getClientOriginalExtension();
 
-            File::put(public_path('files/' . $filename . '.' . $extension), file_get_contents($file));
-            $files[] = 'files/' . $filename . '.' . $extension;
+                File::put(public_path('files/' . $filename . '.' . $extension), file_get_contents($file));
+                $files[] = 'files/' . $filename . '.' . $extension;
 
-            $pdf = new Fpdi();
-            try {
-                $pdf->setSourceFile('files/' . $filename . '.' . $extension);
-            } catch (\Throwable $e) {
-                $request->validate([
-                    'badVersionFile' => 'required'
-                ]);
+                $pdf = new Fpdi();
+                try {
+                    $pdf->setSourceFile('files/' . $filename . '.' . $extension);
+                } catch (\Throwable $e) {
+                    $request->validate([
+                        'badVersionFile' => 'required'
+                    ]);
+                }
             }
         }
         $file = \App\Models\File::query()->create([

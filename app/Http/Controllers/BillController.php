@@ -107,7 +107,7 @@ class BillController extends Controller
             $action->new_date = Carbon::parse($action->created_at)->format('d.m.Y H:i');
         foreach ($bill->messages as $message)
             $message->new_date = Carbon::parse($message->created_at)->format('d.m.Y H:i');
-        if (isset($bill->file->src)) {
+        if (isset($bill->file->src[0])) {
             $src = explode('.', $bill->file->src[0]);
             if (array_pop($src) == 'pdf') {
                 $bill_user_status = $bill->mainUserAccept();

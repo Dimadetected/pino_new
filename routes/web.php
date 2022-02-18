@@ -38,6 +38,7 @@ Route::prefix('/bill')->name('bill.')->middleware('auth')->group(function () {
     Route::get('print/{bill}', 'App\Http\Controllers\BillController@printBill')->name('print');
 });
 Route::prefix('/applications')->name('application.')->middleware('auth')->group(function () {
+    Route::get('/', 'App\Http\Controllers\ApplicationController@index')->name('index');
     Route::get('/accept', 'App\Http\Controllers\ApplicationController@accept')->name('accept');
     Route::get('/accepted', 'App\Http\Controllers\ApplicationController@accepted')->name('accepted');
     Route::get('/my', 'App\Http\Controllers\ApplicationController@my')->name('my');

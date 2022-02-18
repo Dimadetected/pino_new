@@ -54,6 +54,50 @@ class ApplicationController extends Controller
         $this->sms = new SmsService();
     }
 
+    public function index()
+    {
+        $billsCreators = User::query()->orderBy("name", "asc")->get();
+        $contragents = Client::query()->orderBy("name", "asc")->get();
+
+        $billCreatorID = \request("bill_creator_id", 0);
+        $contragentID = \request("contragent_id", 0);
+        $billNumber = \request("bill_number", 0);
+        $date_start = Carbon::parse(\request('date_start', ($_COOKIE['bill_date_start'] ?? now()->startOfYear())))->startOfDay();
+        $date_end = Carbon::parse(\request('date_end', ($_COOKIE['bill_end_start'] ?? now()->endOfYear())))->endOfDay();
+        setcookie('bill_date_start', $date_start);
+        setcookie('bill_end_start', $date_end);
+        $user = auth()->user();
+        if (is_null($user->remember_token))
+            $user->update(['remember_token' => rand(111111111, 99999999999)]);
+        $org_ids = $user->org_ids;
+        $user_id = $user->id;
+        $bills = Bill::query()
+            ->orderByDesc('id')
+            ->where('user_role_id', $user->user_role_id)
+            ->orWhere('user_id', $user->id)
+            ->with(['user', 'bill_type', 'bill_status', 'bill_actions'])
+            ->with('bill_alerts', function ($query) use ($user_id) {
+                $query->where('user_id', $user_id);
+            })->with('chain', function ($query) {
+                $query->where('type', 2);
+            })
+            ->orderBy('created_at', 'desc');
+        $bills = $bills->whereBetween('created_at', [$date_start, $date_end])->get();
+        if ($billNumber != 0 and $billNumber != "") {
+            $bills = $bills->where("id", "=", $billNumber);
+        }
+        if ($contragentID != 0) {
+            $bills = $bills->where("client_id", "=", $contragentID);
+        }
+        if ($billCreatorID != 0) {
+            $bills = $bills->where("user_id", "=", $billCreatorID);
+        }
+        $header = 'Заявки';
+        $bill_type = 'заявки';
+        $action = '<a class="btn btn-success" href=' . route($this->routes['form']) . ' style="float: right">Создать</a>';
+        return view($this->views['index'],
+            compact('bill_type','org_ids', 'date_start', 'date_end', 'bills', 'user', 'header', 'action', 'billsCreators', 'contragents', 'billNumber', 'contragentID', 'billCreatorID'))->with('routes', $this->routes);
+    }
 
     public function accept()
     {

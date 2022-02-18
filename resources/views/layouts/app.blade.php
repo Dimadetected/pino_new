@@ -90,6 +90,9 @@
                                 Заявки
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{{ route('application.index') }}">
+                                    Все
+                                </a>
                                 <a class="dropdown-item" href="{{ route('application.my') }}">
                                     Мои заявки
                                 </a>

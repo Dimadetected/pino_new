@@ -75,9 +75,11 @@ class BillController extends Controller
             ->orderByDesc('id')
             ->where('user_role_id', $user->user_role_id)
             ->orWhere('user_id', $user->id)
-            ->with(['user', 'bill_type', 'bill_status', 'chain', 'bill_actions'])
+            ->with(['user', 'bill_type', 'bill_status', 'bill_actions'])
             ->with('bill_alerts', function ($query) use ($user_id) {
                 $query->where('user_id', $user_id);
+            })->with('chain', function ($query) {
+                $query->where('type',1 );
             })
             ->orderBy('created_at', 'desc');
         $bills = $bills->whereBetween('created_at', [$date_start, $date_end])->get();
@@ -318,8 +320,30 @@ class BillController extends Controller
         return redirect()->back();
     }
 
-    public function store(BillFormRequest $request, Bill $bill)
+    public function store(Request $request, Bill $bill)
     {
+        $chain = Chain::query()->find($request->chain_id);
+
+        if ($chain->type == 1){
+            $request->validate([
+                'text' => 'required',
+                'files.*' => 'required|mimes:pdf'
+            ]);
+        } else{
+            if(count([$request->file()['files']]) > 0){
+                $request->validate([
+                    'text' => 'required',
+                    'files.*' => 'required|mimes:pdf,jpeg,doc'
+                ]);
+            } else{
+                $request->validate([
+                    'text' => 'required',
+                ]);
+            }
+        }
+
+
+
         $user = auth()->user();
         $files = [];
         foreach ([$request->file()['files']] as $file) {
@@ -350,7 +374,6 @@ class BillController extends Controller
 //            $bill->steps = 2;
 //        }
 
-        $chain = Chain::query()->find($request->chain_id);
         $bill->steps = 0;
         $bill->chain_id = $chain->id;
         $bill->user_role_id = $chain->value[$bill->steps];
@@ -395,9 +418,11 @@ class BillController extends Controller
             ->where('user_role_id', $user->user_role_id)
             ->whereBetween('created_at', [$date_start, $date_end])
             ->where('status', 1)
-            ->with(['user', 'bill_type', 'bill_status', 'chain'])
+            ->with(['user', 'bill_type', 'bill_status'])
             ->with('bill_alerts', function ($query) use ($user_id) {
                 $query->where('user_id', $user_id);
+            })->with('chain', function ($query) {
+                $query->where('type',1 );
             });
         if ($billNumber != 0 and $billNumber != "") {
             $bills = $bills->where("id", "=", $billNumber);
@@ -435,9 +460,11 @@ class BillController extends Controller
             ->orderByDesc('id')
             ->whereIn('id', $actions)
             ->whereBetween('created_at', [$date_start, $date_end])
-            ->with(['user', 'bill_type', 'bill_status', 'chain'])
+            ->with(['user', 'bill_type', 'bill_status'])
             ->with('bill_alerts', function ($query) use ($user_id) {
                 $query->where('user_id', $user_id);
+            })->with('chain', function ($query) {
+                $query->where('type',1 );
             })
             ->where('status', 1);
         if ($billNumber != 0 and $billNumber != "") {
@@ -476,9 +503,11 @@ class BillController extends Controller
             ->orderByDesc('id')
             ->where('user_id', $user->id)
             ->whereBetween('created_at', [$date_start, $date_end])
-            ->with(['user', 'bill_type', 'bill_status', 'chain', 'bill_actions'])
+            ->with(['user', 'bill_type', 'bill_status', 'bill_actions'])
             ->with('bill_alerts', function ($query) use ($user_id) {
                 $query->where('user_id', $user_id);
+            })->with('chain', function ($query) {
+                $query->where('type',1 );
             });
         if ($billNumber != 0 and $billNumber != "") {
             $bills = $bills->where("id", "=", $billNumber);

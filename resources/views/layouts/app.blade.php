@@ -84,6 +84,23 @@
                                 </a>
                             </div>
                         </li>
+                            <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Заявки
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{{ route('application.my') }}">
+                                    Мои заявки
+                                </a>
+                                <a class="dropdown-item" href="{{ route('application.accept') }}">
+                                    Заявки для подтверждения
+                                </a>
+                                <a class="dropdown-item" href="{{ route('application.accepted') }}">
+                                    Подтвержденные заявки
+                                </a>
+                            </div>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link " href="{{ route('kanban.index') }}">Задачи</a>
                         </li>

@@ -28,6 +28,20 @@
                     </div>
                 </div>
             </div>
+            <div class="col-12 card card-body shadow my-2">
+                <div class="row">
+                    <div class="col-md-4">
+                        Признак:
+                    </div>
+                    <div class="col-md-8">
+                        <select class="form-control" v-model="type_chain">
+                            <option :value="tc.id" v-for="tc in type_chains">
+                                {{ tc.name }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
             <div class="col-12 card card-body shadow my-2" v-for="(block,index) in blocks">
                 <div class="row">
                     <div class="col-md-4">
@@ -71,6 +85,16 @@ export default {
     data() {
         return {
             alert: false,
+            type_chain: 1,
+            type_chains: [
+                {
+                    "id" : 1,
+                    "name": "Счет"
+                },{
+                    "id": 2,
+                    "name": "Заявка"
+                }
+            ],
             organisations: [],
             organisation_chain: 0,
             chain_name: '',
@@ -122,7 +146,8 @@ export default {
                             token: 'base64:vfhjJc51xw1vWIRyH+JG36Xux3OP/IAAbOVQi2cjA0c=',
                             name: this.chain_name,
                             organisation_id: this.organisation_chain,
-                            value: arrToSend
+                            value: arrToSend,
+                            type: this.type_chain,
                         }
                     ),
                     headers: {

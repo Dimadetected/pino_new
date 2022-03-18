@@ -7,8 +7,10 @@ require('jquery-mask-plugin/dist/jquery.mask.min')
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import '@fancyapps/fancybox/dist/jquery.fancybox.min'
 import VModal from 'vue-js-modal'
 Vue.config.productionTip = false
+
 
 // Install BootstrapVue
 Vue.use(BootstrapVue)
@@ -32,6 +34,7 @@ Vue.component('chains-index', require('./components/chains/index.vue').default);
 Vue.component('organisations-form', require('./components/organisations/form.vue').default);
 Vue.component('organisations-index', require('./components/organisations/index.vue').default);
 
+Vue.component('users-create', require('./components/users/create.vue').default);
 Vue.component('users-form', require('./components/users/form.vue').default);
 Vue.component('users-index', require('./components/users/index.vue').default);
 

@@ -20,6 +20,10 @@ class UserService
 
     public function store($array)
     {
+        if (isset($array["password"])){
+            $array["password"] = bcrypt($array["password"]);
+        }
+
         return $this->query()->create($array);
     }
 

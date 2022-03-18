@@ -23,6 +23,7 @@ Route::get("register", function (){
 Route::get('/', function () {
     return view('welcome');
 });
+Route::post('api/messages/file','App\Http\Controllers\Api\MessageController@fileUpload');
 
 Route::prefix('/bill')->name('bill.')->middleware('auth')->group(function () {
     Route::get('/consult', 'App\Http\Controllers\BillController@consult')->name('consult');
@@ -60,6 +61,7 @@ Route::prefix('/organisations')->name('organisations.')->middleware('auth')->gro
 Route::prefix('/users')->name('users.')->middleware('auth')->group(function () {
     Route::get('/', 'App\Http\Controllers\UserController@index')->name('index');
     Route::get('/form/{user?}', 'App\Http\Controllers\UserController@form')->name('form');
+    Route::get('/create', 'App\Http\Controllers\UserController@create')->name('create');
 });
 Route::prefix('/kanban')->name('kanban.')->middleware('auth')->group(function () {
     Route::get('/', 'App\Http\Controllers\KanbanController@index')->name('index');

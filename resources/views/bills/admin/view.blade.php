@@ -5,12 +5,12 @@
 @section('content')
     <div class="container">
         <div class="row ">
-            <div class="col-md-8">
+            <div class="col-md-7">
                 <div class="card card-body shadow mb-1" style="min-height: 90vh">
                     <div class=" card-title" style="font-size: 16pt"><a href="#">@if($bill->chain->type == 1)Счет@else Заявка @endif #{{$bill->id}}</a></div>
                     <div class=" card-title"
                          style="font-size: 16pt">{{\Carbon\Carbon::parse($bill->created_at)->format('d.m.Y')}}</div>
-                    <div class="col-md-6 " style="font-size: 16pt">
+                    <div class="col-md-12 " style="font-size: 16pt">
                         <div class="row pl-0">
                             <div class="col-6 pl-0">Цепочка:</div>
                             <div class="col-6 pl-0">{{$bill->chain->name}}</div>
@@ -63,7 +63,7 @@
                     @endif
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-5">
 
                 <div class="card card-body shadow mb-5">
                     @if($bill->steps ==0  and $bill->user_id == auth()->user()->id)
@@ -100,16 +100,80 @@
                     <bill-actions :messages="{{$bill->messages}}" :actions="{{$bill->bill_actions}}"></bill-actions>
                     <hr class="mt-4">
                     <div class="mt-3">
-                        <message-create :user_id="'{{auth()->user()->id}}'" :type="'bill'"
-                                        external_id="{{(int)$bill->id}}"></message-create>
+                        <form method="post" action="/api/messages" enctype="multipart/form-data">
+                            @csrf
+                            <textarea name="text" id="" class="form-control"></textarea>
+                            <input type="text" hidden value="{{auth()->user()->id}}" name="user_id">
+                            <input type="text" hidden value="{{(int)$bill->id}}" name="external_id">
+                            <input type="text" hidden value="bill" name="type">
+                            <input type="file" name="files[]" class="form-control-file exampleFormControlFile1 form-control my-2" multiple
+                                   id="exampleFormControlFile1">
+                            <button class="btn btn-danger mt-2 btn-block " @click="clear($event)">Очистить файлы</button>
+                            <button class="btn btn-success mt-2 btn-block ">Отправить</button>
+                        </form>
+{{--                        <message-create :user_id="'{{auth()->user()->id}}'" :type="'bill'"--}}
+{{--                                        external_id="{{(int)$bill->id}}"></message-create>--}}
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <script>
+        var fileForm = new DataTransfer()
         function print() {
             window.open('/{{$print_file}}').print();
+        }
+
+        if (!window.Clipboard) {
+            console.log(2222)
+            var pasteCatcher = document.createElement("div");
+
+            // Firefox вставляет все изображения в элементы с contenteditable
+            pasteCatcher.setAttribute("contenteditable", "");
+
+            pasteCatcher.style.display = "none";
+            document.body.appendChild(pasteCatcher);
+
+            // элемент должен быть в фокусе
+            pasteCatcher.focus();
+            document.addEventListener("click", function () {
+                pasteCatcher.focus();
+            });
+        }
+        // добавляем обработчик событию
+        window.addEventListener("paste", pasteHandler);
+
+        function clear(e){
+            e.preventDefault()
+            fileForm = new DataTransfer()
+        }
+
+        function pasteHandler(e) {
+            // если поддерживается event.clipboardData (Chrome)
+            if (e.clipboardData) {
+                // получаем все содержимое буфера
+                var items = e.clipboardData.items;
+                if (items) {
+                    // находим изображение
+                    for (var i = 0; i < items.length; i++) {
+                        if (items[i].type.indexOf("image") !== -1) {
+                            // представляем изображение в виде файла
+                            var blob = items[i].getAsFile();
+
+                            var fileInput = document.getElementById("exampleFormControlFile1")
+                            // fileInput.files = blob
+                            let file = new File([blob], "img.jpg", {type: "image/jpeg", lastModified: new Date().getTime()});
+                            console.log(fileForm.files.length)
+                            fileForm.items.add(file);
+                            fileInput.files = fileForm.files;
+                            console.log(fileForm.files.length)
+
+                        }
+                    }
+                }
+                // для Firefox проверяем элемент с атрибутом contenteditable
+            } else {
+            }
         }
     </script>
 @endsection

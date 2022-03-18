@@ -12,6 +12,7 @@ use App\Models\Message;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\File;
 
 class MessageController extends Controller
 {
@@ -19,6 +20,11 @@ class MessageController extends Controller
 
     public function index()
     {
+    }
+
+    public function fileUpload($id)
+    {
+        return $id;
     }
 
     public function store(Request $request)
@@ -35,35 +41,57 @@ class MessageController extends Controller
                 ->groupBy("user_id")
                 ->pluck("user_id")
                 ->toArray();
-            $users_id = array_merge($users_id,$bill->messages()->groupBy("user_id")->pluck("user_id")->toArray());
+            $users_id = array_merge($users_id, $bill->messages()->groupBy("user_id")->pluck("user_id")->toArray());
             $users = User::query()->find($users_id);
             foreach ($users as $user) {
                 $buttons[] = [['text' => 'Счет', 'url' => route('bill.view', $bill->id)]];
-                echo $user->id . "\n";
-                echo $user->tg_notice . "\n";
                 if (isset($user->tg_id) and !is_null($user->tg_notice)) {
-                    echo $user->tg_id . "\n";
                     logger($this->telegram->sendMessage([
                         'chat_id' => $user->tg_id,
-                        'text' => "В счете №" . $bill->id .".\n". $sender->name . " оставлил комментарий: \n" . $request->text,
+                        'text' => "В счете №" . $bill->id . ".\n" . $sender->name . " оставлил комментарий: \n" . $request->text,
                         'reply_markup' => json_encode(['inline_keyboard' =>
                             $buttons,
                         ]),
                     ]));
                 }
-                if (isset($user->phone) and !is_null($user->sms_notice)){
-                    $this->sms->send($user->phone, "В счете №" . $bill->id .".\n". $sender->name . " оставлил комментарий: \n");
+                if (isset($user->phone) and !is_null($user->sms_notice)) {
+//                    $this->sms->send($user->phone, "В счете №" . $bill->id .".\n". $sender->name . " оставлил комментарий: \n");
                 }
             }
         }
 
 
-        return response()->json(Message::query()->create([
+        $message = Message::query()->create([
             'type' => $request->type,
             'external_id' => $request->external_id,
             'user_id' => $request->user_id,
             'text' => $request->text,
-        ]));
+        ]);
+
+        $files = [];
+        if (isset($request->files)) {
+            foreach ($request->files as $moreFiles) {
+                foreach ($moreFiles as $file) {
+
+                    if (!is_dir(public_path('files')))
+                        mkdir(public_path('files'), 0777, TRUE);
+                    if (!is_dir(public_path('files/messages')))
+                        mkdir(public_path('files/messages'), 0777, TRUE);
+
+                    $extension = $file->getClientOriginalExtension();
+                    $path = 'files/messages/messageID' . $message->id . '.' . $extension;
+                    File::put(public_path($path), file_get_contents($file));
+                    $files[] = $path;
+
+                }
+            }
+        }
+
+        $file = \App\Models\File::query()->create([
+            'src' => $files,
+        ]);
+
+        return redirect()->back();
     }
 
     /**

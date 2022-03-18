@@ -23,11 +23,11 @@
                     </div>
                     <div class="form-group">
                         <label for="number">Номер:</label>
-                        <input type="text" name="number" id="number" class="form-control" value="{{old('number')}}">
+                        <input type="text" name="number" id="number" class="form-control" value="{{old('number')??0}}">
                     </div>
                     <div class="form-group">
                         <label for="date">Дата:</label>
-                        <input type="text" name="date" id="date" placeholder="дд.мм.гггг" class="form-control" value="{{old('date')}}"
+                        <input type="text" name="date" id="date" placeholder="дд.мм.гггг" class="form-control" value="{{old('date')??now()->format("d.m.Y")}}"
                                onkeyup="dateCheck()">
                     </div>
                     <div class="form-group">
@@ -40,7 +40,7 @@
                     </div>
                     <div class="form-group">
                         <label for="sum">Сумма:</label>
-                        <input type="text" name="sum" id="sum" value="{{old('sum')}}" class="form-control">
+                        <input type="text" name="sum" id="sum" value="{{old('sum')??0}}" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="text">Описание счета:</label>
@@ -60,7 +60,7 @@
                         </div>
                         @enderror
                         <label for="exampleFormControlFile1">Выберите файлы</label>
-                        <input type="file" name="files" class="form-control-file" multiple
+                        <input type="file" name="files" class="form-control-file exampleFormControlFile1" multiple
                                id="exampleFormControlFile1">
                     </div>
 
@@ -72,9 +72,60 @@
 
 @endsection
 @section('script')
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
+        {{--        --}}
+        if (!window.Clipboard) {
+            console.log(2222)
+            var pasteCatcher = document.createElement("div");
+
+            // Firefox вставляет все изображения в элементы с contenteditable
+            pasteCatcher.setAttribute("contenteditable", "");
+
+            pasteCatcher.style.display = "none";
+            document.body.appendChild(pasteCatcher);
+
+            // элемент должен быть в фокусе
+            pasteCatcher.focus();
+            document.addEventListener("click", function () {
+                pasteCatcher.focus();
+            });
+        }
+        // добавляем обработчик событию
+        window.addEventListener("paste", pasteHandler);
+
+        function pasteHandler(e) {
+// если поддерживается event.clipboardData (Chrome)
+            if (e.clipboardData) {
+                // получаем все содержимое буфера
+                var items = e.clipboardData.items;
+                if (items) {
+                    // находим изображение
+                    for (var i = 0; i < items.length; i++) {
+                        if (items[i].type.indexOf("image") !== -1) {
+                            // представляем изображение в виде файла
+                            var blob = items[i].getAsFile();
+                            console.log("blob",blob)
+
+                            var fileInput = document.getElementById("exampleFormControlFile1")
+                            // fileInput.files = blob
+                            let file = new File([blob], "img.jpg",{type:"image/jpeg", lastModified:new Date().getTime()});
+                            let container = new DataTransfer();
+
+                            container.items.add(file);
+                            fileInput.files = container.files;
+                        }
+                    }
+                }
+                // для Firefox проверяем элемент с атрибутом contenteditable
+            } else {
+            }
+        }
+
+
+        {{----}}
+
         $('#date').mask('00.00.0000');
         // function dateCheck() {
         //     let val = document.getElementById('date').value;
@@ -84,9 +135,10 @@
         //         document.getElementById('date').value = val.substring(0, 10)
         //     }
         // }
-        $(document).ready(function() {
+        $(document).ready(function () {
             $('.js-example-basic-single').select2();
         });
+
         function changeCookies() {
             let val = document.getElementById('chain_id').value
             console.log(val)

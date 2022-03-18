@@ -26,6 +26,13 @@
                     <span class="pl-4">{{ message.text }}</span>
                 <div class="text-right">{{ message.new_date }}</div>
                 </p>
+                <div v-for="img in message.images">
+                    <a :href="'/'+img" download class="btn btn-primary">Скачать файл</a>
+                    <a :href="'/'+img" data-fancybox data-caption="Просмотр фото" >
+                        <img  :src="'/'+img" alt="" class="my-3">
+                    </a>
+                </div>
+
                 <hr v-if="index !== actions.length">
             </div>
         </div>
@@ -33,6 +40,8 @@
 </template>
 
 <script>
+import '@fancyapps/fancybox/dist/jquery.fancybox.min'
+
 export default {
     mounted() {
        console.log(new Date().getTimezoneOffset())

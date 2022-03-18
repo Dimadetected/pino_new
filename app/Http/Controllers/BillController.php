@@ -96,7 +96,7 @@ class BillController extends Controller
         $bill_type = 'счета';
         $action = '<a class="btn btn-success" href=' . route($this->routes['form']) . ' style="float: right">Создать</a>';
         return view($this->views['index'],
-            compact('bill_type','org_ids', 'date_start', 'date_end', 'bills', 'user', 'header', 'action', 'billsCreators', 'contragents', 'billNumber', 'contragentID', 'billCreatorID'))->with('routes', $this->routes);
+            compact('bill_type', 'org_ids', 'date_start', 'date_end', 'bills', 'user', 'header', 'action', 'billsCreators', 'contragents', 'billNumber', 'contragentID', 'billCreatorID'))->with('routes', $this->routes);
     }
 
     public function view(Bill $bill)
@@ -111,8 +111,13 @@ class BillController extends Controller
         $print_file = $bill->file->src[0] ?? "";
         foreach ($bill->bill_actions as $action)
             $action->new_date = Carbon::parse($action->created_at)->format('d.m.Y H:i');
-        foreach ($bill->messages as $message)
+        foreach ($bill->messages as $message) {
             $message->new_date = Carbon::parse($message->created_at)->format('d.m.Y H:i');
+            $file = \App\Models\File::query()->where('src', 'LIKE', '%messageID' . $message->id . '%')->first();
+            $message->images = [];
+            if (isset($file->src) and count($file->src) > 0)
+                $message->images = $file->src;
+        }
         if (isset($bill->file->src[0])) {
             $src = explode('.', $bill->file->src[0]);
             if (array_pop($src) == 'pdf') {
@@ -329,7 +334,6 @@ class BillController extends Controller
     public function store(Request $request, Bill $bill)
     {
         $chain = Chain::query()->find($request->chain_id);
-
         if ($chain->type == 1) {
             $request->validate([
                 'text' => 'required',
@@ -387,7 +391,14 @@ class BillController extends Controller
         $bill->user_role_id = $chain->value[$bill->steps];
 
         $bill->number = $request->number;
+        if ($bill->number == "" or $bill->number == 0) {
+            $bill->number = 0;
+        }
+
         $bill->sum = str_replace(',', '.', $request->sum);
+        if ($bill->sum == "" or $bill->sum == 0) {
+            $bill->sum = 0;
+        }
         $bill->client_id = $request->client_id;
         $bill->date = Carbon::parse($request->date)->toDateString();
         $bill->text = $request->text;

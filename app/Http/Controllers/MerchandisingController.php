@@ -186,7 +186,6 @@ class MerchandisingController extends Controller
             $sheet->setCellValueByColumnAndRow(2, $startLine, Carbon::parse($m->date)->format("d.m.Y"));
             $sheet->setCellValueByColumnAndRow(3, $startLine, $m->user->name);
             $sheet->setCellValueByColumnAndRow(4, $startLine, $m->product->name);
-            dd($m->balance);
             $sheet->setCellValueByColumnAndRow(5, $startLine, $m->balance);
             $sheet->setCellValueByColumnAndRow(6, $startLine, $m->price);
             $sheet->setCellValueByColumnAndRow(7, $startLine, Carbon::parse($m->bottled_date)->format("d.m.Y"));

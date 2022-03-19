@@ -130,7 +130,6 @@ class MerchandisingController extends Controller
         return redirect()->route($this->routes['index']);
     }
     public function createExcel(){
-
         $userID = \request('user_id',0);
         $netID = \request('net_id',0);
         $date_start = Carbon::parse(\request('date_start', ($_COOKIE['merch_date_start'] ?? now()->subMonth())))->startOfDay();
@@ -200,9 +199,11 @@ class MerchandisingController extends Controller
         $file = "merchandising.xlsx";
 
         $objWriter = new \PHPExcel_Writer_Excel2007($document);
+
         $objWriter->save($file);
 
         // Имя скачиваемого файла
+//        header('Content-Type: application/vnd.ms-excel');
         header("Content-Type: application/octet-stream");
         header("Accept-Ranges: bytes");
         header("Content-Length: ".filesize($file));
@@ -211,7 +212,7 @@ class MerchandisingController extends Controller
 
         unlink($file);
 
-        return redirect()->route($this->routes["index"]);
+        exit;
 
     }
 }

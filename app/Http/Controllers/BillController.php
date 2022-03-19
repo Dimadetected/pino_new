@@ -62,13 +62,18 @@ class BillController extends Controller
         $billCreatorID = \request("bill_creator_id", 0);
         $contragentID = \request("contragent_id", 0);
         $billNumber = \request("bill_number", 0);
+
         $date_start = Carbon::parse(\request('date_start', ($_COOKIE['bill_date_start'] ?? now()->startOfYear())))->startOfDay();
         $date_end = Carbon::parse(\request('date_end', ($_COOKIE['bill_end_start'] ?? now()->endOfYear())))->endOfDay();
         setcookie('bill_date_start', $date_start);
         setcookie('bill_end_start', $date_end);
+
         $user = auth()->user();
         if (is_null($user->remember_token))
             $user->update(['remember_token' => rand(111111111, 99999999999)]);
+
+
+
         $org_ids = $user->org_ids;
         $user_id = $user->id;
         $bills = Bill::query()

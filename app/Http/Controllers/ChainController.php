@@ -20,19 +20,27 @@ class ChainController extends Controller
         'index' => 'chains.admin.index',
         'form' => 'chains.admin.form',
     ];
-    
+
     public function index()
     {
+        if (auth()->user()->user_role_id != 1){
+            abort(401);
+        }
+
         $header = 'Цепочки';
-    
+
         return view($this->views['index'], compact('header'));
     }
-    
+
     public function form($id = 0)
     {
+        if (auth()->user()->user_role_id != 1){
+            abort(401);
+        }
+
         $header = 'Конструктор цепочек';
-        
+
         return view($this->views['form'], compact('header', 'id'));
     }
-    
+
 }

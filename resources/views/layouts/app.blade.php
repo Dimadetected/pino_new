@@ -24,6 +24,7 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <!-- Styles -->
     <link rel="stylesheet" href="{{ asset('css/app.css' . '?v='. time()) }}">
+    <link rel="stylesheet" href="{{ public_path("/jquery.maskedinput.min.js") }}">
 
     @livewireStyles
 
@@ -39,7 +40,7 @@
 <div class="bg-gray-100" style="min-height: 90vh">
     <div class="row">
         <div class="col-md-8 offset-md-2">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light px-4 px-md-2">
                 <a class="navbar-brand" href="/bill">Пино</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse"
                         data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -64,6 +65,12 @@
                                     </a>
                                     <a class="dropdown-item" href="{{ route('users.index') }}">
                                         Пользователи
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('net.index') }}">
+                                        Сети
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('product.index') }}">
+                                        Товары
                                     </a>
                                 </div>
                             </li>
@@ -104,6 +111,9 @@
                                     Подтвержденные заявки
                                 </a>
                             </div>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link " href="{{ route('merchandising.index') }}">Мерчендайзинг</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link " href="{{ route('kanban.index') }}">Задачи</a>

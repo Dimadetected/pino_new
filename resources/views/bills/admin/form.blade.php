@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="row ">
-        <div class="col-md-4 offset-md-4">
+        <div class="col-10 offset-1 col-lg-4 offset-lg-4">
             <form action="{{route($routes['store'],$bill)}}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="card card-body">

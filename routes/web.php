@@ -44,6 +44,25 @@ Route::prefix('/applications')->name('application.')->middleware('auth')->group(
     Route::get('/accepted', 'App\Http\Controllers\ApplicationController@accepted')->name('accepted');
     Route::get('/my', 'App\Http\Controllers\ApplicationController@my')->name('my');
 });
+Route::prefix('/nets')->name('net.')->middleware('auth')->group(function () {
+    Route::get('/', 'App\Http\Controllers\NetController@index')->name('index');
+    Route::get('/form/{net?}', 'App\Http\Controllers\NetController@form')->name('form');
+    Route::get('/delete/{net?}', 'App\Http\Controllers\NetController@delete')->name('delete');
+    Route::post('/', 'App\Http\Controllers\NetController@store')->name('store');
+});
+Route::prefix('/products')->name('product.')->middleware('auth')->group(function () {
+    Route::get('/', 'App\Http\Controllers\ProductController@index')->name('index');
+    Route::get('/form/{product?}', 'App\Http\Controllers\ProductController@form')->name('form');
+    Route::get('/delete/{product?}', 'App\Http\Controllers\ProductController@delete')->name('delete');
+    Route::post('/', 'App\Http\Controllers\ProductController@store')->name('store');
+});
+Route::prefix('/merchandisings')->name('merchandising.')->middleware('auth')->group(function () {
+    Route::get('/', 'App\Http\Controllers\MerchandisingController@index')->name('index');
+    Route::get('/form/{merchandising?}', 'App\Http\Controllers\MerchandisingController@form')->name('form');
+    Route::get('/delete/{merchandising?}', 'App\Http\Controllers\MerchandisingController@delete')->name('delete');
+    Route::post('/', 'App\Http\Controllers\MerchandisingController@store')->name('store');
+    Route::get('/excel', 'App\Http\Controllers\MerchandisingController@createExcel')->name('excel');
+});
 Route::prefix('/contracts')->name('contracts.')->middleware('auth')->group(function () {
     Route::get('/form/{contract?}/', 'App\Http\Controllers\ContractController@form')->name('form');
     Route::get('/{contract}', 'App\Http\Controllers\ContractController@show')->name('show');

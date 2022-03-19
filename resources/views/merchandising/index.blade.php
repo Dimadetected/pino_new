@@ -50,7 +50,7 @@
                         <div class="row text-right">
                             <div class="offset-md-6 col-md-6 text-right">
                                 @if(auth()->user()->user_role_id == 1)
-                                    <a href="{{$merchLink}}" target="_blank" download="" class="btn btn-success">
+                                    <a href="{{$merchLink}}" target="_blank" class="btn btn-success">
                                         Скачать xlsx
                                     </a>
                                 @endif

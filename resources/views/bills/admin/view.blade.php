@@ -36,8 +36,15 @@
                     <hr>
                     <p class="my-3">{{$bill->text}}</p>
                     @if($bill->printFile())
-                        <embed src="/{{$bill->printFile()}}" class="mt-1  files{{$bill->id}}"
-                               type="application/pdf" height="400px" width="100%">
+                        @if(isset(explode(".",$bill->printFile())[1]))
+                            @if(in_array(explode(".",$bill->printFile())[1],["jpg","jpeg","jfif","tiff","png"]))
+                                <img src="/{{$bill->printFile()}}" class="mt-1  files{{$bill->id}}" height="400px" width="100%">
+                            @else
+                                <embed src="/{{$bill->printFile()}}" class="mt-1  files{{$bill->id}}"
+                                       type="application/pdf" height="400px" width="100%">
+                            @endif
+                        @endif
+
                         <div class="col-12">
                             <div class="row text-center">
                                 <button class=" col-md-10 btn btn-block btn-primary mt-2 shadow btnShowFile"
@@ -111,8 +118,8 @@
                             <button class="btn btn-danger mt-2 btn-block " @click="clear($event)">Очистить файлы</button>
                             <button class="btn btn-success mt-2 btn-block ">Отправить</button>
                         </form>
-{{--                        <message-create :user_id="'{{auth()->user()->id}}'" :type="'bill'"--}}
-{{--                                        external_id="{{(int)$bill->id}}"></message-create>--}}
+                        {{--                        <message-create :user_id="'{{auth()->user()->id}}'" :type="'bill'"--}}
+                        {{--                                        external_id="{{(int)$bill->id}}"></message-create>--}}
                     </div>
                 </div>
             </div>
@@ -120,6 +127,7 @@
     </div>
     <script>
         var fileForm = new DataTransfer()
+
         function print() {
             window.open('/{{$print_file}}').print();
         }
@@ -128,13 +136,13 @@
             console.log(2222)
             var pasteCatcher = document.createElement("div");
 
-            // Firefox вставляет все изображения в элементы с contenteditable
+// Firefox вставляет все изображения в элементы с contenteditable
             pasteCatcher.setAttribute("contenteditable", "");
 
             pasteCatcher.style.display = "none";
             document.body.appendChild(pasteCatcher);
 
-            // элемент должен быть в фокусе
+// элемент должен быть в фокусе
             pasteCatcher.focus();
             document.addEventListener("click", function () {
                 pasteCatcher.focus();
@@ -143,15 +151,15 @@
         // добавляем обработчик событию
         window.addEventListener("paste", pasteHandler);
 
-        function clear(e){
+        function clear(e) {
             e.preventDefault()
             fileForm = new DataTransfer()
         }
 
         function pasteHandler(e) {
-            // если поддерживается event.clipboardData (Chrome)
+// если поддерживается event.clipboardData (Chrome)
             if (e.clipboardData) {
-                // получаем все содержимое буфера
+// получаем все содержимое буфера
                 var items = e.clipboardData.items;
                 if (items) {
                     // находим изображение
@@ -171,7 +179,7 @@
                         }
                     }
                 }
-                // для Firefox проверяем элемент с атрибутом contenteditable
+// для Firefox проверяем элемент с атрибутом contenteditable
             } else {
             }
         }

@@ -73,7 +73,6 @@ class BillController extends Controller
             $user->update(['remember_token' => rand(111111111, 99999999999)]);
 
 
-
         $org_ids = $user->org_ids;
         $user_id = $user->id;
         $bills = Bill::query()
@@ -373,13 +372,14 @@ class BillController extends Controller
                 $files[] = 'files/' . $filename . '.' . $extension;
 
                 $pdf = new Fpdi();
-                try {
-                    $pdf->setSourceFile('files/' . $filename . '.' . $extension);
-                } catch (\Throwable $e) {
-                    $request->validate([
-                        'badVersionFile' => 'required'
-                    ]);
-                }
+                if ($chain->type == 1)
+                    try {
+                        $pdf->setSourceFile('files/' . $filename . '.' . $extension);
+                    } catch (\Throwable $e) {
+                        $request->validate([
+                            'badVersionFile' => 'required'
+                        ]);
+                    }
             }
         }
         $file = \App\Models\File::query()->create([

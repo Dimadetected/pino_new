@@ -9,15 +9,17 @@
                 @csrf
                 <div class="card card-body">
                     <div class="form-group">
-                        <div class="h2">Создание счета:</div>
+                        <div class="h2">Создание @if(request("type") == 1)счета @else заявки @endif:</div>
                         <hr>
                     </div>
                     <div class="form-group">
                         <label for="chain_id">Цепочка:</label>
                         <select name="chain_id" id="chain_id" class="form-control" onchange="changeCookies()">
                             @foreach($chains as $chain)
-                                <option @if($bill->chain_id == $chain->id) selected @elseif(old('chain_id') and old('chain_id') == $chain->id) selected
-                                        @endif value="{{$chain->id}}">{{$chain->name}}</option>
+                                @if(request("type") == $chain->type)
+                                    <option @if($bill->chain_id == $chain->id) selected @elseif(old('chain_id') and old('chain_id') == $chain->id) selected
+                                            @endif value="{{$chain->id}}">{{$chain->name}}</option>
+                                @endif
                             @endforeach
                         </select>
                     </div>
@@ -43,7 +45,7 @@
                         <input type="text" name="sum" id="sum" value="{{old('sum')??0}}" class="form-control">
                     </div>
                     <div class="form-group">
-                        <label for="text">Описание счета:</label>
+                        <label for="text">Описание @if(request("type") == 1)счета: @else заявки:@endif</label>
                         <textarea name="text" id="text" cols="30" rows="5"
                                   class="form-control @error('text') is-invalid @enderror">{{old('text')}}</textarea>
                     </div>
@@ -106,11 +108,11 @@
                         if (items[i].type.indexOf("image") !== -1) {
                             // представляем изображение в виде файла
                             var blob = items[i].getAsFile();
-                            console.log("blob",blob)
+                            console.log("blob", blob)
 
                             var fileInput = document.getElementById("exampleFormControlFile1")
                             // fileInput.files = blob
-                            let file = new File([blob], "img.jpg",{type:"image/jpeg", lastModified:new Date().getTime()});
+                            let file = new File([blob], "img.jpg", {type: "image/jpeg", lastModified: new Date().getTime()});
                             let container = new DataTransfer();
 
                             container.items.add(file);

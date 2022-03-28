@@ -98,7 +98,7 @@ class BillController extends Controller
         }
         $header = 'Счета';
         $bill_type = 'счета';
-        $action = '<a class="btn btn-success" href=' . route($this->routes['form']) . ' style="float: right">Создать</a>';
+        $action = '<a class="btn btn-success" href=' . route($this->routes['form'],["type"=>1]) . ' style="float: right">Создать</a>';
         return view($this->views['index'],
             compact('bill_type', 'org_ids', 'date_start', 'date_end', 'bills', 'user', 'header', 'action', 'billsCreators', 'contragents', 'billNumber', 'contragentID', 'billCreatorID'))->with('routes', $this->routes);
     }
@@ -460,7 +460,7 @@ class BillController extends Controller
         $bills = $bills->get();
         $header = 'Счета для подтверждения';
         $bill_type = 'счета';
-        $action = '<a class="btn btn-success" href=' . route($this->routes['form']) . ' style="float: right">Создать</a>';
+        $action = '<a class="btn btn-success" href=' . route($this->routes['form'],["type"=>1]) . ' style="float: right">Создать</a>';
         return view($this->views['index'], compact('date_end', 'bill_type', 'org_ids', 'date_start', 'bills', 'user', 'header', 'action', 'billsCreators', 'contragents', 'billNumber', 'contragentID', 'billCreatorID'))->with('routes', $this->routes);
     }
 
@@ -507,7 +507,7 @@ class BillController extends Controller
         $header = 'Подтвержденные счета';
         $bill_type = 'счета';
 
-        $action = '<a class="btn btn-success" href=' . route($this->routes['form']) . ' style="float: right">Создать</a>';
+        $action = '<a class="btn btn-success" href=' . route($this->routes['form'],["type"=>1]) . ' style="float: right">Создать</a>';
         return view($this->views['index'], compact('bill_type', 'org_ids', 'date_start', 'date_end', 'bills', 'user', 'header', 'action', 'billsCreators', 'contragents', 'billNumber', 'contragentID', 'billCreatorID'))->with('routes', $this->routes);
     }
 
@@ -551,7 +551,7 @@ class BillController extends Controller
 
         $header = 'Мои счета';
         $bill_type = 'счета';
-        $action = '<a class="btn btn-success" href=' . route($this->routes['form']) . ' style="float: right">Создать</a>';
+        $action = '<a class="btn btn-success" href=' . route($this->routes['form'],["type"=>1]) . ' style="float: right">Создать</a>';
         return view($this->views['index'], compact('bill_type', 'date_start', 'org_ids', 'date_end', 'bills', 'user', 'header', 'action', 'billsCreators', 'contragents', 'billNumber', 'contragentID', 'billCreatorID'))->with('routes', $this->routes);
     }
 

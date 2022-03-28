@@ -94,7 +94,7 @@ class ApplicationController extends Controller
         }
         $header = 'Заявки';
         $bill_type = 'заявки';
-        $action = '<a class="btn btn-success" href=' . route($this->routes['form']) . ' style="float: right">Создать</a>';
+        $action = '<a class="btn btn-success" href=' . route($this->routes['form'],["type"=>2]) . ' style="float: right">Создать</a>';
         return view($this->views['index'],
             compact('bill_type','org_ids', 'date_start', 'date_end', 'bills', 'user', 'header', 'action', 'billsCreators', 'contragents', 'billNumber', 'contragentID', 'billCreatorID'))->with('routes', $this->routes);
     }
@@ -138,7 +138,7 @@ class ApplicationController extends Controller
         $bills = $bills->get();
         $bill_type = 'заявки';
         $header = 'Заявки для подтверждения';
-        $action = '<a class="btn btn-success" href=' . route($this->routes['form']) . ' style="float: right">Создать</a>';
+        $action = '<a class="btn btn-success" href=' . route($this->routes['form'],["type"=>2]) . ' style="float: right">Создать</a>';
         return view($this->views['index'], compact('bill_type','date_end', 'org_ids', 'date_start', 'bills', 'user', 'header', 'action', 'billsCreators', 'contragents', 'billNumber', 'contragentID', 'billCreatorID'))->with('routes', $this->routes);
     }
 
@@ -185,7 +185,7 @@ class ApplicationController extends Controller
         $header = 'Подтвержденные заявки';
         $bill_type = 'заявки';
 
-        $action = '<a class="btn btn-success" href=' . route($this->routes['form']) . ' style="float: right">Создать</a>';
+        $action = '<a class="btn btn-success" href=' . route($this->routes['form'],["type"=>2]) . ' style="float: right">Создать</a>';
         return view($this->views['index'], compact('bill_type','org_ids', 'date_start', 'date_end', 'bills', 'user', 'header', 'action', 'billsCreators', 'contragents', 'billNumber', 'contragentID', 'billCreatorID'))->with('routes', $this->routes);
     }
 
@@ -229,7 +229,7 @@ class ApplicationController extends Controller
 
         $header = 'Мои заявки';
         $bill_type = 'заявки';
-        $action = '<a class="btn btn-success" href=' . route($this->routes['form']) . ' style="float: right">Создать</a>';
+        $action = '<a class="btn btn-success" href=' . route($this->routes['form'],["type"=>2]) . ' style="float: right">Создать</a>';
         return view($this->views['index'], compact('bill_type','date_start', 'org_ids', 'date_end', 'bills', 'user', 'header', 'action', 'billsCreators', 'contragents', 'billNumber', 'contragentID', 'billCreatorID'))->with('routes', $this->routes);
     }
 }

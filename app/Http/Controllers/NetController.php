@@ -47,9 +47,9 @@ class NetController extends Controller
 
     public function index()
     {
-        if (auth()->user()->user_role_id != 1){
-            abort(401);
-        }
+//        if (auth()->user()->user_role_id != 1){
+//            abort(401);
+//        }
 
         $nets = Net::all();
         $header = 'Сети';
@@ -61,9 +61,9 @@ class NetController extends Controller
 
     public function form(Net $net)
     {
-        if (auth()->user()->user_role_id != 1){
-            abort(401);
-        }
+//        if (auth()->user()->user_role_id != 1){
+//            abort(401);
+//        }
 
         $header = '<a href="' . route($this->routes['index']) . '">Сети</a> / Редактирование';
         return view($this->views['form'],
@@ -82,9 +82,9 @@ class NetController extends Controller
 
     public function store(Request $request)
     {
-        if (auth()->user()->user_role_id != 1){
-            abort(401);
-        }
+//        if (auth()->user()->user_role_id != 1){
+//            abort(401);
+//        }
 
         $request->validate([
             "name" => "required"

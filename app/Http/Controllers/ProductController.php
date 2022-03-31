@@ -48,9 +48,9 @@ class ProductController extends Controller
 
     public function index()
     {
-        if (auth()->user()->user_role_id != 1){
-            abort(401);
-        }
+//        if (auth()->user()->user_role_id != 1){
+//            abort(401);
+//        }
 
         $products = Product::all();
         $header = 'Товары';
@@ -61,9 +61,9 @@ class ProductController extends Controller
 
     public function delete(Product $product)
     {
-        if (auth()->user()->user_role_id != 1){
-            abort(401);
-        }
+//        if (auth()->user()->user_role_id != 1){
+//            abort(401);
+//        }
 
         Product::query()->find($product->id)->delete();
         return redirect()->route($this->routes['index']);
@@ -71,9 +71,9 @@ class ProductController extends Controller
 
     public function form(Product $product)
     {
-        if (auth()->user()->user_role_id != 1){
-            abort(401);
-        }
+//        if (auth()->user()->user_role_id != 1){
+//            abort(401);
+//        }
 
         $header = '<a href="' . route($this->routes['index']) . '">Товары</a> / Редактирование';
         return view($this->views['form'],
@@ -82,9 +82,9 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        if (auth()->user()->user_role_id != 1){
-            abort(401);
-        }
+//        if (auth()->user()->user_role_id != 1){
+//            abort(401);
+//        }
 
         $request->validate([
             "name" => "required"

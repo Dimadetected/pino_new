@@ -9,8 +9,9 @@
                 <div v-if="action.message"><b>Сообщение:</b>{{ action.message.text }}</div>
                 <div class="text-right">{{ action.new_date }}</div>
                 </p>
-                <div v-if="actions.images">
+                <div v-if="action.images">
                     <div v-for="img in action.images">
+                        {{img}}
                         <a :href="'/'+img" download class="btn btn-primary">Скачать файл</a>
                         <a :href="'/'+img" data-fancybox data-caption="Просмотр фото">
                             <img :src="'/'+img" alt="" class="my-3">
@@ -60,7 +61,7 @@ export default {
                 }
             }
             newArray.sort((a, b) => a.updated_at < b.updated_at ? 1 : -1);
-
+            console.log(newArray)
             this.actions = newArray
         },
         parseDate(date) {

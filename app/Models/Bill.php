@@ -209,6 +209,10 @@ class Bill extends Model
         $messages = $this->hasMany(Message::class, 'external_id', 'id')->where('type', 'bill')->get();
         foreach ($messages as $k => $v){
             $messages[$k]->new_date = Carbon::parse($messages[$k]->updated_at)->format("d.m.Y H:i");
+            $file = \App\Models\File::query()->where('src', 'LIKE', '%messageID' . $v->id . '%')->first();
+            $messages[$k]->images = [];
+            if (isset($file->src) and count($file->src) > 0)
+                $messages[$k]->images = $file->src;
         }
 
         return json_encode(array_merge(array($actions),array($messages)));

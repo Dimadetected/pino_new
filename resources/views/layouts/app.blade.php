@@ -66,12 +66,6 @@
                                     <a class="dropdown-item" href="{{ route('users.index') }}">
                                         Пользователи
                                     </a>
-                                    <a class="dropdown-item" href="{{ route('net.index') }}">
-                                        Сети
-                                    </a>
-                                    <a class="dropdown-item" href="{{ route('product.index') }}">
-                                        Товары
-                                    </a>
                                 </div>
                             </li>
                         @endif
@@ -112,18 +106,31 @@
                                 </a>
                             </div>
                         </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Справочники
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ route('net.index') }}">
+                                        Сети
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('product.index') }}">
+                                        Товары
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('contracts.index') }}">Договоры
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('clients.index') }}">Контрагенты
+                                    </a>
+                                </div>
+                            </li>
                         <li class="nav-item">
                             <a class="nav-link " href="{{ route('merchandising.index') }}">Мерчендайзинг</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link " href="{{ route('kanban.index') }}">Задачи</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link "  href="{{ route('clients.index') }}">Контрагенты</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link " href="{{ route('contracts.index') }}">Договоры</a>
-                        </li>
+
                     </ul>
                     <form class="form-inline my-2 my-lg-0">
                         <a class="text-dark" href="{{ route('profile.show') }}">

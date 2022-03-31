@@ -15,7 +15,7 @@ class UserService
 
     public function get()
     {
-        return $this->query()->with('user_role','organisations')->get();
+        return $this->query()->with('user_role','organisations')->orderBy("name")->get();
     }
 
     public function store($array)

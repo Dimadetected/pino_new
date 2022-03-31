@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -197,6 +198,20 @@ class Bill extends Model
     public function bill_action()
     {
         return $this->hasOne(BillAction::class)->orderBy('id', 'desc');
+    }
+
+    public function getActions(){
+        $actions = $this->hasOne(BillAction::class)->orderBy('id', 'desc')->get();
+        foreach ($actions as $k => $v ){
+            $actions[$k]->new_date = Carbon::parse($actions[$k]->updated_at)->format("d.m.Y H:i");
+        }
+
+        $messages = $this->hasMany(Message::class, 'external_id', 'id')->where('type', 'bill')->get();
+        foreach ($messages as $k => $v){
+            $messages[$k]->new_date = Carbon::parse($messages[$k]->updated_at)->format("d.m.Y H:i");
+        }
+
+        return json_encode(array_merge(array($actions),array($messages)));
     }
 
     public function messages()

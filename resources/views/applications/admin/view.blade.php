@@ -30,10 +30,6 @@
                                 <div class="col-6 pl-0">Сумма:</div>
                                 <div class="col-6 pl-0">{{$bill->sum}}</div>
                             @endif
-                            @if($bill->worked == 1)
-                                <div class="col-6 pl-0 text-warning">Отработано:</div>
-                                <div class="col-6 pl-0 text-warning">Да</div>
-                            @endif
                         </div>
                     </div>
                     <div class="mt-5 mb-2  h4">{{$bill->bill_type->name??'Оплачено'}}</div>
@@ -81,16 +77,10 @@
                         <a href="{{route('bill.delete',$bill->id)}}" class="btn btn-danger my-1">Удалить</a>
                     @endif
                     {{--                    <a target="_blank" href="{{route('bill.print',$bill->id)}}" class="btn btn-primary" >Распечатать</a>--}}
-                    @if($bill->worked != 1 && isset($bill->chain)&& $bill->chain->type == 2)
-                        <div class="row my-2">
-                            <form class="col-12" action="{{route($routes["worked"], $bill->id)}}">
-                                @csrf
-                                <input type="text" hidden name="worked" value="1">
-                                <button class="btn btn-block btn-warning">Отработано</button>
-                            </form>
-                        </div>
-                    @endif
-                    <a onclick="print()" class="btn btn-primary">Распечатать</a>
+
+                        <button class="btn btn-warning">Отработано</button>
+
+                        <a onclick="print()" class="btn btn-primary">Распечатать</a>
                     @if($bill->status == 2)
                         <div class="row ">
                             <div class="col-12 mt-2 text-center ">

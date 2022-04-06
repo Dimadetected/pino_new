@@ -41,6 +41,7 @@ class BillController extends Controller
         'view' => 'bill.view',
         'form' => 'bill.form',
         'store' => 'bill.store',
+        'worked' => 'application.worked',
     ];
 
     public function check()
@@ -167,10 +168,11 @@ class BillController extends Controller
                 }
             }
         }
+        $routes = $this->routes;
         $alert = $bill->bill_alerts()->where('user_id', $user->id)->first();
         if (isset($alert->count))
             $alert->update(['count' => 0]);
-        return view($this->views['view'], compact('bill', 'user', 'header', 'print_file'));
+        return view($this->views['view'], compact('bill', 'user','routes', 'header', 'print_file'));
     }
 
     public function form(Bill $bill)

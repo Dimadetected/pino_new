@@ -32,15 +32,15 @@ use ZendPdf\PdfDocument;
 class ApplicationController extends Controller
 {
     private $views = [
-        'index' => 'bills.admin.index',
-        'view' => 'bills.admin.view',
-        'form' => 'bills.admin.form',
+        'index' => 'applications.admin.index',
+        'view' => 'applications.admin.view',
+        'form' => 'applications.admin.form',
     ];
     private $routes = [
-        'index' => 'bill.index',
+        'index' => 'application.index',
         'view' => 'bill.view',
         'form' => 'bill.form',
-        'store' => 'bill.store',
+        'store' => 'application.store',
     ];
 
     public function check()
@@ -92,6 +92,11 @@ class ApplicationController extends Controller
         if ($billCreatorID != 0) {
             $bills = $bills->where("user_id", "=", $billCreatorID);
         }
+
+        $worked = \request("worked","");
+        if ($worked != ""){
+            $bills = $bills->where("worked",$worked);
+        }
         $header = 'Заявки';
         $bill_type = 'заявки';
         $action =  $action = '<div class="btn-group" style="float: right" role="group" aria-label="Basic example">' .
@@ -99,7 +104,7 @@ class ApplicationController extends Controller
             '<a class="btn btn-primary ml-2" href=' . route($this->routes['form'], ["type" => 2]) . ' style="float: right">Создать заявку</a>' .
             '</div>';
         return view($this->views['index'],
-            compact('bill_type','org_ids', 'date_start', 'date_end', 'bills', 'user', 'header', 'action', 'billsCreators', 'contragents', 'billNumber', 'contragentID', 'billCreatorID'))->with('routes', $this->routes);
+            compact('bill_type','org_ids', 'date_start', 'date_end','worked', 'bills', 'user', 'header', 'action', 'billsCreators', 'contragents', 'billNumber', 'contragentID', 'billCreatorID'))->with('routes', $this->routes);
     }
 
     public function accept()
@@ -138,6 +143,10 @@ class ApplicationController extends Controller
         if ($billCreatorID != 0) {
             $bills = $bills->where("user_id", "=", $billCreatorID);
         }
+        $worked = \request("worked","");
+        if ($worked != ""){
+            $bills = $bills->where("worked",$worked);
+        }
         $bills = $bills->get();
         $bill_type = 'заявки';
         $header = 'Заявки для подтверждения';
@@ -145,7 +154,7 @@ class ApplicationController extends Controller
             '<a class="btn btn-success" href=' . route($this->routes['form'], ["type" => 1]) . ' style="float: right">Создать счет</a>' .
             '<a class="btn btn-primary ml-2" href=' . route($this->routes['form'], ["type" => 2]) . ' style="float: right">Создать заявку</a>' .
             '</div>';
-        return view($this->views['index'], compact('bill_type','date_end', 'org_ids', 'date_start', 'bills', 'user', 'header', 'action', 'billsCreators', 'contragents', 'billNumber', 'contragentID', 'billCreatorID'))->with('routes', $this->routes);
+        return view($this->views['index'], compact('bill_type','date_end','worked', 'org_ids', 'date_start', 'bills', 'user', 'header', 'action', 'billsCreators', 'contragents', 'billNumber', 'contragentID', 'billCreatorID'))->with('routes', $this->routes);
     }
 
     public function accepted()
@@ -185,7 +194,10 @@ class ApplicationController extends Controller
         if ($billCreatorID != 0) {
             $bills = $bills->where("user_id", "=", $billCreatorID);
         }
-
+        $worked = \request("worked","");
+        if ($worked != ""){
+            $bills = $bills->where("worked",$worked);
+        }
         $bills = $bills->get();
 
         $header = 'Подтвержденные заявки';
@@ -195,7 +207,7 @@ class ApplicationController extends Controller
             '<a class="btn btn-success" href=' . route($this->routes['form'], ["type" => 1]) . ' style="float: right">Создать счет</a>' .
             '<a class="btn btn-primary ml-2" href=' . route($this->routes['form'], ["type" => 2]) . ' style="float: right">Создать заявку</a>' .
             '</div>';
-        return view($this->views['index'], compact('bill_type','org_ids', 'date_start', 'date_end', 'bills', 'user', 'header', 'action', 'billsCreators', 'contragents', 'billNumber', 'contragentID', 'billCreatorID'))->with('routes', $this->routes);
+        return view($this->views['index'], compact('bill_type','org_ids','worked', 'date_start', 'date_end', 'bills', 'user', 'header', 'action', 'billsCreators', 'contragents', 'billNumber', 'contragentID', 'billCreatorID'))->with('routes', $this->routes);
     }
 
     public function my()
@@ -232,7 +244,10 @@ class ApplicationController extends Controller
         if ($billCreatorID != 0) {
             $bills = $bills->where("user_id", "=", $billCreatorID);
         }
-
+        $worked = \request("worked","");
+        if ($worked != ""){
+            $bills = $bills->where("worked",$worked);
+        }
         $bills = $bills->get();
         $org_ids = $user->org_ids;
 
@@ -242,6 +257,13 @@ class ApplicationController extends Controller
             '<a class="btn btn-success" href=' . route($this->routes['form'], ["type" => 1]) . ' style="float: right">Создать счет</a>' .
             '<a class="btn btn-primary ml-2" href=' . route($this->routes['form'], ["type" => 2]) . ' style="float: right">Создать заявку</a>' .
             '</div>';
-        return view($this->views['index'], compact('bill_type','date_start', 'org_ids', 'date_end', 'bills', 'user', 'header', 'action', 'billsCreators', 'contragents', 'billNumber', 'contragentID', 'billCreatorID'))->with('routes', $this->routes);
+        return view($this->views['index'], compact('bill_type','date_start', 'worked','org_ids', 'date_end', 'bills', 'user', 'header', 'action', 'billsCreators', 'contragents', 'billNumber', 'contragentID', 'billCreatorID'))->with('routes', $this->routes);
+    }
+
+    public function worked(Request $request, Bill $bill){
+        $bill->update([
+            "worked" => $request->worked
+        ]);
+        return redirect()->back();
     }
 }

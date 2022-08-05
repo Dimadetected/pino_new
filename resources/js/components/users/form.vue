@@ -180,7 +180,9 @@ export default {
                     this.tg_notice = res.data.tg_notice
                     this.email_notice = res.data.email_notice
                     this.sms_notice = res.data.sms_notice
-                    this.inner = res.data.inner
+                    if (res.data.inner === 1){
+                        this.inner = true
+                    }
                     res.data.organisations.map(org => {
                         this.changeSelect(org.id)
                     })

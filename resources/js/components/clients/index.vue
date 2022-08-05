@@ -1,8 +1,9 @@
 <template>
     <div class="col-12">
-        <div class="row">
+        <div class="row p-3">
             <div class="col-2">ИНН:</div>
-            <input type="text" class="form-control col-9 offset-1" v-model="inn" @keyup="get" placeholder="ИНН">
+            <input type="text" class="form-control col-6 offset-1" v-model="inn" placeholder="ИНН">
+            <div class="btn btn-success col-2 offset-1"  @click="get">Применить</div>
         </div>
         <table class="table">
             <thead>
@@ -39,6 +40,7 @@ export default {
     watch: {},
     methods: {
         get() {
+            this.clients = {}
             fetch('/api/clients?inn='+this.inn)
                 .then(res => res.json())
                 .then(res => {

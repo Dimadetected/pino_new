@@ -40,7 +40,7 @@
                         Внешний сотрудник:
                     </div>
                     <div class="col-md-8">
-                        <input type="checkbox" v-model="inner" class="form-control">
+                        <input class="form-check-input" type="checkbox" v-model="inner">
                     </div>
                 </div>
             </div>
@@ -180,9 +180,7 @@ export default {
                     this.tg_notice = res.data.tg_notice
                     this.email_notice = res.data.email_notice
                     this.sms_notice = res.data.sms_notice
-                    if (res.data.inner === 1){
-                        this.inner = true
-                    }
+                    this.inner = res.data.inner
                     res.data.organisations.map(org => {
                         this.changeSelect(org.id)
                     })

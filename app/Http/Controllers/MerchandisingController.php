@@ -55,7 +55,7 @@ class MerchandisingController extends Controller
             $merchandisings = $merchandisings->where('net_id',$netID);
         }
 
-        if (auth()->user()->inner){
+        if (auth()->user()->inner === true){
             $merchandisings = $merchandisings->where('user_id',$userID);
         }
 
@@ -63,8 +63,6 @@ class MerchandisingController extends Controller
             ->whereBetween('date', [$date_start, $date_end])
             ->with(["user", "net", "product"])
             ->get();
-
-
 
         $header = 'Мерчендайзинг';
         $action = '<a class="btn btn-success" href=' . route($this->routes['form']) . ' style="float: right">Создать</a>';

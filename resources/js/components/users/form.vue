@@ -39,7 +39,7 @@
                     <div class="col-md-4">
                         Внешний сотрудник:
                     </div>
-                    <div class="col-md-8">
+                    <div class="col-md-8 pl-5">
                         <input class="form-control" type="checkbox" v-model="inner">
                     </div>
                 </div>

@@ -124,7 +124,7 @@
                                     </a>
                                 </div>
                             </li>
-                        @if(env("IS_MERCH"))
+                        @if(env("IS_MERCH") === true)
                             <li class="nav-item">
                                 <a class="nav-link " href="{{ route('merchandising.index') }}">Мерчендайзинг</a>
                             </li>

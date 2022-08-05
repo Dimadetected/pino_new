@@ -17,7 +17,7 @@ class ClientService
     public function get($inn)
     {
         if ($inn != "" && $inn !== 0){
-            return $this->query()->where("inn",$inn)->get();
+            return $this->query()->where("inn",'LIKE','%'.$inn.'%')->get();
         }
         return $this->query()->get();
     }

@@ -2,7 +2,7 @@
     <div class="col-12">
         <div class="row">
             <div class="col-2">ИНН:</div>
-            <input type="text" class="form-control col-9 offset-1" v-model="inn" @change="get" placeholder="ИНН">
+            <input type="text" class="form-control col-9 offset-1" v-model="inn" @keyup="get" placeholder="ИНН">
         </div>
         <table class="table">
             <thead>

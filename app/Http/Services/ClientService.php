@@ -14,8 +14,11 @@ class ClientService
         return Client::query();
     }
 
-    public function get()
+    public function get($inn)
     {
+        if ($inn != "" && $inn !== 0){
+            return $this->query()->where("inn",$inn)->get();
+        }
         return $this->query()->get();
     }
 

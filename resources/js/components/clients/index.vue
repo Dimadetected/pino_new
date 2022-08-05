@@ -1,5 +1,8 @@
 <template>
     <div class="col-12">
+        <div class="row">
+            <input type="text" class="form-control col-12" v-model="inn" placeholder="ИНН">
+        </div>
         <table class="table">
             <thead>
             <tr>
@@ -28,13 +31,14 @@ export default {
     },
     data() {
         return {
+            inn: "",
             clients: {},
         }
     },
     watch: {},
     methods: {
         get() {
-            fetch('/api/clients')
+            fetch('/api/clients?inn='+this.inn)
                 .then(res => res.json())
                 .then(res => {
                     this.clients = res.data

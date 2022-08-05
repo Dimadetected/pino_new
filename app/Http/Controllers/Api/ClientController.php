@@ -18,7 +18,8 @@ class ClientController
 
     public function index()
     {
-        return ClientResource::collection($this->service->get());
+        $inn = \request("inn");
+        return ClientResource::collection($this->service->get($inn));
     }
 
     public function store(Request $request)

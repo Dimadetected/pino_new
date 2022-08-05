@@ -124,9 +124,11 @@
                                     </a>
                                 </div>
                             </li>
-                        <li class="nav-item">
-                            <a class="nav-link " href="{{ route('merchandising.index') }}">Мерчендайзинг</a>
-                        </li>
+                        @if(env("IS_MERCH"))
+                            <li class="nav-item">
+                                <a class="nav-link " href="{{ route('merchandising.index') }}">Мерчендайзинг</a>
+                            </li>
+                        @endif
                         <li class="nav-item">
                             <a class="nav-link " href="{{ route('kanban.index') }}">Задачи</a>
                         </li>

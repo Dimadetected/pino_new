@@ -26,6 +26,7 @@ class User extends Authenticatable
         'email_notice',
         'sms_notice',
         'phone',
+        'inner'
     ];
 
     /**

@@ -112,12 +112,14 @@
                                     Справочники
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    @if(env("IS_MERCH") === true)
                                     <a class="dropdown-item" href="{{ route('net.index') }}">
                                         Сети
                                     </a>
                                     <a class="dropdown-item" href="{{ route('product.index') }}">
                                         Товары
                                     </a>
+                                    @endif
                                     <a class="dropdown-item" href="{{ route('contracts.index') }}">Договоры
                                     </a>
                                     <a class="dropdown-item" href="{{ route('clients.index') }}">Контрагенты

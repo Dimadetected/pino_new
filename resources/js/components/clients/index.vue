@@ -1,7 +1,8 @@
 <template>
     <div class="col-12">
         <div class="row">
-            <input type="text" class="form-control col-12" v-model="inn" placeholder="ИНН">
+            <div class="col-2">ИНН:</div>
+            <input type="text" class="form-control col-9 offset-1" v-model="inn" @change="get" placeholder="ИНН">
         </div>
         <table class="table">
             <thead>

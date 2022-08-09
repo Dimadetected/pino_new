@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+dd('/'. env("TGBOT") .'/webhook');
 Route::post('/'. env("TGBOT") .'/webhook', 'App\Http\Controllers\TelegramController@handle');
 Route::get('/getMe', 'App\Http\Controllers\TelegramController@getMe');
 Route::get('/send', 'App\Http\Controllers\TelegramController@send');

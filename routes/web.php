@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/1693125992:AAFku3IyNSELpLporEaWmuehK8qNok8p0z8/webhook', 'App\Http\Controllers\TelegramController@handle');
+Route::post('/'. env("TGBOT") .'/webhook', 'App\Http\Controllers\TelegramController@handle');
 Route::get('/getMe', 'App\Http\Controllers\TelegramController@getMe');
 Route::get('/send', 'App\Http\Controllers\TelegramController@send');
 Route::get('/setWebHook', 'App\Http\Controllers\TelegramController@setWebHook');

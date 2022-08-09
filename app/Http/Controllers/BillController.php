@@ -51,7 +51,7 @@ class BillController extends Controller
 
     public function __construct()
     {
-        $this->telegram = new TgService("5532622310:AAG9-x9K9e3mkdXcx4pwXfccjEvSe08Swxs");
+        $this->telegram = new TgService(env("TGBOT"));
         $this->sms = new SmsService();
     }
 

@@ -13,7 +13,7 @@ class Auth
 
     public function __construct()
     {
-        $this->telegram = new TgService('1693125992:AAFku3IyNSELpLporEaWmuehK8qNok8p0z8');
+        $this->telegram = new TgService(env("TGBOT"));
     }
 
     public function index(Request $request)

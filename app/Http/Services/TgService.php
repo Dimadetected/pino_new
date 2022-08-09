@@ -34,7 +34,7 @@ class TgService
      */
     public function setWebHook()
     {
-        $url = 'https://xn--h1akdb.xn--p1acf/' . $this->token . '/webhook';
+        $url = 'https://xn--80aqpccbc.xn--p1ai/' . $this->token . '/webhook';
         $response = Http::get($this->url . '/setWebhook', [
             'url' => $url
         ]);

@@ -36,7 +36,7 @@ class TgService
     {
 //        $url = 'https://xn--80aqpccbc.xn--p1ai/' . $this->token . '/webhook';
         $url = 'https://xn--h1akdb.xn--p1acf/' . $this->token . '/webhook';
-        $response = Http::get($this->url . '/removeWebhook', [
+        $response = Http::get($this->url . '/setWebhook?remove', [
             'url' => $url
         ]);
         dd(dd($response->body()));

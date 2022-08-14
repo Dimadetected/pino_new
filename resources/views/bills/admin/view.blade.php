@@ -7,7 +7,7 @@
         <div class="row ">
             <div class="col-md-7">
                 <div class="card card-body shadow mb-1" style="min-height: 90vh">
-                    <div class=" card-title" style="font-size: 16pt"><a href="#">@if($bill->chain->type == 1)Счет@else Заявка @endif #{{$bill->id}}</a></div>
+                    <div class=" card-title" style="font-size: 16pt"><a href="#" style="z-index: 9999999">@if($bill->chain->type == 1)Счет@else Заявка @endif #{{$bill->id}}</a></div>
                     <div class=" card-title"
                          style="font-size: 16pt">{{\Carbon\Carbon::parse($bill->created_at)->format('d.m.Y')}}</div>
                     <div class="col-md-12 " style="font-size: 16pt">

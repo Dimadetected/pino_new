@@ -142,9 +142,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                @elseif(($bill->user_role_id == $user->user_role_id ) or
+                                @elseif((($bill->user_role_id == $user->user_role_id ) or
                                 ($bill->steps == 0 and $bill->user_id == auth()->user()->id) or
-                                ($bill->user_role_id == $user->user_role_id and $bill->user_role_id == 4))
+                                ($bill->user_role_id == $user->user_role_id and $bill->user_role_id == 4)) and (auth()->user()->read_only === false))
                                     <bill-status-change-component :user_id="{{auth()->user()->id}}" :bill="{{$bill}}"></bill-status-change-component>
                                 @endif
 

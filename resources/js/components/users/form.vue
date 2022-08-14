@@ -47,6 +47,16 @@
             <div class="col-12 card card-body shadow my-2">
                 <div class="row">
                     <div class="col-md-4">
+                        Только просмотр:
+                    </div>
+                    <div class="col-md-8 pl-5">
+                        <input class="form-control" type="checkbox" v-model="read_only">
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 card card-body shadow my-2">
+                <div class="row">
+                    <div class="col-md-4">
                         Роль:
                     </div>
                     <div class="col-md-8">
@@ -136,6 +146,7 @@ export default {
             user_name: '',
             phone: '',
             inner: false,
+            read_only: false,
             user_email: '',
             user_role: '',
             user_roles: [],
@@ -181,6 +192,7 @@ export default {
                     this.email_notice = res.data.email_notice
                     this.sms_notice = res.data.sms_notice
                     this.inner = res.data.inner
+                    this.read_only = res.data.read_only
                     res.data.organisations.map(org => {
                         this.changeSelect(org.id)
                     })
@@ -202,6 +214,7 @@ export default {
                             email_notice: this.email_notice,
                             sms_notice: this.sms_notice,
                             inner: this.inner,
+                            read_only: this.read_only,
                             phone: this.phone,
                         }
                     ),

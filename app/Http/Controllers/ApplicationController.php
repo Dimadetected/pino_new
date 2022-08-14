@@ -99,10 +99,15 @@ class ApplicationController extends Controller
         }
         $header = 'Заявки';
         $bill_type = 'заявки';
-        $action =  $action = '<div class="btn-group" style="float: right" role="group" aria-label="Basic example">' .
-            '<a class="btn btn-success" href=' . route($this->routes['form'], ["type" => 1]) . ' style="float: right">Создать счет</a>' .
-            '<a class="btn btn-primary ml-2" href=' . route($this->routes['form'], ["type" => 2]) . ' style="float: right">Создать заявку</a>' .
-            '</div>';
+        if (auth()->user()->read_only === true){
+            $action = '<div class="btn-group" style="float: right" role="group" aria-label="Basic example">' .
+                '</div>';
+        }else{
+            $action = '<div class="btn-group" style="float: right" role="group" aria-label="Basic example">' .
+                '<a class="btn btn-success" href=' . route($this->routes['form'], ["type" => 1]) . ' style="float: right">Создать счет</a>' .
+                '<a class="btn btn-primary ml-2" href=' . route($this->routes['form'], ["type" => 2]) . ' style="float: right">Создать заявку</a>' .
+                '</div>';
+        }
         return view($this->views['index'],
             compact('bill_type','org_ids', 'date_start', 'date_end','worked', 'bills', 'user', 'header', 'action', 'billsCreators', 'contragents', 'billNumber', 'contragentID', 'billCreatorID'))->with('routes', $this->routes);
     }
@@ -150,10 +155,15 @@ class ApplicationController extends Controller
         $bills = $bills->get();
         $bill_type = 'заявки';
         $header = 'Заявки для подтверждения';
-        $action =  $action = '<div class="btn-group" style="float: right" role="group" aria-label="Basic example">' .
-            '<a class="btn btn-success" href=' . route($this->routes['form'], ["type" => 1]) . ' style="float: right">Создать счет</a>' .
-            '<a class="btn btn-primary ml-2" href=' . route($this->routes['form'], ["type" => 2]) . ' style="float: right">Создать заявку</a>' .
-            '</div>';
+        if (auth()->user()->read_only === true){
+            $action = '<div class="btn-group" style="float: right" role="group" aria-label="Basic example">' .
+                '</div>';
+        }else{
+            $action = '<div class="btn-group" style="float: right" role="group" aria-label="Basic example">' .
+                '<a class="btn btn-success" href=' . route($this->routes['form'], ["type" => 1]) . ' style="float: right">Создать счет</a>' .
+                '<a class="btn btn-primary ml-2" href=' . route($this->routes['form'], ["type" => 2]) . ' style="float: right">Создать заявку</a>' .
+                '</div>';
+        }
         return view($this->views['index'], compact('bill_type','date_end','worked', 'org_ids', 'date_start', 'bills', 'user', 'header', 'action', 'billsCreators', 'contragents', 'billNumber', 'contragentID', 'billCreatorID'))->with('routes', $this->routes);
     }
 
@@ -203,10 +213,15 @@ class ApplicationController extends Controller
         $header = 'Подтвержденные заявки';
         $bill_type = 'заявки';
 
-        $action =  $action = '<div class="btn-group" style="float: right" role="group" aria-label="Basic example">' .
-            '<a class="btn btn-success" href=' . route($this->routes['form'], ["type" => 1]) . ' style="float: right">Создать счет</a>' .
-            '<a class="btn btn-primary ml-2" href=' . route($this->routes['form'], ["type" => 2]) . ' style="float: right">Создать заявку</a>' .
-            '</div>';
+        if (auth()->user()->read_only === true){
+            $action = '<div class="btn-group" style="float: right" role="group" aria-label="Basic example">' .
+                '</div>';
+        }else{
+            $action = '<div class="btn-group" style="float: right" role="group" aria-label="Basic example">' .
+                '<a class="btn btn-success" href=' . route($this->routes['form'], ["type" => 1]) . ' style="float: right">Создать счет</a>' .
+                '<a class="btn btn-primary ml-2" href=' . route($this->routes['form'], ["type" => 2]) . ' style="float: right">Создать заявку</a>' .
+                '</div>';
+        }
         return view($this->views['index'], compact('bill_type','org_ids','worked', 'date_start', 'date_end', 'bills', 'user', 'header', 'action', 'billsCreators', 'contragents', 'billNumber', 'contragentID', 'billCreatorID'))->with('routes', $this->routes);
     }
 
@@ -253,10 +268,15 @@ class ApplicationController extends Controller
 
         $header = 'Мои заявки';
         $bill_type = 'заявки';
-        $action =  $action = '<div class="btn-group" style="float: right" role="group" aria-label="Basic example">' .
-            '<a class="btn btn-success" href=' . route($this->routes['form'], ["type" => 1]) . ' style="float: right">Создать счет</a>' .
-            '<a class="btn btn-primary ml-2" href=' . route($this->routes['form'], ["type" => 2]) . ' style="float: right">Создать заявку</a>' .
-            '</div>';
+        if (auth()->user()->read_only === true){
+            $action = '<div class="btn-group" style="float: right" role="group" aria-label="Basic example">' .
+                '</div>';
+        }else{
+            $action = '<div class="btn-group" style="float: right" role="group" aria-label="Basic example">' .
+                '<a class="btn btn-success" href=' . route($this->routes['form'], ["type" => 1]) . ' style="float: right">Создать счет</a>' .
+                '<a class="btn btn-primary ml-2" href=' . route($this->routes['form'], ["type" => 2]) . ' style="float: right">Создать заявку</a>' .
+                '</div>';
+        }
         return view($this->views['index'], compact('bill_type','date_start', 'worked','org_ids', 'date_end', 'bills', 'user', 'header', 'action', 'billsCreators', 'contragents', 'billNumber', 'contragentID', 'billCreatorID'))->with('routes', $this->routes);
     }
 

@@ -99,7 +99,7 @@ class ApplicationController extends Controller
         }
         $header = 'Заявки';
         $bill_type = 'заявки';
-        if (auth()->user()->read_only === true){
+        if (auth()->user()->read_only == true){
             $action = '<div class="btn-group" style="float: right" role="group" aria-label="Basic example">' .
                 '</div>';
         }else{
@@ -155,7 +155,7 @@ class ApplicationController extends Controller
         $bills = $bills->get();
         $bill_type = 'заявки';
         $header = 'Заявки для подтверждения';
-        if (auth()->user()->read_only === true){
+        if (auth()->user()->read_only == true){
             $action = '<div class="btn-group" style="float: right" role="group" aria-label="Basic example">' .
                 '</div>';
         }else{
@@ -213,7 +213,7 @@ class ApplicationController extends Controller
         $header = 'Подтвержденные заявки';
         $bill_type = 'заявки';
 
-        if (auth()->user()->read_only === true){
+        if (auth()->user()->read_only == true){
             $action = '<div class="btn-group" style="float: right" role="group" aria-label="Basic example">' .
                 '</div>';
         }else{
@@ -268,7 +268,7 @@ class ApplicationController extends Controller
 
         $header = 'Мои заявки';
         $bill_type = 'заявки';
-        if (auth()->user()->read_only === true){
+        if (auth()->user()->read_only == true){
             $action = '<div class="btn-group" style="float: right" role="group" aria-label="Basic example">' .
                 '</div>';
         }else{

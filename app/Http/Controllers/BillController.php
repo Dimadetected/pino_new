@@ -104,7 +104,7 @@ class BillController extends Controller
                 '</div>';
         }else{
             $action = '<div class="btn-group" style="float: right" role="group" aria-label="Basic example">' .
-                '<a class="btn btn-success" href=' . route($this->routes['form'], ["type" => 1]) . ' style="float: right">Создать счет1</a>' .
+                '<a class="btn btn-success" href=' . route($this->routes['form'], ["type" => 1]) . ' style="float: right">Создать счет</a>' .
                 '<a class="btn btn-primary ml-2" href=' . route($this->routes['form'], ["type" => 2]) . ' style="float: right">Создать заявку</a>' .
                 '</div>';
         }
@@ -471,7 +471,7 @@ class BillController extends Controller
         $bills = $bills->get();
         $header = 'Счета для подтверждения';
         $bill_type = 'счета';
-        if (auth()->user()->read_only === true){
+        if (auth()->user()->read_only == true){
             $action = '<div class="btn-group" style="float: right" role="group" aria-label="Basic example">' .
                 '</div>';
         }else{
@@ -526,7 +526,7 @@ class BillController extends Controller
         $header = 'Подтвержденные счета';
         $bill_type = 'счета';
 
-        if (auth()->user()->read_only === true){
+        if (auth()->user()->read_only == true){
             $action = '<div class="btn-group" style="float: right" role="group" aria-label="Basic example">' .
                 '</div>';
         }else{
@@ -578,7 +578,7 @@ class BillController extends Controller
 
         $header = 'Мои счета';
         $bill_type = 'счета';
-        if (auth()->user()->read_only === true){
+        if (auth()->user()->read_only == true){
             $action = '<div class="btn-group" style="float: right" role="group" aria-label="Basic example">' .
                 '</div>';
         }else{

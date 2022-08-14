@@ -83,7 +83,7 @@
                                         <li>
                                             {{$bill->user->name}}</li>
                                         @if(isset($bill->client->name))
-                                            <li>{{substr($bill->client->name,0,50)}}</li>
+                                            <li>{{substr($bill->client->name,50)}}</li>
                                         @endif
                                         @if(isset($bill->date))
                                             <li>Дата: {{\Carbon\Carbon::parse($bill->date)->format('d.m.Y')}}</li>

@@ -69,7 +69,7 @@
                             @endif
                             <div style="position: relative"
                                  class="card card-body shadow mb-5 alert @if($bill->status == 1 and is_null($bill->user_role_id) ) alert-success @elseif($bill->status == 2) alert-danger @endif">
-                                <div class=" card-title" style="font-size: 16pt"><a class="btn btn-primary" style="z-index: 9999999999999999999"
+                                <div class=" card-title" style="font-size: 16pt"><a class="text-primary"
                                                                                     href="{{route($routes['view'],$bill)}}">@if($bill->chain->type == 1)Счет @else Заявка @endif
                                         #{{$bill->id}}</a></div>
                                 <div class=" card-title"
@@ -83,7 +83,7 @@
                                         <li>
                                             {{$bill->user->name}}</li>
                                         @if(isset($bill->client->name))
-                                            <li>{{$bill->client->name}}</li>
+                                            <li>{{substr($bill->client->name,0,50)}}</li>
                                         @endif
                                         @if(isset($bill->date))
                                             <li>Дата: {{\Carbon\Carbon::parse($bill->date)->format('d.m.Y')}}</li>

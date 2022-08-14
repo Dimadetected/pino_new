@@ -99,12 +99,12 @@ class BillController extends Controller
         }
         $header = 'Счета';
         $bill_type = 'счета';
-        if (auth()->user()->read_only === true){
+        if (auth()->user()->read_only == true){
             $action = '<div class="btn-group" style="float: right" role="group" aria-label="Basic example">' .
                 '</div>';
         }else{
             $action = '<div class="btn-group" style="float: right" role="group" aria-label="Basic example">' .
-                '<a class="btn btn-success" href=' . route($this->routes['form'], ["type" => 1]) . ' style="float: right">Создать счет</a>' .
+                '<a class="btn btn-success" href=' . route($this->routes['form'], ["type" => 1]) . ' style="float: right">Создать счет1</a>' .
                 '<a class="btn btn-primary ml-2" href=' . route($this->routes['form'], ["type" => 2]) . ' style="float: right">Создать заявку</a>' .
                 '</div>';
         }

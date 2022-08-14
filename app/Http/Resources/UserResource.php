@@ -25,6 +25,7 @@ class UserResource extends JsonResource
             'sms_notice' => $this->sms_notice,
             'phone' => $this->phone,
             'inner' => $this->inner,
+            'read_only' => $this->read_only,
         ];
     }
 }

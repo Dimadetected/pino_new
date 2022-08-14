@@ -69,7 +69,7 @@
                             @endif
                             <div style="position: relative"
                                  class="card card-body shadow mb-5 alert @if($bill->status == 1 and is_null($bill->user_role_id) ) alert-success @elseif($bill->status == 2) alert-danger @endif">
-                                <div class=" card-title" style="font-size: 16pt"><a style="z-index: 9999999" class="text-primary"
+                                <div class=" card-title" style="font-size: 16pt"><a class="btn text-primary"
                                                                                     href="{{route($routes['view'],$bill)}}">@if($bill->chain->type == 1)Счет @else Заявка @endif
                                         #{{$bill->id}}</a></div>
                                 <div class=" card-title"

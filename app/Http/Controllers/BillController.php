@@ -596,6 +596,7 @@ class BillController extends Controller
         return redirect()->route('bill.index');
     }
 
+
     public function printBill(Bill $bill)
     {
         return view('bills.admin.print', compact('bill'));

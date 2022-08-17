@@ -77,7 +77,7 @@ class BillController extends Controller
         $org_ids = $user->org_ids;
         $user_id = $user->id;
         $bills = Bill::query()
-            ->orderByDesc('id')
+            ->orderByDesc('created_at')->OrderBy('status')
             ->where('user_role_id', $user->user_role_id)
             ->orWhere('user_id', $user->id)
             ->with(['user', 'bill_type', 'bill_status', 'bill_actions'])
@@ -449,7 +449,7 @@ class BillController extends Controller
         setcookie('bill_date_start', $date_start);
         setcookie('bill_end_start', $date_end);
         $bills = Bill::query()
-            ->orderByDesc('id')
+            ->orderByDesc('created_at')->OrderBy('status')
             ->where('user_role_id', $user->user_role_id)
             ->whereBetween('created_at', [$date_start, $date_end])
             ->where('status', 1)
@@ -501,7 +501,7 @@ class BillController extends Controller
         setcookie('bill_date_start', $date_start);
         setcookie('bill_end_start', $date_end);
         $bills = Bill::query()
-            ->orderByDesc('id')
+            ->orderByDesc('created_at')->OrderBy('status')
             ->whereIn('id', $actions)
             ->whereBetween('created_at', [$date_start, $date_end])
             ->with(['user', 'bill_type', 'bill_status'])
@@ -554,7 +554,7 @@ class BillController extends Controller
         setcookie('bill_end_start', $date_end);
         $user_id = $user->id;
         $bills = Bill::query()
-            ->orderByDesc('id')
+            ->orderByDesc('created_at')->OrderBy('status')
             ->where('user_id', $user->id)
             ->whereBetween('created_at', [$date_start, $date_end])
             ->with(['user', 'bill_type', 'bill_status', 'bill_actions'])

@@ -77,7 +77,7 @@ class BillController extends Controller
         $org_ids = $user->org_ids;
         $user_id = $user->id;
         $bills = Bill::query()
-            ->orderByDesc('created_at')->OrderBy('status')
+            ->orderBy('status')
             ->where('user_role_id', $user->user_role_id)
             ->orWhere('user_id', $user->id)
             ->with(['user', 'bill_type', 'bill_status', 'bill_actions'])

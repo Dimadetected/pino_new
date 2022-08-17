@@ -60,7 +60,7 @@ class Bill extends Model
         $actions = $this->bill_actions()->where('status', 1)->with('user')->get();
         if ($actions and count($actions) > 0) {
             foreach ($actions as $action)
-                if ($action->user->user_role_id == 1)
+                if (isset($action->user) and $action->user->user_role_id == 1)
                     return $action;
         }
         return FALSE;

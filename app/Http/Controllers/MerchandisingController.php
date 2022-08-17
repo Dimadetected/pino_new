@@ -55,7 +55,7 @@ class MerchandisingController extends Controller
             $merchandisings = $merchandisings->where('net_id',$netID);
         }
 
-        if (auth()->user()->inner === true){
+        if (auth()->user()->inner == true){
             $merchandisings = $merchandisings->where('user_id',$userID);
         }
 

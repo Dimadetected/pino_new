@@ -50,7 +50,7 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
-                        @if(in_array(Auth::user()->id,[1,2]))
+                        @if(in_array(Auth::user()->user_role_id,[1]))
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -69,6 +69,11 @@
                                 </div>
                             </li>
                         @endif
+                        @if(auth()->user()->inner == true)
+                                <li class="nav-item">
+                                    <a class="nav-link " href="{{ route('merchandising.index') }}">Мерчендайзинг</a>
+                                </li>
+                            @else
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -134,7 +139,7 @@
                         <li class="nav-item">
                             <a class="nav-link " href="{{ route('kanban.index') }}">Задачи</a>
                         </li>
-
+                        @endif
                     </ul>
                     <form class="form-inline my-2 my-lg-0">
                         <a class="text-dark" href="{{ route('profile.show') }}">

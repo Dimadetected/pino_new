@@ -49,11 +49,11 @@
                     <div class="col-md-12 mt-3 text-right">
                         <div class="row text-right">
                             <div class="offset-md-6 col-md-6 text-right">
-                                @if(auth()->user()->user_role_id == 1)
+{{--                                @if(auth()->user()->user_role_id == 1)--}}
                                     <a href="{{$merchLink}}" target="_blank" class="btn btn-success">
                                         Скачать xlsx
                                     </a>
-                                @endif
+{{--                                @endif--}}
                                 <button class="btn btn-primary">
                                     Применить
                                 </button>

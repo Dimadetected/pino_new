@@ -592,6 +592,7 @@ class BillController extends Controller
     }
 
     public function declined()
+
     {
         $billsCreators = User::query()->orderBy("name", "asc")->get();
         $contragents = Client::query()->orderBy("name", "asc")->get();
@@ -600,22 +601,30 @@ class BillController extends Controller
         $contragentID = \request("contragent_id", 0);
         $billNumber = \request("bill_number", 0);
 
-        $user = auth()->user();
         $date_start = Carbon::parse(\request('date_start', ($_COOKIE['bill_date_start'] ?? now()->startOfYear())))->startOfDay();
         $date_end = Carbon::parse(\request('date_end', ($_COOKIE['bill_end_start'] ?? now()->endOfYear())))->endOfDay();
         setcookie('bill_date_start', $date_start);
         setcookie('bill_end_start', $date_end);
+
+        $user = auth()->user();
+        if (is_null($user->remember_token))
+            $user->update(['remember_token' => rand(111111111, 99999999999)]);
+
+
+        $org_ids = $user->org_ids;
         $user_id = $user->id;
         $bills = Bill::query()
-            ->orderByDesc('created_at')->OrderBy('status')
-            ->where('user_id', $user->id)
-            ->whereBetween('created_at', [$date_start, $date_end])
+            ->orderBy('status')
+            ->where('user_role_id', $user->user_role_id)
+            ->orWhere('user_id', $user->id)
             ->with(['user', 'bill_type', 'bill_status', 'bill_actions'])
             ->with('bill_alerts', function ($query) use ($user_id) {
                 $query->where('user_id', $user_id);
             })->with('chain', function ($query) {
-                $query->where('type', 1);
-            });
+                $query->where('type', 2);
+            })
+            ->orderBy('created_at', 'desc');
+        $bills = $bills->whereBetween('created_at', [$date_start, $date_end]);
         if ($billNumber != 0 and $billNumber != "") {
             $bills = $bills->where("id", "=", $billNumber);
         }
@@ -625,10 +634,7 @@ class BillController extends Controller
         if ($billCreatorID != 0) {
             $bills = $bills->where("user_id", "=", $billCreatorID);
         }
-
-         $bills = $bills->where("status",2)->get();
-        $org_ids = $user->org_ids;
-
+        $bills = $bills->where("status","=",1)->get();
         $header = 'Отклоненные счета';
         $bill_type = 'счета';
         if (auth()->user()->read_only == true){
@@ -640,7 +646,9 @@ class BillController extends Controller
                 '<a class="btn btn-primary ml-2" href=' . route($this->routes['form'], ["type" => 2]) . ' style="float: right">Создать заявку</a>' .
                 '</div>';
         }
-        return view($this->views['index'], compact('bill_type', 'date_start', 'org_ids', 'date_end', 'bills', 'user', 'header', 'action', 'billsCreators', 'contragents', 'billNumber', 'contragentID', 'billCreatorID'))->with('routes', $this->routes);
+
+        return view($this->views['index'],
+            compact('bill_type', 'org_ids', 'date_start', 'date_end', 'bills', 'user', 'header', 'action', 'billsCreators', 'contragents', 'billNumber', 'contragentID', 'billCreatorID'))->with('routes', $this->routes);
     }
 
     public function delete(Bill $bill)

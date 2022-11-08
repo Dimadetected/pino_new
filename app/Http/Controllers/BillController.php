@@ -616,25 +616,25 @@ class BillController extends Controller
         $bills = Bill::query()
             ->orderBy('status')
             ->where("status",2)
-//             ->where('user_role_id', $user->user_role_id)
-//             ->orWhere('user_id', $user->id)
-//             ->with(['user', 'bill_type', 'bill_status', 'bill_actions'])
-//             ->with('bill_alerts', function ($query) use ($user_id) {
-//                 $query->where('user_id', $user_id);
-//             })->with('chain', function ($query) {
-//                 $query->where('type', 2);
-//             })
+            ->where('user_role_id', $user->user_role_id)
+            ->orWhere('user_id', $user->id)
+            ->with(['user', 'bill_type', 'bill_status', 'bill_actions'])
+            ->with('bill_alerts', function ($query) use ($user_id) {
+                $query->where('user_id', $user_id);
+            })->with('chain', function ($query) {
+                $query->where('type', 2);
+            })
             ->orderBy('created_at', 'desc');
-//         $bills = $bills->whereBetween('created_at', [$date_start, $date_end]);
-//         if ($billNumber != 0 and $billNumber != "") {
-//             $bills = $bills->where("id", "=", $billNumber);
-//         }
-//         if ($contragentID != 0) {
-//             $bills = $bills->where("client_id", "=", $contragentID);
-//         }
-//         if ($billCreatorID != 0) {
-//             $bills = $bills->where("user_id", "=", $billCreatorID);
-//         }
+        $bills = $bills->whereBetween('created_at', [$date_start, $date_end]);
+        if ($billNumber != 0 and $billNumber != "") {
+            $bills = $bills->where("id", "=", $billNumber);
+        }
+        if ($contragentID != 0) {
+            $bills = $bills->where("client_id", "=", $contragentID);
+        }
+        if ($billCreatorID != 0) {
+            $bills = $bills->where("user_id", "=", $billCreatorID);
+        }
         $bills = $bills->get();
         $header = 'Отклоненные счета';
         $bill_type = 'счета';

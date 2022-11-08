@@ -615,7 +615,7 @@ class BillController extends Controller
         $user_id = $user->id;
         $bills = Bill::query()
             ->orderBy('status')
-//             ->where("status",1)
+            ->where("status",2)
 //             ->where('user_role_id', $user->user_role_id)
 //             ->orWhere('user_id', $user->id)
 //             ->with(['user', 'bill_type', 'bill_status', 'bill_actions'])

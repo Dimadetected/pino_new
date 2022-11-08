@@ -77,6 +77,7 @@ class BillController extends Controller
         $org_ids = $user->org_ids;
         $user_id = $user->id;
         $bills = Bill::query()
+            ->where("status",1)
             ->orderBy('status')
             ->where('user_role_id', $user->user_role_id)
             ->orWhere('user_id', $user->id)
@@ -86,7 +87,6 @@ class BillController extends Controller
             })->with('chain', function ($query) {
                 $query->where('type', 1);
             })
-            ->where("status",1)
             ->orderBy('created_at', 'desc');
         $bills = $bills->whereBetween('created_at', [$date_start, $date_end]);
         if ($billNumber != 0 and $billNumber != "") {

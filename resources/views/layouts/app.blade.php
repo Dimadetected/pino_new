@@ -89,6 +89,9 @@
                                 <a class="dropdown-item" href="{{ route('bill.accepted') }}">
                                     Подтвержденные счета
                                 </a>
+                                <a class="dropdown-item" href="{{ route('bill.declined') }}">
+                                    Отклоненные счета
+                                </a>
                             </div>
                         </li>
                             <li class="nav-item dropdown">

@@ -31,6 +31,7 @@ Route::prefix('/bill')->name('bill.')->middleware('auth')->group(function () {
     Route::get('/', 'App\Http\Controllers\BillController@index')->name('index');
     Route::get('/accept', 'App\Http\Controllers\BillController@accept')->name('accept');
     Route::get('/accepted', 'App\Http\Controllers\BillController@accepted')->name('accepted');
+    Route::get('/declined', 'App\Http\Controllers\BillController@declined')->name('declined');
     Route::get('/my', 'App\Http\Controllers\BillController@my')->name('my');
     Route::get('/form/{bill?}', 'App\Http\Controllers\BillController@form')->name('form');
     Route::get('/delete/{bill}', 'App\Http\Controllers\BillController@delete')->name('delete');

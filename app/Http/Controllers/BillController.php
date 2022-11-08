@@ -86,6 +86,7 @@ class BillController extends Controller
             })->with('chain', function ($query) {
                 $query->where('type', 1);
             })
+            ->where("status",1)
             ->orderBy('created_at', 'desc');
         $bills = $bills->whereBetween('created_at', [$date_start, $date_end]);
         if ($billNumber != 0 and $billNumber != "") {
@@ -97,7 +98,7 @@ class BillController extends Controller
         if ($billCreatorID != 0) {
             $bills = $bills->where("user_id", "=", $billCreatorID);
         }
-        $bills = $bills->where("status",1)->get();
+        $bills = $bills->get();
         $header = 'Счета';
         $bill_type = 'счета';
         if (auth()->user()->read_only == true){
@@ -555,6 +556,7 @@ class BillController extends Controller
         setcookie('bill_end_start', $date_end);
         $user_id = $user->id;
         $bills = Bill::query()
+            ->where("status",1)
             ->orderByDesc('created_at')->OrderBy('status')
             ->where('user_id', $user->id)
             ->whereBetween('created_at', [$date_start, $date_end])
@@ -574,7 +576,7 @@ class BillController extends Controller
             $bills = $bills->where("user_id", "=", $billCreatorID);
         }
 
-         $bills = $bills->where("status",1)->get();
+         $bills = $bills->get();
         $org_ids = $user->org_ids;
 
         $header = 'Мои счета';
